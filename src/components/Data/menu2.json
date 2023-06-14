@@ -1,0 +1,107 @@
+{
+    "menu2": [
+        {
+            "name": "Home",
+            "routerLink": [""],
+            "identifier": "Home",
+            "iconClass": "icofont-ui-home",
+            "breadcrumbMessage": "Welcome to Analytics Dashboard.",
+            "isCategory": false,
+            "isApp": false,
+            "isToggled":true,
+            "children": []
+        },
+        {
+            "name": "Authentication",
+            "routerLink": [""],
+            "identifier": "Authentication",
+            "iconClass": "icofont-ui-lock",
+            "breadcrumbMessage": "Welcome to Analytics Dashboard.",
+            "isCategory": false,
+            "isApp": false,
+            "children": [
+                {
+                    "name": "Sign in",
+                    "routerLink": ["sign-in"],
+                    "identifier": "Sign in",
+                    "iconClass": "icofont-ui-home",
+                    "breadcrumbMessage": "Welcome to Analytics Dashboard.",
+                    "isCategory": false,
+                    "isApp": false,
+                    "children": []
+                },
+                {
+                    "name": "Sign up",
+                    "routerLink": ["sign-up"],
+                    "identifier": "Sign up",
+                    "iconClass": "icofont-ui-home",
+                    "breadcrumbMessage": "Welcome to Analytics Dashboard.",
+                    "isCategory": false,
+                    "isApp": false,
+                    "children": []
+                },
+                {
+                    "name": "Password reset",
+                    "routerLink": ["password-reset"],
+                    "identifier": "Password reset",
+                    "iconClass": "icofont-ui-home",
+                    "breadcrumbMessage": "Welcome to Analytics Dashboard.",
+                    "isCategory": false,
+                    "isApp": false,
+                    "children": []
+                },
+                {
+                    "name": "2-Step Authentication",
+                    "routerLink": ["2-step-authentication"],
+                    "identifier": "2-Step Authentication",
+                    "iconClass": "icofont-ui-home",
+                    "breadcrumbMessage": "Welcome to Analytics Dashboard.",
+                    "isCategory": false,
+                    "isApp": false,
+                    "children": []
+                },
+                {
+                    "name": "404",
+                    "routerLink": ["page-404"],
+                    "identifier": "404",
+                    "iconClass": "icofont-ui-home",
+                    "breadcrumbMessage": "Welcome to Analytics Dashboard.",
+                    "isCategory": false,
+                    "isApp": false,
+                    "children": []
+                }
+            ]
+        },
+        {
+            "name": "Stater page",
+            "routerLink": ["stater-page"],
+            "identifier": "Stater page",
+            "iconClass": "icofont-code",
+            "breadcrumbMessage": "Welcome to Analytics Dashboard.",
+            "isCategory": false,
+            "isApp": false,
+            "children": []
+        },
+       
+        {
+            "name": "Documentation",
+            "routerLink": ["documentation"],
+            "identifier": "Documentation",
+            "iconClass": "icofont-law-document",
+            "breadcrumbMessage": "Welcome to Analytics Dashboard.",
+            "isCategory": false,
+            "isApp": false,
+            "children": []
+        },
+        {
+            "name": "Changelog",
+            "routerLink": ["changelog"],
+            "identifier": "Changelog",
+            "iconClass": "icofont-edit",
+            "breadcrumbMessage": "Welcome to Analytics Dashboard.",
+            "isCategory": false,
+            "isApp": false,
+            "children": []
+        }
+    ]
+}
