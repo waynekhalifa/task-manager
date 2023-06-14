@@ -4,6 +4,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
+import "./assets/scss/main.scss";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

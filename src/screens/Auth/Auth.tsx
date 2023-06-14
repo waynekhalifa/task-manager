@@ -1,5 +1,7 @@
-const Auth: React.FC = () => {
-  return <>Auth</>;
+import Auth from "components/Auth";
+
+const AuthPages: React.FC = () => {
+  return <Auth />;
 };
 
-export default Auth;
+export default AuthPages;
