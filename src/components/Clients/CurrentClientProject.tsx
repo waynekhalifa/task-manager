@@ -6,9 +6,9 @@ interface Props {
   logoBg: any;
   title: any;
   sl: any;
-  onClickEdit: any;
-  onClickDelete: any;
-  onClickAdd: any;
+  onClickEdit?: any;
+  onClickDelete?: any;
+  onClickAdd?: any;
 }
 
 const CurrentClientProject: React.FC<Props> = ({

@@ -8,10 +8,12 @@ import { MembersData } from "components/Data/AppData";
 interface Props { }
 interface State {
     isModal: boolean,
+    show: boolean,
 }
 
 const INITIAlIZE_DATA: State = {
     isModal: false,
+    show: false,
 }
 
 const Members: React.FC<Props> = () => {
@@ -341,7 +343,7 @@ const Members: React.FC<Props> = () => {
                 </Modal.Body>
                 <Modal.Footer>
                     <button type="button" className="btn btn-secondary" onClick={() => {
-                        setState({ ...state, show: false });
+                        setState({ ...state, show: false })
                     }}>Done</button>
                     <button type="button" className="btn btn-primary">Sent</button>
                 </Modal.Footer>

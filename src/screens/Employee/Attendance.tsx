@@ -21,9 +21,9 @@ const Attendance: React.FC<Props> = () => {
         <div className="container-xxl">
             <PageHeader headerTitle="Attendance (Admin)" renderRight={() => {
                 return <div className="col-auto d-flex w-sm-100">
-                    <button type="button" className="btn btn-dark  w-sm-100 me-2" onClick={() => { 
+                    <button type="button" className="btn btn-dark  w-sm-100 me-2" onClick={() => {
                         setState({ ...state, isModal: true })
-                     }}><i className="icofont-edit me-2 fs-6"></i>Edit Attendance</button>
+                    }}><i className="icofont-edit me-2 fs-6"></i>Edit Attendance</button>
                     <Dropdown>
                         <Dropdown.Toggle as="button" className="btn btn-primary ">Filter</Dropdown.Toggle>
                         <Dropdown.Menu as="ul" className="dropdown-menu-end">
@@ -39,7 +39,7 @@ const Attendance: React.FC<Props> = () => {
                     <AttendanceCard />
                 </div>
             </div>
-            <Modal centered show={state.isModal} onHide={() => { 
+            <Modal centered show={state.isModal} onHide={() => {
                 setState({ ...state, isModal: false })
             }}>
                 <Modal.Header closeButton>
@@ -83,7 +83,7 @@ const Attendance: React.FC<Props> = () => {
 
                 </Modal.Body>
                 <Modal.Footer>
-                    <button type="button" className="btn btn-secondary" onClick={() => { 
+                    <button type="button" className="btn btn-secondary" onClick={() => {
                         setState({ ...state, isModal: false })
                     }}>Done</button>
                     <button type="button" className="btn btn-primary">Save</button>

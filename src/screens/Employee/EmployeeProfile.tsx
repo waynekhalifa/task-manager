@@ -63,7 +63,7 @@ const EmployeeProfile: React.FC<Props> = () => {
                 </div>
 
             </div>
-            <Modal centered show={ismodal} onHide={() => { 
+            <Modal centered show={ismodal} onHide={() => {
                 setState({ ismodal: false, modalData: "" });
             }}>
                 <Modal.Header closeButton>
@@ -121,9 +121,9 @@ const EmployeeProfile: React.FC<Props> = () => {
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <button type="button" className="btn btn-secondary" onClick={() => { 
+                    <button type="button" className="btn btn-secondary" onClick={() => {
                         setState({ ismodal: false, modalData: "" });
-                     }}>Done</button>
+                    }}>Done</button>
                     <button type="button" className="btn btn-primary">Sent</button>
                 </Modal.Footer>
             </Modal>

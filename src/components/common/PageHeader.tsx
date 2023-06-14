@@ -1,9 +1,9 @@
 import { Nav } from "react-bootstrap";
 
 interface Props {
-  headerTitle: any;
-  isTabShow: any;
-  renderRight: any;
+  headerTitle?: any;
+  isTabShow?: any;
+  renderRight?: any;
 }
 
 const PageHeader: React.FC<Props> = ({
