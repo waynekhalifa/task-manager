@@ -16,6 +16,8 @@
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.4",
     "react-dom": "^18.2.0",
+    "react-drag-and-drop": "^3.0.0",
+    "react-nestable": "^2.0.0",
     "react-router-dom": "^6.12.1",
     "react-scripts": "5.0.1",
     "react-syntax-highlighter": "^15.5.0",

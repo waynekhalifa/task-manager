@@ -1,24 +1,18 @@
 interface Props {
-  title: any;
-  images: any;
-  titleBGClass: any;
-  status: any;
-  date: any;
-  message: any;
-  attachment: any;
-  ticketInfo: any;
+  data: any;
 }
 
-const NestableCard: React.FC<Props> = ({
-  title,
-  images,
-  titleBGClass,
-  status,
-  date,
-  message,
-  attachment,
-  ticketInfo,
-}) => {
+const NestableCard: React.FC<Props> = ({ data }) => {
+  const {
+    title,
+    images,
+    titleBGClass,
+    status,
+    date,
+    message,
+    attachment,
+    ticketInfo,
+  } = data;
   return (
     <div className="dd-handle mt-2">
       <div className="task-info d-flex align-items-center justify-content-between">
