@@ -3,10 +3,10 @@ interface Props {
   post: any;
   name: any;
   Companyname: any;
-  isMember: any;
-  onClickEdit: any;
-  onClickDelete: any;
-  details: any;
+  isMember?: any;
+  onClickEdit?: any;
+  onClickDelete?: any;
+  details?: any;
 }
 
 const OurClients: React.FC<Props> = ({
