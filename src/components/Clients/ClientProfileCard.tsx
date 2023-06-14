@@ -1,8 +1,8 @@
 import profileImg from "assets/images/lg/avatar3.jpg";
 
 interface Props {
-  designation: string;
-  details: string;
+  designation?: string;
+  details?: string;
 }
 
 const ClientProfileCard: React.FC<Props> = ({ designation, details }) => {
