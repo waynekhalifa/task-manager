@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { menu } from "../Data/menu.json";
 import { menu2 } from "../Data/menu2.json";
 import Logo from "../../assets/images/logo.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useApp from "hooks/useApp";
 
 type IState = {
@@ -28,6 +28,12 @@ const Sidebar: React.FC<Props> = ({ activekey }) => {
   const [state, setState] = useState<IState>(INITIAL_STATE);
   const { isSidebarMini, menuData, darkLightMode } = state;
   const { push } = useApp();
+
+  useEffect(() => {
+    window.document.children[0].setAttribute("data-theme", "light");
+
+    // eslint-disable-next-line
+  }, []);
 
   const openChildren = (id: any) => {
     var otherTabs: any = document.getElementsByClassName("has-children");
