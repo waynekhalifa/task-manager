@@ -4,7 +4,7 @@ import PageHeader from "components/common/PageHeader";
 import { TimeAttandanceData } from "components/Data/AppData";
 import {
   EmployessYearlyStatusData,
-  TodayTimeUtilisationData
+  TodayTimeUtilisationData,
 } from "components/Data/ChartData";
 import RecentActivityCard from "components/Employees/RecentActivityCard";
 import StatisticsCard from "components/Employees/StatisticsCard";
@@ -20,7 +20,7 @@ const AttendanceEmployees: React.FC<Props> = () => {
         <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-12">
           <GeneralChartCard
             Title="Today Time Utilisation"
-            extraDivBody={() =>
+            extraDivBody={() => (
               <div className="timesheet-info d-flex align-items-center justify-content-between flex-wrap">
                 <div className="intime d-flex align-items-center mt-2">
                   <i className="icofont-finger-print fs-4 color-light-success" />
@@ -28,10 +28,12 @@ const AttendanceEmployees: React.FC<Props> = () => {
                 </div>
                 <div className="outtime mt-2 w-sm-100">
                   <button type="button" className="btn btn-dark w-sm-100">
-                    <i className="icofont-foot-print me-2" />Punch Out
+                    <i className="icofont-foot-print me-2" />
+                    Punch Out
                   </button>
                 </div>
-              </div>}
+              </div>
+            )}
             identity="todaytimeutl"
             data={TodayTimeUtilisationData}
             footerBody={
@@ -46,6 +48,7 @@ const AttendanceEmployees: React.FC<Props> = () => {
                 </div>
               </div>
             }
+            TitleRight={undefined}
           />
         </div>
         <div className="col-xxl-8 col-xl-8 col-lg-8 col-md-12">
@@ -53,6 +56,9 @@ const AttendanceEmployees: React.FC<Props> = () => {
             Title="Employess Yearly Status"
             identity="Employessyearlystatus"
             data={EmployessYearlyStatusData}
+            TitleRight={undefined}
+            extraDivBody={undefined}
+            footerBody={undefined}
           />
         </div>
       </div>
