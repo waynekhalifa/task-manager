@@ -6,24 +6,26 @@ const Dashboard = lazy(() => import("./screens/Dashboard"));
 
 const App: React.FC = () => {
   return (
-    <Routes>
-      <Route
-        path="/*"
-        element={
-          <Suspense fallback={null}>
-            <Auth />
-          </Suspense>
-        }
-      />
-      <Route
-        path="dashboard/*"
-        element={
-          <Suspense fallback={null}>
-            <Dashboard />
-          </Suspense>
-        }
-      />
-    </Routes>
+    <div id="mytask-layout" className="theme-indigo">
+      <Routes>
+        <Route
+          path="/*"
+          element={
+            <Suspense fallback={null}>
+              <Auth />
+            </Suspense>
+          }
+        />
+        <Route
+          path="dashboard/*"
+          element={
+            <Suspense fallback={null}>
+              <Dashboard />
+            </Suspense>
+          }
+        />
+      </Routes>
+    </div>
   );
 };
 
