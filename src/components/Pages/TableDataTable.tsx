@@ -8,7 +8,7 @@ const TableDataTable: React.FC = () => {
         title="Datatable"
         columns={LeadersListData.columns as any}
         data={LeadersListData.rows}
-        // defaultSortField="title"
+        // defaultSortFieldId="title"
         pagination
         subHeader
         selectableRows={false}

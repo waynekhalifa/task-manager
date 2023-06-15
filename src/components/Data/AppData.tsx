@@ -21,7 +21,7 @@ import lgAvatar10 from "../../assets/images/lg/avatar10.jpg";
 import lgAvatar11 from "../../assets/images/lg/avatar11.jpg";
 import lgAvatar12 from "../../assets/images/lg/avatar12.jpg";
 
-export const chatAppData = [
+export const chatAppData: any = [
   {
     Name: "Chris Fox",
     image: Avatar1,
@@ -269,7 +269,7 @@ export const chatAppData = [
   },
 ];
 
-export const TimesheetListData = {
+export const TimesheetListData: any = {
   title: "Timesheet List",
   columns: [
     {
@@ -291,7 +291,7 @@ export const TimesheetListData = {
     },
     {
       name: "MON",
-      selector: (row) => (
+      selector: (row:any) => (
         <input
           type="time"
           className="form-control"
@@ -304,7 +304,7 @@ export const TimesheetListData = {
     },
     {
       name: "TUE",
-      selector: (row) => (
+      selector: (row:any) => (
         <input
           type="time"
           className="form-control"
@@ -317,7 +317,7 @@ export const TimesheetListData = {
     },
     {
       name: "WED",
-      selector: (row) => (
+      selector: (row:any) => (
         <input
           type="time"
           className="form-control"
@@ -330,7 +330,7 @@ export const TimesheetListData = {
     },
     {
       name: "THUR",
-      selector: (row) => (
+      selector: (row:any) => (
         <input
           type="time"
           className="form-control"
@@ -343,7 +343,7 @@ export const TimesheetListData = {
     },
     {
       name: "FRI",
-      selector: (row) => (
+      selector: (row:any) => (
         <input
           type="time"
           className="form-control"
@@ -356,7 +356,7 @@ export const TimesheetListData = {
     },
     {
       name: "SAT",
-      selector: (row) => (
+      selector: (row:any) => (
         <input
           type="time"
           className="form-control"
@@ -369,9 +369,9 @@ export const TimesheetListData = {
     },
     {
       name: "TOTAL",
-      selector: (row) => row.total,
+      selector: (row:any) => row.total,
       sortable: true,
-      cell: (row) => (
+      cell: (row:any) => (
         <button type="button" className="btn light-success-bg">
           {row.total}
         </button>
@@ -379,7 +379,7 @@ export const TimesheetListData = {
     },
     {
       name: "",
-      selector: (row) => {},
+      selector: (row:any) => {},
       cell: () => (
         <div
           className="btn-group"
@@ -480,14 +480,14 @@ export const TimesheetListData = {
   ],
 };
 
-export const LeadersListData = {
+export const LeadersListData: any = {
   title: "Leaders List",
   columns: [
     {
       name: "LEADER NAME",
-      selector: (row) => row.leadername,
+      selector: (row:any) => row.leadername,
       sortable: true,
-      cell: (row) => (
+      cell: (row:any) => (
         <>
           <img className="avatar rounded-circle" src={row.image} alt="" />{" "}
           <span className="fw-bold ms-1">{row.leadername}</span>
@@ -497,32 +497,32 @@ export const LeadersListData = {
     },
     {
       name: "PROJECT",
-      selector: (row) => row.project,
+      selector: (row:any) => row.project,
       sortable: true,
     },
     {
       name: "TOTAL TASK",
-      selector: (row) => row.totaltask,
+      selector: (row:any) => row.totaltask,
       sortable: true,
     },
     {
       name: "EMAIL",
-      selector: (row) => row.email,
+      selector: (row:any) => row.email,
       sortable: true,
     },
     {
       name: "PROJECT ASSIGNED",
-      selector: (row) => row.projectassigned,
+      selector: (row:any) => row.projectassigned,
       sortable: true,
     },
     {
       name: "ASSIGNED STAFF",
-      selector: (row) => {},
+      selector: (row:any) => {},
       sortable: true,
-      cell: (row) => {
+      cell: (row:any) => {
         return (
           <div className="avatar-list avatar-list-stacked px-3">
-            {row.assignedstaff.map((d, i) => (
+            {row.assignedstaff.map((d:any, i:number) => (
               <img
                 key={"fibd" + i}
                 className="avatar rounded-circle sm"
@@ -539,13 +539,13 @@ export const LeadersListData = {
     },
     {
       name: "STATUS",
-      selector: (row) => {},
+      selector: (row:any) => {},
       sortable: true,
-      cell: (row) => <span className="badge bg-success">{row.status}</span>,
+      cell: (row:any) => <span className="badge bg-success">{row.status}</span>,
     },
     {
       name: "ACTION",
-      selector: (row) => {},
+      selector: (row:any) => {},
       sortable: true,
       cell: () => (
         <div
@@ -637,14 +637,14 @@ export const LeadersListData = {
   ],
 };
 
-export const TicketsViewData = {
+export const TicketsViewData: any = {
   title: "Tickets List",
   columns: [
     {
       name: "TICKET ID",
-      selector: (row) => row.ticketid,
+      selector: (row:any) => row.ticketid,
       sortable: true,
-      cell: (row) => (
+      cell: (row:any) => (
         <a href="tickets-detail" className="fw-bold text-secondary">
           {row.ticketid}
         </a>
@@ -652,14 +652,14 @@ export const TicketsViewData = {
     },
     {
       name: "SUBJECT",
-      selector: (row) => row.subject,
+      selector: (row:any) => row.subject,
       sortable: true,
     },
     {
       name: "ASSIGNED",
-      selector: (row) => row.assigned,
+      selector: (row:any) => row.assigned,
       sortable: true,
-      cell: (row) => (
+      cell: (row:any) => (
         <>
           <img className="avatar rounded-circle" src={row.image} alt="" />{" "}
           <span className="fw-bold ms-1">{row.assigned}</span>
@@ -669,14 +669,14 @@ export const TicketsViewData = {
     },
     {
       name: "CREATD DATE",
-      selector: (row) => row.createdate,
+      selector: (row:any) => row.createdate,
       sortable: true,
     },
     {
       name: "STATUS",
-      selector: (row) => {},
+      selector: (row:any) => {},
       sortable: true,
-      cell: (row) => (
+      cell: (row:any) => (
         <span
           className={`badge ${
             row.status === "Completed" ? "bg-success" : "bg-warning"
@@ -688,7 +688,7 @@ export const TicketsViewData = {
     },
     {
       name: "ACTION",
-      selector: (row) => {},
+      selector: (row:any) => {},
       sortable: true,
       cell: () => (
         <div
@@ -758,7 +758,7 @@ export const TicketsViewData = {
   ],
 };
 
-export const BugImageAttechedData = [
+export const BugImageAttechedData: any = [
   {
     filename: "Image3.jpg",
     fileicon: "icofont-bug fs-5",
@@ -786,7 +786,7 @@ export const BugImageAttechedData = [
   },
 ];
 
-export const BugFileAttechedData = [
+export const BugFileAttechedData:any = [
   {
     filename: "file1.pdf",
     fileicon: "icofont-file-pdf fs-5",
@@ -814,7 +814,7 @@ export const BugFileAttechedData = [
   },
 ];
 
-export const OurClientsData = [
+export const OurClientsData :any = [
   {
     avatar: lgAvatar3,
     post: "CEO",
@@ -877,7 +877,7 @@ export const OurClientsData = [
   },
 ];
 
-export const clentProfileData = [
+export const clentProfileData:any = [
   {
     teamImage: [lgAvatar1, lgAvatar3, lgAvatar4, lgAvatar4, Avatar8],
     logo: "icofont-paint",
@@ -894,7 +894,7 @@ export const clentProfileData = [
   },
 ];
 
-export const MembersData = [
+export const MembersData:any = [
   {
     avatar: lgAvatar3,
     post: "",
@@ -957,7 +957,7 @@ export const MembersData = [
   },
 ];
 
-export const employeeProfileData = [
+export const employeeProfileData:any = [
   {
     teamImage: [lgAvatar1, lgAvatar3, lgAvatar4, lgAvatar4, Avatar8],
     logo: "icofont-paint",
@@ -974,7 +974,7 @@ export const employeeProfileData = [
   },
 ];
 
-export const employeeInformationDetails = [
+export const employeeInformationDetails:any = [
   {
     title: "Personal Informations",
     information: [
@@ -1027,29 +1027,29 @@ export const employeeInformationDetails = [
   },
 ];
 
-export const HolidaysData = {
+export const HolidaysData:any = {
   title: "Holidays List",
   columns: [
     {
       name: "#",
-      selector: (row) => <span className={row.txtClass}>{row.ticketid}</span>,
+      selector: (row:any) => <span className={row.txtClass}>{row.ticketid}</span>,
       sortable: true,
     },
     {
       name: "HOLIDAY DAY",
-      selector: (row) => <span className={row.txtClass}>{row.Holidayday}</span>,
+      selector: (row:any) => <span className={row.txtClass}>{row.Holidayday}</span>,
       sortable: true,
     },
     {
       name: "HOLIDAY DATE",
-      selector: (row) => (
+      selector: (row:any) => (
         <span className={row.txtClass}>{row.holidaydate}</span>
       ),
       sortable: true,
     },
     {
       name: "HOLIDAY NAME",
-      selector: (row) => (
+      selector: (row:any) => (
         <span className={row.txtClass}>{row.holidayname}</span>
       ),
       sortable: true,
@@ -1136,14 +1136,14 @@ export const HolidaysData = {
   ],
 };
 
-export const LeaveRequestData = {
+export const LeaveRequestData:any = {
   title: "Leave Request",
   columns: [
     {
       name: "EMPLOYEE ID",
-      selector: (row) => row.employeeId,
+      selector: (row:any) => row.employeeId,
       sortable: true,
-      cell: (row) => (
+      cell: (row:any) => (
         <a href="members-profile" className="fw-bold text-secondary">
           {row.employeeId}
         </a>
@@ -1151,9 +1151,9 @@ export const LeaveRequestData = {
     },
     {
       name: "EMPLOYEE NAME",
-      selector: (row) => {},
+      selector: (row:any) => {},
       sortable: true,
-      cell: (row) => (
+      cell: (row:any) => (
         <>
           {" "}
           <img className="avatar rounded-circle" src={row.image} alt=""></img>
@@ -1163,27 +1163,27 @@ export const LeaveRequestData = {
     },
     {
       name: "LEAVE TYPE",
-      selector: (row) => row.leavetype,
+      selector: (row:any) => row.leavetype,
       sortable: true,
     },
     {
       name: "FROM",
-      selector: (row) => row.from,
+      selector: (row:any) => row.from,
       sortable: true,
     },
     {
       name: "TO",
-      selector: (row) => row.to,
+      selector: (row:any) => row.to,
       sortable: true,
     },
     {
       name: "REASON",
-      selector: (row) => row.reason,
+      selector: (row:any) => row.reason,
       sortable: true,
     },
     {
       name: "ACTION",
-      selector: (row) => {},
+      selector: (row:any) => {},
       sortable: true,
       cell: () => (
         <div
@@ -1268,20 +1268,20 @@ export const LeaveRequestData = {
   ],
 };
 
-export const DepartmentsData = {
+export const DepartmentsData: any = {
   title: "Departments",
   columns: [
     {
       name: "#",
-      selector: (row) => row.employeeId,
+      selector: (row:any) => row.employeeId,
       sortable: true,
       // cell:row=><a href="#!" className="fw-bold text-secondary">{row.employeeId}</a>
     },
     {
       name: "DEPARTMENT HEAD",
-      selector: (row) => row.DepartmentHead,
+      selector: (row:any) => row.DepartmentHead,
       sortable: true,
-      cell: (row) => (
+      cell: (row:any) => (
         <>
           {" "}
           <img className="avatar rounded-circle" src={row.image} alt=""></img>
@@ -1291,17 +1291,17 @@ export const DepartmentsData = {
     },
     {
       name: "DEPARTMENT NAME",
-      selector: (row) => row.DepartmentName,
+      selector: (row:any) => row.DepartmentName,
       sortable: true,
     },
     {
       name: "EMPLOYEE UNDER WORK",
-      selector: (row) => row.employeeNo,
+      selector: (row:any) => row.employeeNo,
       sortable: true,
     },
     {
       name: "ACTION",
-      selector: (row) => {},
+      selector: (row:any) => {},
       sortable: true,
       cell: () => (
         <div
@@ -1369,12 +1369,12 @@ export const DepartmentsData = {
   ],
 };
 
-export const PaymentsData = {
+export const PaymentsData: any = {
   title: "Payments",
   columns: [
     {
       name: "NO",
-      selector: (row) => (
+      selector: (row:any) => (
         <a href="invoices" className="fw-bold text-secondary">
           {row.no}
         </a>
@@ -1383,34 +1383,34 @@ export const PaymentsData = {
     },
     {
       name: "PROJECT",
-      selector: (row) => row.project,
+      selector: (row:any) => row.project,
       sortable: true,
     },
     {
       name: "CLIENT NAME",
-      selector: (row) => row.clientName,
+      selector: (row:any) => row.clientName,
       sortable: true,
     },
     {
       name: "DATE START",
-      selector: (row) => row.dateStart,
+      selector: (row:any) => row.dateStart,
       sortable: true,
     },
     {
       name: "DATE END",
-      selector: (row) => row.dateEnd,
+      selector: (row:any) => row.dateEnd,
       sortable: true,
     },
     {
       name: "AMOUNT",
-      selector: (row) => row.amount,
+      selector: (row:any) => row.amount,
       sortable: true,
     },
     {
       name: "STATUS",
       selector: () => {},
       sortable: true,
-      cell: (row) => (
+      cell: (row:any) => (
         <span
           className={`badge ${
             row.status === "Paid"
@@ -1492,24 +1492,24 @@ export const PaymentsData = {
   ],
 };
 
-export const ExpensesData = {
+export const ExpensesData: any = {
   title: "Expenses",
   columns: [
     {
       name: "EXP ID",
-      selector: (row) => row.expId,
+      selector: (row:any) => row.expId,
       sortable: true,
     },
     {
       name: "ITEM",
-      selector: (row) => row.item,
+      selector: (row:any) => row.item,
       sortable: true,
     },
     {
       name: "ORDER BY",
       selector: () => {},
       sortable: true,
-      cell: (row) => (
+      cell: (row:any) => (
         <>
           {" "}
           <img className="avatar rounded-circle" src={row.image} alt=""></img>
@@ -1519,19 +1519,19 @@ export const ExpensesData = {
     },
     {
       name: "DATE",
-      selector: (row) => row.date,
+      selector: (row:any) => row.date,
       sortable: true,
     },
     {
       name: "FROM",
-      selector: (row) => row.from,
+      selector: (row:any) => row.from,
       sortable: true,
     },
     {
       name: "STATUS",
       selector: () => {},
       sortable: true,
-      cell: (row) => (
+      cell: (row:any) => (
         <span
           className={`badge ${
             row.status === "Completed"
@@ -1628,7 +1628,7 @@ export const ExpensesData = {
   ],
 };
 
-export const ProjectCardData = [
+export const ProjectCardData: any = [
   {
     teamImage: [lgAvatar1, lgAvatar3, lgAvatar4, lgAvatar4, Avatar8],
     logo: "icofont-paint",
@@ -1730,7 +1730,7 @@ export const ProjectCardData = [
   },
 ];
 
-export const InProgressTaskData = [
+export const InProgressTaskData: any = [
   {
     id: 1,
     images: [Avatar2, Avatar1],
@@ -1798,7 +1798,7 @@ export const InProgressTaskData = [
   },
 ];
 
-export const needReviewData = [
+export const needReviewData: any = [
   {
     id: 1,
     images: [Avatar3, Avatar1],
@@ -1853,7 +1853,7 @@ export const needReviewData = [
   },
 ];
 
-export const CompletedData = [
+export const CompletedData: any = [
   {
     id: 1,
     images: [Avatar3, Avatar1],
@@ -1921,39 +1921,39 @@ export const CompletedData = [
   },
 ];
 
-export const TimeAttandanceData = {
+export const TimeAttandanceData: any = {
   title: "",
   columns: [
     {
       name: "#",
-      selector: (row) => row.no,
+      selector: (row:any) => row.no,
       sortable: true,
     },
     {
       name: "DATE",
-      selector: (row) => row.date,
+      selector: (row:any) => row.date,
       sortable: true,
     },
     {
       name: "PUNCHIN TIME",
-      selector: (row) => row.punchinTime,
+      selector: (row:any) => row.punchinTime,
       sortable: true,
     },
     {
       name: "PUNCHOU TIME",
-      selector: (row) => (
+      selector: (row:any) => (
         <span className="text-danger">{row.punchoutTime}</span>
       ),
       sortable: true,
     },
     {
       name: "BREACK TIME",
-      selector: (row) => <span className="text-danger">{row.breackTime}</span>,
+      selector: (row:any) => <span className="text-danger">{row.breackTime}</span>,
       sortable: true,
     },
     {
       name: "HALF DAY",
-      selector: (row) => (
+      selector: (row:any) => (
         <i
           className={`icofont-close-circled ${
             row.halfDay ? "text-success" : "text-danger"
@@ -1964,7 +1964,7 @@ export const TimeAttandanceData = {
     },
     {
       name: "FULL DAY",
-      selector: (row) => (
+      selector: (row:any) => (
         <i
           className={`icofont-close-circled ${
             row.fullDay ? "text-success" : "text-danger"
@@ -1975,12 +1975,12 @@ export const TimeAttandanceData = {
     },
     {
       name: "OVERTIME",
-      selector: (row) => <span className="text-success">{row.overTime}</span>,
+      selector: (row:any) => <span className="text-success">{row.overTime}</span>,
       sortable: true,
     },
     {
       name: "TOTAL PRODUCTION",
-      selector: (row) => row.total,
+      selector: (row:any) => row.total,
     },
   ],
   rows: [

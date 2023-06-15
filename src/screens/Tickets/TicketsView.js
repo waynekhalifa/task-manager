@@ -70,7 +70,7 @@ class TicketsView extends React.Component{
                                 title={TicketsViewData.title}
                                 columns={columnT}
                                 data={TicketsViewData.rows}
-                                defaultSortField="title"
+                                defaultSortFieldId="title"
                                 pagination
                                 selectableRows={false}
                                 className="table myDataTable table-hover align-middle mb-0 d-row nowrap dataTable no-footer dtr-inline"
