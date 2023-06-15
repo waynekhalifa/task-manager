@@ -74,14 +74,14 @@ const SignIn: React.FC = () => {
               SIGN IN
             </Link>
           </div>
-          <div className="col-12 text-center mt-4">
+          {/* <div className="col-12 text-center mt-4">
             <span className="text-muted">
               Don't have an account yet?{" "}
               <Link to="sign-up" className="text-secondary">
                 Sign up here
               </Link>
             </span>
-          </div>
+          </div> */}
         </form>
       </div>
     </div>
