@@ -22,7 +22,7 @@ const GeneralChartCard: React.FC<Props> = ({
     option: data.options,
     series: data.options.series,
   };
-  const [state, setState] = useState<IState>(INITIAL_STATE);
+  const [state] = useState<IState>(INITIAL_STATE);
   const { option, series } = state;
 
   return (
