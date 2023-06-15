@@ -1,6 +1,10 @@
+import { Suspense, lazy } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
+
 import Sidebar from "components/common/Sidebar";
-import HrDashboard from "./Dashboard/HrDashboard";
 import Header from "components/common/Header";
+
+const DashboardIndex = lazy(() => import("./DashboardIndex"));
 
 const MainIndex: React.FC = () => {
   const activekey = () => {
@@ -21,7 +25,13 @@ const MainIndex: React.FC = () => {
       <div className="main px-lg-4 px-md-4">
         <Header />
         <div className="body d-flex py-lg-3 py-md-2">
-          <HrDashboard />
+          {/* <HrDashboard /> */}
+          <Suspense fallback={null}>
+            <Routes>
+              <Route path="/" element={<Navigate to="summary" />} />
+              <Route path=":slug/*" element={<DashboardIndex />} />
+            </Routes>
+          </Suspense>
         </div>
       </div>
     </div>

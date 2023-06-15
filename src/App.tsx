@@ -1,8 +1,8 @@
 import { Suspense, lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 
-const Auth = lazy(() => import("./screens/AuthIndex"));
-const Dashboard = lazy(() => import("./screens/MainIndex"));
+const AuthIndex = lazy(() => import("./screens/AuthIndex"));
+const MainIndex = lazy(() => import("./screens/MainIndex"));
 
 const App: React.FC = () => {
   return (
@@ -12,7 +12,7 @@ const App: React.FC = () => {
           path="/*"
           element={
             <Suspense fallback={null}>
-              <Auth />
+              <AuthIndex />
             </Suspense>
           }
         />
@@ -20,7 +20,7 @@ const App: React.FC = () => {
           path="dashboard/*"
           element={
             <Suspense fallback={null}>
-              <Dashboard />
+              <MainIndex />
             </Suspense>
           }
         />
