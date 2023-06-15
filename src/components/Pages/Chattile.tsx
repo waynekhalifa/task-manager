@@ -19,8 +19,8 @@ type IState = {
 
 const Chattile: React.FC<Props> = ({ data }) => {
   const INITIAL_STATE: IState = {
-    activeChatIndex: [...data],
-    chatData: 0,
+    chatData: [...data],
+    activeChatIndex: 0,
     txtMessage: "",
   };
   const [state, setState] = useState<IState>(INITIAL_STATE);
