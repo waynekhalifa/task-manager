@@ -16,7 +16,7 @@ const MainIndex: React.FC = () => {
   return (
     <div id="mytask-layout" className="theme-indigo">
       <Sidebar activekey={activekey()} />
-      <>Pages</>
+      <div className="main px-lg-4 px-md-4">Pages</div>
     </div>
   );
 };
