@@ -3,8 +3,8 @@ interface Props {
   iconClass: any;
   iconbg: any;
   title: any;
-  details: any;
-  progressBg: any;
+  details?: any;
+  progressBg?: any;
 }
 
 const StatusCard: React.FC<Props> = ({

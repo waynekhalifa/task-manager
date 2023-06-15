@@ -14,38 +14,38 @@ class TicketsView extends React.Component{
         columnT = [
             {
                 name: "TICKET ID",
-                selector: (row)=>row.ticketid,
+                selector: (row:any)=>row.ticketid,
                 sortable: true,
-                cell:(row)=> <a href="tickets-detail" className="fw-bold text-secondary">{row.ticketid}</a>
+                cell:(row:any)=> <a href="tickets-detail" className="fw-bold text-secondary">{row.ticketid}</a>
             },
             {
                 name: "SUBJECT",
-                selector: (row)=>row.subject,
+                selector: (row:any)=>row.subject,
                 sortable: true
             },
             {
                 name: "ASSIGNED",
-                selector: (row)=>row.assigned,
+                selector: (row:any)=>row.assigned,
                 sortable: true,
                 cell:row=><><img className="avatar rounded-circle" src={row.image} alt="" /> <span className="fw-bold ms-1">{row.assigned}</span></>,
                 minWidth:"250px"
             },
             {
                 name: "CREATD DATE",
-                selector: (row)=>row.createdate,
+                selector: (row:any)=>row.createdate,
                 sortable: true
             },
             {
                 name: "STATUS",
-                selector: (row)=>{},
+                selector: (row:any)=>{},
                 sortable: true,
-                cell:row=><span className={`badge ${row.status==="Completed"?'bg-success':"bg-warning"}`}>{row.status}</span>
+                cell : row=><span className={`badge ${row.status==="Completed"?'bg-success':"bg-warning"}`}>{row.status}</span>
             },
             {
                 name: "ACTION",
-                selector: (row)=>{},
+                selector: (row:any)=>{},
                 sortable: true,
-                cell:(row)=><div className="btn-group" role="group" aria-label="Basic outlined example">
+                cell:(row:any)=><div className="btn-group" role="group" aria-label="Basic outlined example">
                             <button type="button" className="btn btn-outline-secondary" onClick={()=>{ this.setState({ siEditModal:row,isModal:true }) }}><i className="icofont-edit text-success"></i></button>
                             <button type="button" className="btn btn-outline-secondary deleterow"><i className="icofont-ui-delete text-danger"></i></button>
                         </div>

@@ -7,37 +7,14 @@ import Avatar6 from "../../assets/images/xs/avatar6.jpg";
 
 export const EmployeeInfoChartData: any = {
   options: {
-    series: [
-      {
-        name: "Available",
-        data: [4, 19, 7, 35, 14, 27, 9, 12]
-      }
-    ],
-    chart: {
-      height: 140,
-      type: "line",
-      toolbar: {
-        show: false
-      }
-    },
+    series: [{ name: "Available", data: [4, 19, 7, 35, 14, 27, 9, 12] }],
+    chart: { height: 140, type: "line", toolbar: { show: false } },
     grid: {
       show: false,
-      xaxis: {
-        lines: {
-          show: false
-        }
-      },
-      yaxis: {
-        lines: {
-          show: false
-        }
-      }
+      xaxis: { lines: { show: false } },
+      yaxis: { lines: { show: false } }
     },
-    stroke: {
-      width: 4,
-      curve: "smooth",
-      colors: ["var(--chart-color2)"]
-    },
+    stroke: { width: 4, curve: "smooth", colors: ["var(--chart-color2)"] },
     xaxis: {
       type: "datetime",
       categories: [
@@ -52,7 +29,7 @@ export const EmployeeInfoChartData: any = {
       ],
       tickAmount: 10,
       labels: {
-        formatter: function(value, timestamp, opts) {
+        formatter: function(value: any, timestamp: any, opts: any) {
           return opts.dateFormatter(new Date(timestamp), "dd MMM");
         }
       }
@@ -74,15 +51,9 @@ export const EmployeeInfoChartData: any = {
       colors: ["#FFA41B"],
       strokeColors: "#ffffff",
       strokeWidth: 2,
-      hover: {
-        size: 7
-      }
+      hover: { size: 7 }
     },
-    yaxis: {
-      show: false,
-      min: -10,
-      max: 50
-    }
+    yaxis: { show: false, min: -10, max: 50 }
   }
 };
 
