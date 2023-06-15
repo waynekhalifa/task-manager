@@ -179,14 +179,14 @@ const Sidebar: React.FC<Props> = ({ activekey }) => {
               return (
                 <li key={"dsfshsdg" + i} className=" collapsed">
                   <Link
-                    to={process.env.PUBLIC_URL + "/" + d.routerLink[0]}
+                    to={d.routerLink[0]}
                     className={`m-link ${
                       d.routerLink[0] === activekey ? "active" : ""
                     }`}
                   >
                     <i className={d.iconClass}></i>
                     <span>{d.name}</span>
-                    <span className="arrow icofont-dotted-down ms-auto text-end fs-5"></span>
+                    {/* <span className="arrow icofont-dotted-down ms-auto text-end fs-5"></span> */}
                   </Link>
                 </li>
               );
