@@ -51,7 +51,7 @@ export const menu: any[] = [
   },
   {
     name: "Chat",
-    routerLink: ["/dashboard/employees"],
+    routerLink: ["/dashboard/chat"],
     identifier: "Employees",
     iconClass: "icofont-chat",
     breadcrumbMessage: "",

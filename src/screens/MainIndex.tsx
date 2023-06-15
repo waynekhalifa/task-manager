@@ -20,7 +20,7 @@ const MainIndex: React.FC = () => {
     return activeKey1;
   };
   return (
-    <div id="mytask-layout" className="theme-indigo">
+    <>
       <Sidebar activekey={activekey()} />
       <div className="main px-lg-4 px-md-4">
         <Header />
@@ -34,7 +34,7 @@ const MainIndex: React.FC = () => {
           </Suspense>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
