@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import GoogleImg from "../../assets/images/google.svg";
 
 const SignIn: React.FC = () => {
   return (
@@ -11,9 +10,9 @@ const SignIn: React.FC = () => {
         <form className="row g-1 p-3 p-md-4">
           <div className="col-12 text-center mb-1 mb-lg-5">
             <h1>Sign in</h1>
-            <span>Free access to our dashboard.</span>
+            <span>Sign in to your dashboard.</span>
           </div>
-          <div className="col-12 text-center mb-4">
+          {/* <div className="col-12 text-center mb-4">
             <a className="btn btn-lg btn-outline-secondary btn-block" href="#!">
               <span className="d-flex justify-content-center align-items-center">
                 <img
@@ -25,7 +24,7 @@ const SignIn: React.FC = () => {
               </span>
             </a>
             <span className="dividers text-muted mt-4">OR</span>
-          </div>
+          </div> */}
           <div className="col-12">
             <div className="mb-2">
               <label className="form-label">Email address</label>
