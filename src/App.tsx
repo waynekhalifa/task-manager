@@ -2,7 +2,7 @@ import { Suspense, lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 
 const Auth = lazy(() => import("./screens/AuthIndex"));
-const Dashboard = lazy(() => import("./screens/Dashboard"));
+const Dashboard = lazy(() => import("./screens/MainIndex"));
 
 const App: React.FC = () => {
   return (

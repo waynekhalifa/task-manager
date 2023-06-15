@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
-import { menu } from "../Data/menu.json";
-import { menu2 } from "../Data/menu2.json";
+
 import Logo from "../../assets/images/logo.png";
 import { useEffect, useState } from "react";
 import useApp from "hooks/useApp";
+import { menu } from "components/Data/menu";
+import { menu2 } from "components/Data/menu2";
 
 type IState = {
   isSidebarMini: boolean;
