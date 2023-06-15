@@ -1,4 +1,6 @@
 import Sidebar from "components/common/Sidebar";
+import HrDashboard from "./Dashboard/HrDashboard";
+import Header from "components/common/Header";
 
 const MainIndex: React.FC = () => {
   const activekey = () => {
@@ -16,7 +18,12 @@ const MainIndex: React.FC = () => {
   return (
     <div id="mytask-layout" className="theme-indigo">
       <Sidebar activekey={activekey()} />
-      <div className="main px-lg-4 px-md-4">Pages</div>
+      <div className="main px-lg-4 px-md-4">
+        <Header />
+        <div className="body d-flex py-lg-3 py-md-2">
+          <HrDashboard />
+        </div>
+      </div>
     </div>
   );
 };
