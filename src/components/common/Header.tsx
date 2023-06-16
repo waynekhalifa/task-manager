@@ -118,7 +118,7 @@ const Header: React.FC = () => {
                                 <small>1HR</small>
                               </p>
                               <span className="">
-                                Quality Assurance Task Completed
+                                Curriculum Development Task Completed
                               </span>
                             </div>
                           </a>

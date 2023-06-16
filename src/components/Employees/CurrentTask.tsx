@@ -16,7 +16,7 @@ const CurrentTask: React.FC = () => {
                 <div className="dd-handle">
                   <div className="task-info d-flex align-items-center justify-content-between">
                     <h6 className="light-info-bg py-1 px-2 rounded-1 d-inline-block fw-bold small-14 mb-0">
-                      UI/UX Design
+                      Curriculum Development
                     </h6>
                     <div className="task-priority d-flex flex-column align-items-center justify-content-center">
                       <div className="avatar-list avatar-list-stacked m-0">
@@ -55,7 +55,7 @@ const CurrentTask: React.FC = () => {
                 <div className="dd-handle">
                   <div className="task-info d-flex align-items-center justify-content-between">
                     <h6 className="bg-lightgreen py-1 px-2 rounded-1 d-inline-block fw-bold small-14 mb-0">
-                      Website Design
+                      Teacher Training
                     </h6>
                     <div className="task-priority d-flex flex-column align-items-center justify-content-center">
                       <div className="avatar-list avatar-list-stacked m-0">
