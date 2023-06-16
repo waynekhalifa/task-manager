@@ -8,10 +8,12 @@ import { AuthLoginInput } from "types/login";
 import { useLogin } from "framework/auth/login";
 import { Pages } from "enums/pages";
 import { Routes } from "enums/routes.";
+import { useAuth } from "contexts/AuthContext";
 
 const defaultValues: AuthLoginInput = { username: "", password: "" };
 
 const SignIn: React.FC = () => {
+  const { setSession } = useAuth();
   const { push } = useApp();
   const {
     handleSubmit,
@@ -30,6 +32,7 @@ const SignIn: React.FC = () => {
     try {
       const result = await mutateAsync(data);
 
+      setSession(result);
       localStorage.setItem("access_token", result.access);
 
       push(Routes.DASHBOARD + Pages.SUMMARY);
