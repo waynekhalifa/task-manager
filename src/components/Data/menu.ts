@@ -79,4 +79,14 @@ export const menu: any[] = [
     isApp: true,
     children: [],
   },
+  {
+    name: "Categories",
+    routerLink: ["/dashboard/categories"],
+    identifier: "Categories",
+    iconClass: "icofont-listine-dots",
+    breadcrumbMessage: "",
+    isCategory: false,
+    isApp: true,
+    children: [],
+  },
 ];

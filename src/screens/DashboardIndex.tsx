@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { Pages } from "enums/pages";
 import { Suspense, lazy } from "react";
+import Categories from "./Category/Category";
 
 const Projects = lazy(() => import("./Projects/Projects"));
 const Tasks = lazy(() => import("./Projects/Tasks"));
@@ -30,6 +31,8 @@ const DashboardIndex: React.FC = () => {
         return <Attendance />;
       case Pages.CALENDAR:
         return <Calendar />;
+      case Pages.CATEGORIES:
+        return <Categories />;
       default:
         return <HrDashboard />;
     }
