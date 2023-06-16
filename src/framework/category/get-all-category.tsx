@@ -4,7 +4,7 @@ import { QueryOptionsType } from "types/queryOptions";
 import http from "utils/http";
 
 export const getAllCategories = async ({ queryKey }: any) => {
-  const { data } = await http.post(Endpoints.CATEGORY);
+  const { data } = await http.get(Endpoints.CATEGORY);
   return { categories: { data: data as any } };
 };
 

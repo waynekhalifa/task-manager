@@ -10,7 +10,7 @@ const TaskProgress: React.FC = () => {
         <div className="progress-count mb-4">
           <div className="d-flex justify-content-between align-items-center mb-1">
             <h6 className="mb-0 fw-bold d-flex align-items-center">
-              UI/UX Design
+              Curriculum Development
             </h6>
             <span className="small text-muted">02/07</span>
           </div>
@@ -25,7 +25,7 @@ const TaskProgress: React.FC = () => {
         <div className="progress-count mb-4">
           <div className="d-flex justify-content-between align-items-center mb-1">
             <h6 className="mb-0 fw-bold d-flex align-items-center">
-              Website Design
+              Teacher Training
             </h6>
             <span className="small text-muted">01/03</span>
           </div>
@@ -40,7 +40,8 @@ const TaskProgress: React.FC = () => {
         <div className="progress-count mb-4">
           <div className="d-flex justify-content-between align-items-center mb-1">
             <h6 className="mb-0 fw-bold d-flex align-items-center">
-              Quality Assurance
+              Assessment System
+
             </h6>
             <span className="small text-muted">02/07</span>
           </div>
@@ -55,7 +56,8 @@ const TaskProgress: React.FC = () => {
         <div className="progress-count mb-4">
           <div className="d-flex justify-content-between align-items-center mb-1">
             <h6 className="mb-0 fw-bold d-flex align-items-center">
-              Development
+              Student Records
+
             </h6>
             <span className="small text-muted">01/05</span>
           </div>

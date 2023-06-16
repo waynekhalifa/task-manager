@@ -21,7 +21,7 @@ const DashboardIndex: React.FC = () => {
         return <Projects />;
       case Pages.TASKS:
         return <Tasks />;
-      case Pages.TICKETS:
+      case Pages.Enquires:
         return <Tickets />;
       case Pages.EMPLOYEES:
         return <Employees />;

@@ -21,14 +21,12 @@ const INITIAL_STATE: IState = {
   updateRtl: false,
 };
 
-interface Props {
-  activekey: any;
-}
-
-const Sidebar: React.FC<Props> = ({ activekey }) => {
+const Sidebar: React.FC = () => {
   const [state, setState] = useState<IState>(INITIAL_STATE);
   const { isSidebarMini, menuData, darkLightMode } = state;
   const { push } = useApp();
+
+  const activekey = window.location.pathname;
 
   useEffect(() => {
     window.document.children[0].setAttribute("data-theme", "light");
@@ -89,21 +87,6 @@ const Sidebar: React.FC<Props> = ({ activekey }) => {
     }
   };
 
-  // const closeChildren = () => {
-  //   var otherTabs: any = document.getElementsByClassName("has-children");
-  //   if (otherTabs) {
-  //     for (var i = 0; i < otherTabs.length; i++) {
-  //       otherTabs[i].className = otherTabs[i].className.replace(" show", "");
-  //       if (otherTabs[i].parentElement.children.length > 1) {
-  //         otherTabs[i].parentElement.children[0].setAttribute(
-  //           "aria-expanded",
-  //           "false"
-  //         );
-  //       }
-  //     }
-  //   }
-  // };
-
   const GotoChangeMenu = (val: any) => {
     if (val === "UI Components") {
       push("ui-alerts");
@@ -145,9 +128,8 @@ const Sidebar: React.FC<Props> = ({ activekey }) => {
   return (
     <div
       id="mainSideMenu"
-      className={`sidebar px-4 py-4 py-md-5 me-0 ${
-        isSidebarMini ? "sidebar-mini" : ""
-      }`}
+      className={`sidebar px-4 py-4 py-md-5 me-0 ${isSidebarMini ? "sidebar-mini" : ""
+        }`}
     >
       <div className="d-flex flex-column h-100">
         <a href="hr-dashboard" className="mb-0 brand-icon">
@@ -180,9 +162,8 @@ const Sidebar: React.FC<Props> = ({ activekey }) => {
                 <li key={"dsfshsdg" + i} className=" collapsed">
                   <Link
                     to={d.routerLink[0]}
-                    className={`m-link ${
-                      d.routerLink[0] === activekey ? "active" : ""
-                    }`}
+                    className={`m-link ${d.routerLink[0] === activekey ? "active" : ""
+                      }`}
                   >
                     <i className={d.iconClass}></i>
                     <span>{d.name}</span>
@@ -194,13 +175,12 @@ const Sidebar: React.FC<Props> = ({ activekey }) => {
             return (
               <li key={"shsdg" + i} className=" collapsed">
                 <a
-                  className={`m-link ${
-                    d.children.filter(
-                      (d: any) => "/" + d.routerLink[0] === activekey
-                    ).length > 0
+                  className={`m-link ${d.children.filter(
+                    (d: any) => "/" + d.routerLink[0] === activekey
+                  ).length > 0
                       ? "active"
                       : ""
-                  }`}
+                    }`}
                   href="#!"
                   onClick={(e) => {
                     e.preventDefault();
@@ -248,7 +228,7 @@ const Sidebar: React.FC<Props> = ({ activekey }) => {
             );
           })}
         </ul>
-        <ul className="list-unstyled mb-0">
+        {/* <ul className="list-unstyled mb-0">
           <li className="d-flex align-items-center justify-content-center">
             <div className="form-check form-switch theme-switch">
               <input
@@ -281,7 +261,7 @@ const Sidebar: React.FC<Props> = ({ activekey }) => {
               </label>
             </div>
           </li>
-        </ul>
+        </ul> */}
         <button
           type="button"
           className="btn btn-link sidebar-mini-btn text-light"

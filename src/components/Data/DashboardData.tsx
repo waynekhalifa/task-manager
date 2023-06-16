@@ -29,7 +29,7 @@ export const EmployeeInfoChartData: any = {
       ],
       tickAmount: 10,
       labels: {
-        formatter: function(value: any, timestamp: any, opts: any) {
+        formatter: function (value: any, timestamp: any, opts: any) {
           return opts.dateFormatter(new Date(timestamp), "dd MMM");
         }
       }
@@ -79,19 +79,19 @@ export const TopHiringSourcesChartData: any = {
   options: {
     series: [
       {
-        name: "Ui/Ux Designer",
+        name: "Teacher",
         data: [45, 25, 44, 23, 25, 41, 32, 25, 22, 65, 22, 29]
       },
       {
-        name: "App Development",
+        name: "Assessment System",
         data: [45, 12, 25, 22, 19, 22, 29, 23, 23, 25, 41, 32]
       },
       {
-        name: "Quality Assurance",
+        name: "Student",
         data: [45, 25, 32, 25, 22, 65, 44, 23, 25, 41, 22, 29]
       },
       {
-        name: "Web Developer",
+        name: "Manger",
         data: [32, 25, 22, 11, 22, 29, 16, 25, 9, 23, 25, 13]
       }
     ],
@@ -320,7 +320,7 @@ export const ClientInvoicesData: any = {
   columns: [
     {
       name: "NO",
-      selector: () => {},
+      selector: () => { },
       sortable: true,
       cell: (row: any) =>
         <a href="invoices" className="fw-bold text-secondary">
@@ -337,7 +337,7 @@ export const ClientInvoicesData: any = {
     { name: "AMOUNT", selector: (row: any) => row.amount, sortable: true },
     {
       name: "STATUS",
-      selector: (row: any) => {},
+      selector: (row: any) => { },
       sortable: true,
       cell: (row: any) =>
         <span

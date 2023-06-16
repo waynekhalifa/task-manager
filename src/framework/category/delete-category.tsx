@@ -3,11 +3,10 @@ import { Endpoints } from "enums/endpoints";
 import { CategoryUpdateInput } from "types/category";
 import http from "utils/http";
 
-export const useUpdateCategory = () => {
+export const useDeleteCategory = () => {
   return useMutation<any, Error, CategoryUpdateInput>(async updateInput => {
-    const { data } = await http.patch(
-      Endpoints.CATEGORY + updateInput.id + "/",
-      updateInput
+    const { data } = await http.delete(
+      Endpoints.CATEGORY + updateInput.id + "/"
     );
     return { session: { data: data as any } };
   });
@@ -19,6 +18,5 @@ export const categoryInput = (
   return {
     id: data.id,
     name: data.name,
-    base_category: data.base_category
   };
 };

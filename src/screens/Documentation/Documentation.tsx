@@ -1,6 +1,4 @@
 import React from "react";
-import OpenMenu from "assets/images/document/menu-open.png";
-import CloseMenu from "assets/images/document/menu-close.png";
 
 interface Props { }
 
@@ -97,7 +95,7 @@ const Documentation: React.FC<Props> = () => {
                                                 <li><strong><i className="icofont-folder text-secondary me-2"></i>Payroll</strong></li>
                                                 <li><strong><i className="icofont-folder text-secondary me-2"></i>Projects</strong></li>
                                                 <li><strong><i className="icofont-folder text-secondary me-2"></i>Stater</strong></li>
-                                                <li><strong><i className="icofont-folder text-secondary me-2"></i>Tickets</strong></li>
+                                                <li><strong><i className="icofont-folder text-secondary me-2"></i>Enquires</strong></li>
                                                 <li><strong><i className="icofont-folder text-secondary me-2"></i>UIComponents</strong></li>
                                                 <li><strong><i className="icofont-file-code text-secondary me-2"></i>AuthIndex.js</strong></li>
                                                 <li><strong><i className="icofont-file-code text-secondary me-2"></i>mainIndex.js</strong></li>

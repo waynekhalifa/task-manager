@@ -1,27 +1,26 @@
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 
 import Sidebar from "components/common/Sidebar";
 import Header from "components/common/Header";
+import { useAuth } from "contexts/AuthContext";
+import useApp from "hooks/useApp";
 
 const DashboardIndex = lazy(() => import("./DashboardIndex"));
 
 const MainIndex: React.FC = () => {
-  const activekey = () => {
-    var res: any = window.location.pathname;
-    var baseUrl: any = process.env.PUBLIC_URL;
-    baseUrl = baseUrl.split("/");
-    res = res.split("/");
-    // res = res.length > 1 ? res[res.length-1] : "/";
-    res = res.length > 0 ? res[baseUrl.length] : "/";
-    res = res ? "/" + res : "/";
-    const activeKey1 = res;
-    //cdv
-    return activeKey1;
-  };
+  const { session } = useAuth();
+  const { push } = useApp();
+
+  useEffect(() => {
+    if (!session) push("/");
+
+    // eslint-disable-next-line
+  }, []);
+
   return (
     <>
-      <Sidebar activekey={activekey()} />
+      <Sidebar />
       <div className="main px-lg-4 px-md-4">
         <Header />
         <div className="body d-flex py-lg-3 py-md-2">
