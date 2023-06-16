@@ -4,13 +4,12 @@ import { loginValidation } from "validators/loginValidation";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import useApp from "hooks/useApp";
+import { AuthLoginInput } from "types/login";
+import { useLogin } from "framework/auth/login";
+import { Pages } from "enums/pages";
+import { Routes } from "enums/routes.";
 
-interface IFormInputs {
-  email: string;
-  password: string;
-}
-
-const defaultValues: IFormInputs = { email: "", password: "" };
+const defaultValues: AuthLoginInput = { username: "", password: "" };
 
 const SignIn: React.FC = () => {
   const { push } = useApp();
@@ -23,13 +22,22 @@ const SignIn: React.FC = () => {
     mode: "onChange",
     defaultValues,
   });
+  const { mutateAsync } = useLogin();
 
-  const onSubmit: SubmitHandler<IFormInputs> = async (data: IFormInputs) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<AuthLoginInput> = async (
+    data: AuthLoginInput
+  ) => {
+    try {
+      const result = await mutateAsync(data);
 
-    /** should implement login functionality */
+      console.log({ result });
 
-    push("/dashboard");
+      push(Routes.DASHBOARD + Pages.SUMMARY);
+    } catch (err: Error | any) {
+      //  @TODO should handle error
+
+      console.log(err);
+    }
   };
 
   return (
@@ -45,12 +53,12 @@ const SignIn: React.FC = () => {
           </div>
           <div className="col-12">
             <div className="mb-2">
-              <label className="form-label">Email address</label>
+              <label className="form-label">Username</label>
               <input
-                {...register("email")}
-                type="email"
+                {...register("username")}
+                type="text"
                 className="form-control form-control-lg"
-                placeholder="name@example.com"
+                placeholder="name123"
               />
             </div>
           </div>
