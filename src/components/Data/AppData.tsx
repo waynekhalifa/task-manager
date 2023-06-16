@@ -274,7 +274,7 @@ export const TimesheetListData: any = {
   columns: [
     {
       name: "PROJECT NAME",
-      selector: () => {},
+      selector: () => { },
       sortable: true,
       cell: () => (
         <select className="form-select">
@@ -291,87 +291,87 @@ export const TimesheetListData: any = {
     },
     {
       name: "MON",
-      selector: (row:any) => (
+      selector: (row: any) => (
         <input
           type="time"
           className="form-control"
           id="timepickerded29"
           value={row.mon}
-          onChange={() => {}}
+          onChange={() => { }}
         />
       ),
       sortable: true,
     },
     {
       name: "TUE",
-      selector: (row:any) => (
+      selector: (row: any) => (
         <input
           type="time"
           className="form-control"
           id="timepickerded29"
           value={row.tue}
-          onChange={() => {}}
+          onChange={() => { }}
         />
       ),
       sortable: true,
     },
     {
       name: "WED",
-      selector: (row:any) => (
+      selector: (row: any) => (
         <input
           type="time"
           className="form-control"
           id="timepickerded29"
           value={row.wed}
-          onChange={() => {}}
+          onChange={() => { }}
         />
       ),
       sortable: true,
     },
     {
       name: "THUR",
-      selector: (row:any) => (
+      selector: (row: any) => (
         <input
           type="time"
           className="form-control"
           id="timepickerded29"
           value={row.thur}
-          onChange={() => {}}
+          onChange={() => { }}
         />
       ),
       sortable: true,
     },
     {
       name: "FRI",
-      selector: (row:any) => (
+      selector: (row: any) => (
         <input
           type="time"
           className="form-control"
           id="timepickerded29"
           value={row.fri}
-          onChange={() => {}}
+          onChange={() => { }}
         />
       ),
       sortable: true,
     },
     {
       name: "SAT",
-      selector: (row:any) => (
+      selector: (row: any) => (
         <input
           type="time"
           className="form-control"
           id="timepickerded29"
           value={row.sat}
-          onChange={() => {}}
+          onChange={() => { }}
         />
       ),
       sortable: true,
     },
     {
       name: "TOTAL",
-      selector: (row:any) => row.total,
+      selector: (row: any) => row.total,
       sortable: true,
-      cell: (row:any) => (
+      cell: (row: any) => (
         <button type="button" className="btn light-success-bg">
           {row.total}
         </button>
@@ -379,7 +379,7 @@ export const TimesheetListData: any = {
     },
     {
       name: "",
-      selector: (row:any) => {},
+      selector: (row: any) => { },
       cell: () => (
         <div
           className="btn-group"
@@ -485,9 +485,9 @@ export const LeadersListData: any = {
   columns: [
     {
       name: "LEADER NAME",
-      selector: (row:any) => row.leadername,
+      selector: (row: any) => row.leadername,
       sortable: true,
-      cell: (row:any) => (
+      cell: (row: any) => (
         <>
           <img className="avatar rounded-circle" src={row.image} alt="" />{" "}
           <span className="fw-bold ms-1">{row.leadername}</span>
@@ -497,32 +497,32 @@ export const LeadersListData: any = {
     },
     {
       name: "PROJECT",
-      selector: (row:any) => row.project,
+      selector: (row: any) => row.project,
       sortable: true,
     },
     {
       name: "TOTAL TASK",
-      selector: (row:any) => row.totaltask,
+      selector: (row: any) => row.totaltask,
       sortable: true,
     },
     {
       name: "EMAIL",
-      selector: (row:any) => row.email,
+      selector: (row: any) => row.email,
       sortable: true,
     },
     {
       name: "PROJECT ASSIGNED",
-      selector: (row:any) => row.projectassigned,
+      selector: (row: any) => row.projectassigned,
       sortable: true,
     },
     {
       name: "ASSIGNED STAFF",
-      selector: (row:any) => {},
+      selector: (row: any) => { },
       sortable: true,
-      cell: (row:any) => {
+      cell: (row: any) => {
         return (
           <div className="avatar-list avatar-list-stacked px-3">
-            {row.assignedstaff.map((d:any, i:number) => (
+            {row.assignedstaff.map((d: any, i: number) => (
               <img
                 key={"fibd" + i}
                 className="avatar rounded-circle sm"
@@ -539,13 +539,13 @@ export const LeadersListData: any = {
     },
     {
       name: "STATUS",
-      selector: (row:any) => {},
+      selector: (row: any) => { },
       sortable: true,
-      cell: (row:any) => <span className="badge bg-success">{row.status}</span>,
+      cell: (row: any) => <span className="badge bg-success">{row.status}</span>,
     },
     {
       name: "ACTION",
-      selector: (row:any) => {},
+      selector: (row: any) => { },
       sortable: true,
       cell: () => (
         <div
@@ -637,29 +637,29 @@ export const LeadersListData: any = {
   ],
 };
 
-export const TicketsViewData: any = {
-  title: "Tickets List",
+export const EnquiresViewData: any = {
+  title: "Enquires List",
   columns: [
     {
       name: "TICKET ID",
-      selector: (row:any) => row.ticketid,
+      selector: (row: any) => row.ticketid,
       sortable: true,
-      cell: (row:any) => (
-        <a href="tickets-detail" className="fw-bold text-secondary">
+      cell: (row: any) => (
+        <a href="Enquires-detail" className="fw-bold text-secondary">
           {row.ticketid}
         </a>
       ),
     },
     {
       name: "SUBJECT",
-      selector: (row:any) => row.subject,
+      selector: (row: any) => row.subject,
       sortable: true,
     },
     {
       name: "ASSIGNED",
-      selector: (row:any) => row.assigned,
+      selector: (row: any) => row.assigned,
       sortable: true,
-      cell: (row:any) => (
+      cell: (row: any) => (
         <>
           <img className="avatar rounded-circle" src={row.image} alt="" />{" "}
           <span className="fw-bold ms-1">{row.assigned}</span>
@@ -669,18 +669,17 @@ export const TicketsViewData: any = {
     },
     {
       name: "CREATD DATE",
-      selector: (row:any) => row.createdate,
+      selector: (row: any) => row.createdate,
       sortable: true,
     },
     {
       name: "STATUS",
-      selector: (row:any) => {},
+      selector: (row: any) => { },
       sortable: true,
-      cell: (row:any) => (
+      cell: (row: any) => (
         <span
-          className={`badge ${
-            row.status === "Completed" ? "bg-success" : "bg-warning"
-          }`}
+          className={`badge ${row.status === "Completed" ? "bg-success" : "bg-warning"
+            }`}
         >
           {row.status}
         </span>
@@ -688,7 +687,7 @@ export const TicketsViewData: any = {
     },
     {
       name: "ACTION",
-      selector: (row:any) => {},
+      selector: (row: any) => { },
       sortable: true,
       cell: () => (
         <div
@@ -786,7 +785,7 @@ export const BugImageAttechedData: any = [
   },
 ];
 
-export const BugFileAttechedData:any = [
+export const BugFileAttechedData: any = [
   {
     filename: "file1.pdf",
     fileicon: "icofont-file-pdf fs-5",
@@ -814,7 +813,7 @@ export const BugFileAttechedData:any = [
   },
 ];
 
-export const OurClientsData :any = [
+export const OurClientsData: any = [
   {
     avatar: lgAvatar3,
     post: "CEO",
@@ -877,24 +876,24 @@ export const OurClientsData :any = [
   },
 ];
 
-export const clentProfileData:any = [
+export const clentProfileData: any = [
   {
     teamImage: [lgAvatar1, lgAvatar3, lgAvatar4, lgAvatar4, Avatar8],
     logo: "icofont-paint",
     logoBg: "light-info-bg",
-    title: "UI/UX Design",
+    title: "Curriculum Development",
     sl: "Social Geek Made",
   },
   {
     teamImage: [lgAvatar1, lgAvatar3, lgAvatar4, lgAvatar4],
     logo: "icofont-vector-path",
     logoBg: "bg-lightgreen",
-    title: "Website Design",
+    title: "Teacher Training",
     sl: "Practice to Perfect",
   },
 ];
 
-export const MembersData:any = [
+export const MembersData: any = [
   {
     avatar: lgAvatar3,
     post: "",
@@ -904,7 +903,7 @@ export const MembersData:any = [
   {
     avatar: lgAvatar2,
     post: "",
-    name: "Quality Assurance",
+    name: "Curriculum Development",
     Companyname: "Lillian Powell",
   },
   {
@@ -940,7 +939,7 @@ export const MembersData:any = [
   {
     avatar: lgAvatar12,
     post: "",
-    name: "Quality Assurance",
+    name: "Curriculum Development",
     Companyname: "Paul Slater",
   },
   {
@@ -957,24 +956,24 @@ export const MembersData:any = [
   },
 ];
 
-export const employeeProfileData:any = [
+export const employeeProfileData: any = [
   {
     teamImage: [lgAvatar1, lgAvatar3, lgAvatar4, lgAvatar4, Avatar8],
     logo: "icofont-paint",
     logoBg: "light-info-bg",
-    title: "UI/UX Design",
+    title: "Curriculum Development",
     sl: "Social Geek Made",
   },
   {
     teamImage: [lgAvatar1, lgAvatar3, lgAvatar4, lgAvatar4],
     logo: "icofont-vector-path",
     logoBg: "bg-lightgreen",
-    title: "Website Design",
+    title: "Teacher Training",
     sl: "Practice to Perfect",
   },
 ];
 
-export const employeeInformationDetails:any = [
+export const employeeInformationDetails: any = [
   {
     title: "Personal Informations",
     information: [
@@ -1027,36 +1026,36 @@ export const employeeInformationDetails:any = [
   },
 ];
 
-export const HolidaysData:any = {
+export const HolidaysData: any = {
   title: "Holidays List",
   columns: [
     {
       name: "#",
-      selector: (row:any) => <span className={row.txtClass}>{row.ticketid}</span>,
+      selector: (row: any) => <span className={row.txtClass}>{row.ticketid}</span>,
       sortable: true,
     },
     {
       name: "HOLIDAY DAY",
-      selector: (row:any) => <span className={row.txtClass}>{row.Holidayday}</span>,
+      selector: (row: any) => <span className={row.txtClass}>{row.Holidayday}</span>,
       sortable: true,
     },
     {
       name: "HOLIDAY DATE",
-      selector: (row:any) => (
+      selector: (row: any) => (
         <span className={row.txtClass}>{row.holidaydate}</span>
       ),
       sortable: true,
     },
     {
       name: "HOLIDAY NAME",
-      selector: (row:any) => (
+      selector: (row: any) => (
         <span className={row.txtClass}>{row.holidayname}</span>
       ),
       sortable: true,
     },
     {
       name: "ACTION",
-      selector: () => {},
+      selector: () => { },
       sortable: true,
       cell: () => (
         <div
@@ -1136,14 +1135,14 @@ export const HolidaysData:any = {
   ],
 };
 
-export const LeaveRequestData:any = {
+export const LeaveRequestData: any = {
   title: "Leave Request",
   columns: [
     {
       name: "EMPLOYEE ID",
-      selector: (row:any) => row.employeeId,
+      selector: (row: any) => row.employeeId,
       sortable: true,
-      cell: (row:any) => (
+      cell: (row: any) => (
         <a href="members-profile" className="fw-bold text-secondary">
           {row.employeeId}
         </a>
@@ -1151,9 +1150,9 @@ export const LeaveRequestData:any = {
     },
     {
       name: "EMPLOYEE NAME",
-      selector: (row:any) => {},
+      selector: (row: any) => { },
       sortable: true,
-      cell: (row:any) => (
+      cell: (row: any) => (
         <>
           {" "}
           <img className="avatar rounded-circle" src={row.image} alt=""></img>
@@ -1163,27 +1162,27 @@ export const LeaveRequestData:any = {
     },
     {
       name: "LEAVE TYPE",
-      selector: (row:any) => row.leavetype,
+      selector: (row: any) => row.leavetype,
       sortable: true,
     },
     {
       name: "FROM",
-      selector: (row:any) => row.from,
+      selector: (row: any) => row.from,
       sortable: true,
     },
     {
       name: "TO",
-      selector: (row:any) => row.to,
+      selector: (row: any) => row.to,
       sortable: true,
     },
     {
       name: "REASON",
-      selector: (row:any) => row.reason,
+      selector: (row: any) => row.reason,
       sortable: true,
     },
     {
       name: "ACTION",
-      selector: (row:any) => {},
+      selector: (row: any) => { },
       sortable: true,
       cell: () => (
         <div
@@ -1273,15 +1272,15 @@ export const DepartmentsData: any = {
   columns: [
     {
       name: "#",
-      selector: (row:any) => row.employeeId,
+      selector: (row: any) => row.employeeId,
       sortable: true,
       // cell:row=><a href="#!" className="fw-bold text-secondary">{row.employeeId}</a>
     },
     {
       name: "DEPARTMENT HEAD",
-      selector: (row:any) => row.DepartmentHead,
+      selector: (row: any) => row.DepartmentHead,
       sortable: true,
-      cell: (row:any) => (
+      cell: (row: any) => (
         <>
           {" "}
           <img className="avatar rounded-circle" src={row.image} alt=""></img>
@@ -1291,17 +1290,17 @@ export const DepartmentsData: any = {
     },
     {
       name: "DEPARTMENT NAME",
-      selector: (row:any) => row.DepartmentName,
+      selector: (row: any) => row.DepartmentName,
       sortable: true,
     },
     {
       name: "EMPLOYEE UNDER WORK",
-      selector: (row:any) => row.employeeNo,
+      selector: (row: any) => row.employeeNo,
       sortable: true,
     },
     {
       name: "ACTION",
-      selector: (row:any) => {},
+      selector: (row: any) => { },
       sortable: true,
       cell: () => (
         <div
@@ -1374,7 +1373,7 @@ export const PaymentsData: any = {
   columns: [
     {
       name: "NO",
-      selector: (row:any) => (
+      selector: (row: any) => (
         <a href="invoices" className="fw-bold text-secondary">
           {row.no}
         </a>
@@ -1383,42 +1382,41 @@ export const PaymentsData: any = {
     },
     {
       name: "PROJECT",
-      selector: (row:any) => row.project,
+      selector: (row: any) => row.project,
       sortable: true,
     },
     {
       name: "CLIENT NAME",
-      selector: (row:any) => row.clientName,
+      selector: (row: any) => row.clientName,
       sortable: true,
     },
     {
       name: "DATE START",
-      selector: (row:any) => row.dateStart,
+      selector: (row: any) => row.dateStart,
       sortable: true,
     },
     {
       name: "DATE END",
-      selector: (row:any) => row.dateEnd,
+      selector: (row: any) => row.dateEnd,
       sortable: true,
     },
     {
       name: "AMOUNT",
-      selector: (row:any) => row.amount,
+      selector: (row: any) => row.amount,
       sortable: true,
     },
     {
       name: "STATUS",
-      selector: () => {},
+      selector: () => { },
       sortable: true,
-      cell: (row:any) => (
+      cell: (row: any) => (
         <span
-          className={`badge ${
-            row.status === "Paid"
-              ? "bg-success"
-              : row.status === "Draf"
+          className={`badge ${row.status === "Paid"
+            ? "bg-success"
+            : row.status === "Draf"
               ? "bg-lavender-purple"
               : "bg-warning"
-          }`}
+            }`}
         >
           {row.status}
         </span>
@@ -1497,19 +1495,19 @@ export const ExpensesData: any = {
   columns: [
     {
       name: "EXP ID",
-      selector: (row:any) => row.expId,
+      selector: (row: any) => row.expId,
       sortable: true,
     },
     {
       name: "ITEM",
-      selector: (row:any) => row.item,
+      selector: (row: any) => row.item,
       sortable: true,
     },
     {
       name: "ORDER BY",
-      selector: () => {},
+      selector: () => { },
       sortable: true,
-      cell: (row:any) => (
+      cell: (row: any) => (
         <>
           {" "}
           <img className="avatar rounded-circle" src={row.image} alt=""></img>
@@ -1519,27 +1517,26 @@ export const ExpensesData: any = {
     },
     {
       name: "DATE",
-      selector: (row:any) => row.date,
+      selector: (row: any) => row.date,
       sortable: true,
     },
     {
       name: "FROM",
-      selector: (row:any) => row.from,
+      selector: (row: any) => row.from,
       sortable: true,
     },
     {
       name: "STATUS",
-      selector: () => {},
+      selector: () => { },
       sortable: true,
-      cell: (row:any) => (
+      cell: (row: any) => (
         <span
-          className={`badge ${
-            row.status === "Completed"
-              ? "bg-success"
-              : row.status === "Draf"
+          className={`badge ${row.status === "Completed"
+            ? "bg-success"
+            : row.status === "Draf"
               ? "bg-lavender-purple"
               : "bg-warning"
-          }`}
+            }`}
         >
           {row.status}
         </span>
@@ -1547,7 +1544,7 @@ export const ExpensesData: any = {
     },
     {
       name: "ACTION",
-      selector: () => {},
+      selector: () => { },
       sortable: true,
       cell: () => (
         <div
@@ -1633,14 +1630,14 @@ export const ProjectCardData: any = [
     teamImage: [lgAvatar1, lgAvatar3, lgAvatar4, lgAvatar4, Avatar8],
     logo: "icofont-paint",
     logoBg: "light-info-bg",
-    title: "UI/UX Design",
+    title: "Curriculum Development",
     sl: "Social Geek Made",
   },
   {
     teamImage: [lgAvatar1, lgAvatar3, lgAvatar4, lgAvatar4],
     logo: "icofont-vector-path",
     logoBg: "bg-lightgreen",
-    title: "Website Design",
+    title: "Teacher Training",
     sl: "Practice to Perfect",
   },
   {
@@ -1655,14 +1652,14 @@ export const ProjectCardData: any = [
     ],
     logo: "icofont-ui-touch-phone",
     logoBg: "bg-lightyellow",
-    title: "App Development",
+    title: "Assessment System",
     sl: "Java Dalia",
   },
   {
     teamImage: [lgAvatar1, lgAvatar3],
     logo: "icofont-tick-boxed",
     logoBg: "light-success-bg",
-    title: "Quality Assurance",
+    title: "Curriculum Development",
     sl: "Switch and Swif",
   },
   {
@@ -1694,21 +1691,21 @@ export const ProjectCardData: any = [
     ],
     logo: "icofont-tasks",
     logoBg: "bg-lightblue",
-    title: "Software Testing",
+    title: "Student Records",
     sl: "Fast Cad",
   },
   {
     teamImage: [lgAvatar1, lgAvatar3, lgAvatar4, lgAvatar8],
     logo: "icofont-vector-path",
     logoBg: "bg-lightgreen",
-    title: "Website Design",
+    title: "Teacher Training",
     sl: "Hex Clan",
   },
   {
     teamImage: [lgAvatar1, lgAvatar3],
     logo: "icofont-tick-boxed",
     logoBg: "light-success-bg",
-    title: "Quality Assurance",
+    title: "Curriculum Development",
     sl: "Switch and Swif",
   },
   {
@@ -1736,7 +1733,7 @@ export const InProgressTaskData: any = [
     images: [Avatar2, Avatar1],
     Data: "MEDI1UM",
     status: "MEDIUM",
-    title: "Quality Assurance",
+    title: "Curriculum Development",
     titleBGClass: "light-success-bg",
     date: "28 Mar",
     message: 5,
@@ -1749,7 +1746,7 @@ export const InProgressTaskData: any = [
     images: [Avatar2],
     Data: "LOW2",
     status: "LOW",
-    title: "Website Design",
+    title: "Teacher Training",
     titleBGClass: "bg-lightgreen",
     date: "12 Feb",
     message: 3,
@@ -1762,7 +1759,7 @@ export const InProgressTaskData: any = [
     images: [Avatar3, Avatar1],
     Data: "MEDI3UM",
     status: "MEDIUM",
-    title: "UI/UX Design",
+    title: "Curriculum Development",
     titleBGClass: "light-info-bg",
     date: "03 Apr",
     message: 7,
@@ -1775,7 +1772,7 @@ export const InProgressTaskData: any = [
     images: [Avatar5, Avatar1],
     Data: "MEDI4UM",
     status: "MEDIUM",
-    title: "UI/UX Design",
+    title: "Curriculum Development",
     titleBGClass: "light-info-bg",
     date: "03 Apr",
     message: 7,
@@ -1804,7 +1801,7 @@ export const needReviewData: any = [
     images: [Avatar3, Avatar1],
     Data: "MEDIUM1need",
     status: "MEDIUM",
-    title: "UI/UX Design",
+    title: "Curriculum Development",
     titleBGClass: "light-info-bg",
     date: "03 Apr",
     message: 7,
@@ -1817,7 +1814,7 @@ export const needReviewData: any = [
     images: [Avatar5, Avatar1],
     Data: "MEDIUM2need",
     status: "MEDIUM",
-    title: "UI/UX Design",
+    title: "Curriculum Development",
     titleBGClass: "light-info-bg",
     date: "03 Apr",
     message: 7,
@@ -1830,7 +1827,7 @@ export const needReviewData: any = [
     images: [Avatar2, Avatar1],
     Data: "MEDIUM3need",
     status: "MEDIUM",
-    title: "Quality Assurance",
+    title: "Curriculum Development",
     titleBGClass: "light-success-bg",
     date: "28 Mar",
     message: 5,
@@ -1859,7 +1856,7 @@ export const CompletedData: any = [
     images: [Avatar3, Avatar1],
     Data: "MEDIUM1Complete",
     status: "MEDIUM",
-    title: "UI/UX Design",
+    title: "Curriculum Development",
     titleBGClass: "light-info-bg",
     date: "03 Apr",
     message: 7,
@@ -1872,7 +1869,7 @@ export const CompletedData: any = [
     images: [Avatar5, Avatar1],
     Data: "MEDIUM2Complete",
     status: "MEDIUM",
-    title: "UI/UX Design",
+    title: "Curriculum Development",
     titleBGClass: "light-info-bg",
     date: "03 Apr",
     message: 7,
@@ -1885,7 +1882,7 @@ export const CompletedData: any = [
     images: [Avatar2, Avatar1],
     Data: "MEDIUM3Complete",
     status: "MEDIUM",
-    title: "Quality Assurance",
+    title: "Curriculum Development",
     titleBGClass: "light-success-bg",
     date: "28 Mar",
     message: 5,
@@ -1926,61 +1923,59 @@ export const TimeAttandanceData: any = {
   columns: [
     {
       name: "#",
-      selector: (row:any) => row.no,
+      selector: (row: any) => row.no,
       sortable: true,
     },
     {
       name: "DATE",
-      selector: (row:any) => row.date,
+      selector: (row: any) => row.date,
       sortable: true,
     },
     {
       name: "PUNCHIN TIME",
-      selector: (row:any) => row.punchinTime,
+      selector: (row: any) => row.punchinTime,
       sortable: true,
     },
     {
       name: "PUNCHOU TIME",
-      selector: (row:any) => (
+      selector: (row: any) => (
         <span className="text-danger">{row.punchoutTime}</span>
       ),
       sortable: true,
     },
     {
       name: "BREACK TIME",
-      selector: (row:any) => <span className="text-danger">{row.breackTime}</span>,
+      selector: (row: any) => <span className="text-danger">{row.breackTime}</span>,
       sortable: true,
     },
     {
       name: "HALF DAY",
-      selector: (row:any) => (
+      selector: (row: any) => (
         <i
-          className={`icofont-close-circled ${
-            row.halfDay ? "text-success" : "text-danger"
-          }`}
+          className={`icofont-close-circled ${row.halfDay ? "text-success" : "text-danger"
+            }`}
         ></i>
       ),
       sortable: true,
     },
     {
       name: "FULL DAY",
-      selector: (row:any) => (
+      selector: (row: any) => (
         <i
-          className={`icofont-close-circled ${
-            row.fullDay ? "text-success" : "text-danger"
-          }`}
+          className={`icofont-close-circled ${row.fullDay ? "text-success" : "text-danger"
+            }`}
         ></i>
       ),
       sortable: true,
     },
     {
       name: "OVERTIME",
-      selector: (row:any) => <span className="text-success">{row.overTime}</span>,
+      selector: (row: any) => <span className="text-success">{row.overTime}</span>,
       sortable: true,
     },
     {
       name: "TOTAL PRODUCTION",
-      selector: (row:any) => row.total,
+      selector: (row: any) => row.total,
     },
   ],
   rows: [

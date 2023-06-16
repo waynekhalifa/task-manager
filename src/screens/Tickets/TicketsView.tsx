@@ -1,13 +1,13 @@
 import DataTable from "react-data-table-component";
 import { Modal } from "react-bootstrap";
 import PageHeader from "../../components/common/PageHeader";
-import { TicketsViewData } from "../../components/Data/AppData";
+import { EnquiresViewData } from "../../components/Data/AppData";
 import { useState } from "react";
 
 type IState = { isModal: boolean; siEditModal: any };
 const INITIAL_STATE: IState = { isModal: false, siEditModal: "" };
 
-const TicketsView: React.FC = () => {
+const EnquiresView: React.FC = () => {
   const [state, setState] = useState<IState>(INITIAL_STATE);
   const columnT = [
     {
@@ -15,7 +15,7 @@ const TicketsView: React.FC = () => {
       selector: (row: any) => row.ticketid,
       sortable: true,
       cell: (row: any) => (
-        <a href="tickets-detail" className="fw-bold text-secondary">
+        <a href="Enquires-detail" className="fw-bold text-secondary">
           {row.ticketid}
         </a>
       ),
@@ -44,13 +44,12 @@ const TicketsView: React.FC = () => {
     },
     {
       name: "STATUS",
-      selector: (row: any) => {},
+      selector: (row: any) => { },
       sortable: true,
       cell: (row: any) => (
         <span
-          className={`badge ${
-            row.status === "Completed" ? "bg-success" : "bg-warning"
-          }`}
+          className={`badge ${row.status === "Completed" ? "bg-success" : "bg-warning"
+            }`}
         >
           {row.status}
         </span>
@@ -58,7 +57,7 @@ const TicketsView: React.FC = () => {
     },
     {
       name: "ACTION",
-      selector: (row: any) => {},
+      selector: (row: any) => { },
       sortable: true,
       cell: (row: any) => (
         <div
@@ -86,7 +85,7 @@ const TicketsView: React.FC = () => {
   return (
     <div className="container-xxl">
       <PageHeader
-        headerTitle="Tickets"
+        headerTitle="Enquires"
         renderRight={() => {
           return (
             <div className="col-auto d-flex w-sm-100">
@@ -96,7 +95,7 @@ const TicketsView: React.FC = () => {
                   setState((prevState) => ({ ...prevState, isModal: true }));
                 }}
               >
-                <i className="icofont-plus-circle me-2 fs-6"></i>Add Tickets
+                <i className="icofont-plus-circle me-2 fs-6"></i>Add Enquires
               </button>
             </div>
           );
@@ -107,9 +106,9 @@ const TicketsView: React.FC = () => {
           <div className="card">
             <div className="card-body">
               <DataTable
-                title={TicketsViewData.title}
+                title={EnquiresViewData.title}
                 columns={columnT}
-                data={TicketsViewData.rows}
+                data={EnquiresViewData.rows}
                 // defaultSortField="title"
                 pagination
                 selectableRows={false}
@@ -141,7 +140,7 @@ const TicketsView: React.FC = () => {
               type="text"
               className="form-control"
               id="sub"
-              onChange={() => {}}
+              onChange={() => { }}
               value={state.siEditModal ? state.siEditModal.subject : ""}
             />
           </div>
@@ -156,7 +155,7 @@ const TicketsView: React.FC = () => {
                     type="text"
                     className="form-control"
                     id="depone"
-                    onChange={() => {}}
+                    onChange={() => { }}
                     value={state.siEditModal ? state.siEditModal.assigned : ""}
                   />
                 </div>
@@ -168,7 +167,7 @@ const TicketsView: React.FC = () => {
                     type="date"
                     className="form-control"
                     id="deptwo"
-                    onChange={() => {}}
+                    onChange={() => { }}
                     value={
                       state.siEditModal ? state.siEditModal.createdate : ""
                     }
@@ -206,4 +205,4 @@ const TicketsView: React.FC = () => {
   );
 };
 
-export default TicketsView;
+export default EnquiresView;

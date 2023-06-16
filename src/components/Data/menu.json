@@ -2,7 +2,9 @@
     "menu": [
         {
             "name": "Dashboard",
-            "routerLink": [""],
+            "routerLink": [
+                ""
+            ],
             "identifier": "dashboard",
             "iconClass": "icofont-home fs-5",
             "breadcrumbMessage": "Welcome to Analytics Dashboard.",
@@ -11,7 +13,9 @@
             "children": [
                 {
                     "name": "Hr Dashboard",
-                    "routerLink": ["hr-dashboard"],
+                    "routerLink": [
+                        "hr-dashboard"
+                    ],
                     "identifier": "Hr Dashboard",
                     "iconClass": "",
                     "breadcrumbMessage": "",
@@ -21,7 +25,9 @@
                 },
                 {
                     "name": "Project Dashboard",
-                    "routerLink": ["project-dashboard"],
+                    "routerLink": [
+                        "project-dashboard"
+                    ],
                     "identifier": "Project Dashboard",
                     "iconClass": "",
                     "breadcrumbMessage": "",
@@ -33,7 +39,9 @@
         },
         {
             "name": "Projects",
-            "routerLink": [""],
+            "routerLink": [
+                ""
+            ],
             "identifier": "Projects",
             "iconClass": "icofont-briefcase",
             "breadcrumbMessage": "",
@@ -42,7 +50,9 @@
             "children": [
                 {
                     "name": "Projects",
-                    "routerLink": ["projects"],
+                    "routerLink": [
+                        "projects"
+                    ],
                     "identifier": "Projects",
                     "iconClass": "",
                     "breadcrumbMessage": "",
@@ -52,7 +62,9 @@
                 },
                 {
                     "name": "Tasks",
-                    "routerLink": ["tasks"],
+                    "routerLink": [
+                        "tasks"
+                    ],
                     "identifier": "Tasks",
                     "iconClass": "",
                     "breadcrumbMessage": "",
@@ -62,7 +74,9 @@
                 },
                 {
                     "name": "Timesheet",
-                    "routerLink": ["timesheet"],
+                    "routerLink": [
+                        "timesheet"
+                    ],
                     "identifier": "Timesheet",
                     "iconClass": "",
                     "breadcrumbMessage": "",
@@ -72,7 +86,9 @@
                 },
                 {
                     "name": "Leaders",
-                    "routerLink": ["leaders"],
+                    "routerLink": [
+                        "leaders"
+                    ],
                     "identifier": "Leaders",
                     "iconClass": "",
                     "breadcrumbMessage": "",
@@ -80,23 +96,25 @@
                     "isApp": false,
                     "children": []
                 }
-
             ]
         },
-
         {
-            "name": "Tickets",
-            "routerLink": [""],
-            "identifier": "Tickets",
+            "name": "Enquires",
+            "routerLink": [
+                ""
+            ],
+            "identifier": "Enquires",
             "iconClass": "icofont-ticket",
             "breadcrumbMessage": "",
             "isCategory": false,
             "isApp": true,
             "children": [
                 {
-                    "name": "Tickets View",
-                    "routerLink": ["tickets-view"],
-                    "identifier": "Tickets View",
+                    "name": "Enquires View",
+                    "routerLink": [
+                        "enquires-view"
+                    ],
+                    "identifier": "Enquires View",
                     "iconClass": "",
                     "breadcrumbMessage": "",
                     "isCategory": false,
@@ -104,9 +122,11 @@
                     "children": []
                 },
                 {
-                    "name": "Tickets Detail",
-                    "routerLink": ["tickets-detail"],
-                    "identifier": "Tickets Detail",
+                    "name": "Enquires Detail",
+                    "routerLink": [
+                        "enquires-detail"
+                    ],
+                    "identifier": "Enquires Detail",
                     "iconClass": "",
                     "breadcrumbMessage": "",
                     "isCategory": false,
@@ -115,10 +135,11 @@
                 }
             ]
         },
-      
         {
             "name": "Employees",
-            "routerLink": [""],
+            "routerLink": [
+                ""
+            ],
             "identifier": "Employees",
             "iconClass": "icofont-users-alt-5",
             "breadcrumbMessage": "",
@@ -127,7 +148,9 @@
             "children": [
                 {
                     "name": "Members",
-                    "routerLink": ["members"],
+                    "routerLink": [
+                        "members"
+                    ],
                     "identifier": "Members",
                     "iconClass": "",
                     "breadcrumbMessage": "",
@@ -137,7 +160,9 @@
                 },
                 {
                     "name": "Members Profile",
-                    "routerLink": ["members-profile"],
+                    "routerLink": [
+                        "members-profile"
+                    ],
                     "identifier": "Members Profile",
                     "iconClass": "",
                     "breadcrumbMessage": "",
@@ -147,7 +172,9 @@
                 },
                 {
                     "name": "Holidays",
-                    "routerLink": ["holidays"],
+                    "routerLink": [
+                        "holidays"
+                    ],
                     "identifier": "Holidays",
                     "iconClass": "",
                     "breadcrumbMessage": "",
@@ -157,7 +184,9 @@
                 },
                 {
                     "name": "Attendance Employees",
-                    "routerLink": ["attendance-employees"],
+                    "routerLink": [
+                        "attendance-employees"
+                    ],
                     "identifier": "Attendance Employees",
                     "iconClass": "",
                     "breadcrumbMessage": "",
@@ -167,7 +196,9 @@
                 },
                 {
                     "name": "Attendance",
-                    "routerLink": ["attendance"],
+                    "routerLink": [
+                        "attendance"
+                    ],
                     "identifier": "Attendance",
                     "iconClass": "",
                     "breadcrumbMessage": "",
@@ -177,7 +208,9 @@
                 },
                 {
                     "name": "Leave Request",
-                    "routerLink": ["leave-request"],
+                    "routerLink": [
+                        "leave-request"
+                    ],
                     "identifier": "Leave Request",
                     "iconClass": "",
                     "breadcrumbMessage": "",
@@ -187,7 +220,9 @@
                 },
                 {
                     "name": "Department",
-                    "routerLink": ["department"],
+                    "routerLink": [
+                        "department"
+                    ],
                     "identifier": "Department",
                     "iconClass": "",
                     "breadcrumbMessage": "",
@@ -199,7 +234,9 @@
         },
         {
             "name": "Accounts",
-            "routerLink": [""],
+            "routerLink": [
+                ""
+            ],
             "identifier": "Accounts",
             "iconClass": "icofont-ui-calculator",
             "breadcrumbMessage": "",
@@ -208,7 +245,9 @@
             "children": [
                 {
                     "name": "Invoices",
-                    "routerLink": ["invoices"],
+                    "routerLink": [
+                        "invoices"
+                    ],
                     "identifier": "Invoices",
                     "iconClass": "",
                     "breadcrumbMessage": "",
@@ -218,7 +257,9 @@
                 },
                 {
                     "name": "Payments",
-                    "routerLink": ["payments"],
+                    "routerLink": [
+                        "payments"
+                    ],
                     "identifier": "Payments",
                     "iconClass": "",
                     "breadcrumbMessage": "",
@@ -228,7 +269,9 @@
                 },
                 {
                     "name": "Expenses",
-                    "routerLink": ["expenses"],
+                    "routerLink": [
+                        "expenses"
+                    ],
                     "identifier": "Expenses",
                     "iconClass": "",
                     "breadcrumbMessage": "",
@@ -238,7 +281,5 @@
                 }
             ]
         }
-      
-      
     ]
 }

@@ -30,9 +30,9 @@ export const menu: any[] = [
     children: [],
   },
   {
-    name: "Tickets",
-    routerLink: ["/dashboard/tickets"],
-    identifier: "Tickets",
+    name: "Enquires",
+    routerLink: ["/dashboard/Enquires"],
+    identifier: "Enquires",
     iconClass: "icofont-ticket",
     breadcrumbMessage: "",
     isCategory: false,

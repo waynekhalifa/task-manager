@@ -87,16 +87,16 @@ class Tasks extends React.Component {
             <div className="mb-3">
               <label className="form-label">Task Category</label>
               <select className="form-select">
-                <option>UI/UX Design</option>
-                <option value="1">Website Design</option>
-                <option value="2">App Development</option>
-                <option value="3">Quality Assurance</option>
-                <option value="4">Development</option>
-                <option value="5">Backend Development</option>
-                <option value="6">Software Testing</option>
-                <option value="7">Website Design</option>
-                <option value="8">Marketing</option>
-                <option value="9">SEO</option>
+                <option>Curriculum Development</option>
+                <option value="1">Technology Integration</option>
+                <option value="2">Teacher Training</option>
+                <option value="3">Assessment System</option>
+                <option value="4">Student Records</option>
+                <option value="5">Inclusive Education</option>
+                <option value="6">Technology Integration</option>
+                <option value="7">Educational Field Trips</option>
+                <option value="8">Parental Involvement</option>
+                <option value="9">Parental Feedback</option>
                 <option value="10">Other</option>
               </select>
             </div>
