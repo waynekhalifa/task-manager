@@ -21,14 +21,12 @@ const INITIAL_STATE: IState = {
   updateRtl: false,
 };
 
-interface Props {
-  activekey: any;
-}
-
-const Sidebar: React.FC<Props> = ({ activekey }) => {
+const Sidebar: React.FC = () => {
   const [state, setState] = useState<IState>(INITIAL_STATE);
   const { isSidebarMini, menuData, darkLightMode } = state;
   const { push } = useApp();
+
+  const activekey = window.location.pathname;
 
   useEffect(() => {
     window.document.children[0].setAttribute("data-theme", "light");
@@ -88,21 +86,6 @@ const Sidebar: React.FC<Props> = ({ activekey }) => {
       }
     }
   };
-
-  // const closeChildren = () => {
-  //   var otherTabs: any = document.getElementsByClassName("has-children");
-  //   if (otherTabs) {
-  //     for (var i = 0; i < otherTabs.length; i++) {
-  //       otherTabs[i].className = otherTabs[i].className.replace(" show", "");
-  //       if (otherTabs[i].parentElement.children.length > 1) {
-  //         otherTabs[i].parentElement.children[0].setAttribute(
-  //           "aria-expanded",
-  //           "false"
-  //         );
-  //       }
-  //     }
-  //   }
-  // };
 
   const GotoChangeMenu = (val: any) => {
     if (val === "UI Components") {

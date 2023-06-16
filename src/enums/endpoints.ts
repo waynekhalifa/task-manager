@@ -1,8 +1,12 @@
 export enum Endpoints {
-  SITE = "domains/domain-details-guest",
-  PAGES = "/pages/get/",
-  CATEGORIES = "/category/",
-  PRODUCTS = "/products/",
-  LOGIN = "/user/auth/login/",
-  REGISTER = "/user/auth/signup/",
+  LOGIN = "user/auth/login/", // POST
+  REGISTER = "user/auth/register/", // POST
+  CHANGE_PASSWORD = "user/auth/password/change/", // PUT - PATCH
+  RESET_PASSWORD_CHANGE = "user/auth/password/reset/change/", // PUT - PATCH
+  RESET_PASSWORD_SEND = "user/auth/password/reset/send/", // POST
+  RESET_PASSWORD_VERIFY = "user/auth/password/reset/verify/", // POST
+  TOKEN_REFRESH = "user/auth/token/refresh/", // POST
+  ACTIVATE_ACCOUNT = "user/utils/activate/{otp}/{user_id}", // GET
+  PROMOTE = "user/utils/user/promote/", // GET
+  PROMOTE_DETAILS = "user/utils/user/promote/{id}/", // PUT - PATCH
 }
