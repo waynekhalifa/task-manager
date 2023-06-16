@@ -30,7 +30,7 @@ const SignIn: React.FC = () => {
     try {
       const result = await mutateAsync(data);
 
-      console.log({ result });
+      localStorage.setItem("access_token", result.access);
 
       push(Routes.DASHBOARD + Pages.SUMMARY);
     } catch (err: Error | any) {
