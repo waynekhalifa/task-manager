@@ -9,4 +9,5 @@ export enum Endpoints {
   EMPLOYEE = "management/employee/",
   TASK = "management/task/",
   PROJECT = "management/project/",
+  CATEGORY= "category/",
 }
