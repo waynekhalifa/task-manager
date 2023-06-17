@@ -1,12 +1,10 @@
-import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { Endpoints } from "enums/endpoints";
 import { QueryOptionsType } from "types/queryOptions";
+import http from "utils/http";
 
 export const getAllEmployees = async ({ queryKey }: any) => {
-  const { data } = await axios.get(
-    process.env.REACT_APP_API_BASE_URL + Endpoints.EMPLOYEE
-  );
+  const { data } = await http.post(Endpoints.EMPLOYEE);
   return { employees: { data: data as any } };
 };
 

@@ -1,20 +1,11 @@
-import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
 import { Endpoints } from "enums/endpoints";
 import { TaskCreateInput } from "types/task";
+import http from "utils/http";
 
 export const useCreateTask = () => {
   return useMutation<any, Error, TaskCreateInput>(async createInput => {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("access_token")}`
-      }
-    };
-    const { data } = await axios.post(
-      process.env.REACT_APP_API_BASE_URL + Endpoints.TASK,
-      createInput,
-      config
-    );
+    const { data } = await http.post(Endpoints.TASK, createInput);
     return { session: { data: data as any } };
   });
 };

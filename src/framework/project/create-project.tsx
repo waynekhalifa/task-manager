@@ -1,20 +1,11 @@
-import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
 import { Endpoints } from "enums/endpoints";
 import { ProjectCreateInput } from "types/project";
+import http from "utils/http";
 
 export const useCreateCategory = () => {
   return useMutation<any, Error, ProjectCreateInput>(async createInput => {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("access_token")}`
-      }
-    };
-    const { data } = await axios.post(
-      process.env.REACT_APP_API_BASE_URL + Endpoints.PROJECT,
-      createInput,
-      config
-    );
+    const { data } = await http.post(Endpoints.PROJECT, createInput);
     return { session: { data: data as any } };
   });
 };
