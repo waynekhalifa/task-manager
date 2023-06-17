@@ -84,7 +84,7 @@ const Categories: React.FC = () => {
     } as CategoryCreateInput;
 
     createMutation(inputData).then((res) => {
-      data?.categories.data.results.push(res);
+      categories.push(res.session.data);
       handleModalClose();
     }).catch((err) => {
       alert(err);
@@ -98,9 +98,9 @@ const Categories: React.FC = () => {
     } as CategoryUpdateInput;
 
     editMutation(inputData).then((res) => {
-      data = data?.categories.data.results.map((category: CategoryUpdateInput) => {
-        if (category.id === res.id) {
-          category.name = res.name;
+      categories.map((category: CategoryUpdateInput) => {
+        if (category.id === res.session.data.id) {
+          category.name = res.session.data.name;
         }
       });
       handleModalClose();
@@ -116,7 +116,7 @@ const Categories: React.FC = () => {
     } as CategoryUpdateInput;
 
     deleteMutation(inputData).then((res) => {
-      data = data?.categories.data.results.filter((category: CategoryUpdateInput) => category.id !== res.id);
+      categories = categories.splice(categories.indexOf(selectedCategory), 1);
       handleModalClose();
     }
     ).catch((err) => {
