@@ -4,8 +4,11 @@ import CurrentClientProject from "../../components/Clients/CurrentClientProject"
 import AddNewUserModal from "../../components/common/AddNewUserModal";
 import PageHeader from "../../components/common/PageHeader";
 import { ProjectCardData } from "../../components/Data/AppData";
+import { useCategoryQuery } from "framework/category/get-all-category";
+import { CategoryUpdateInput } from "types/category";
+import { projectInput, useCreateProject } from "framework/project/create-project";
 
-interface Props {}
+interface Props { }
 
 interface State {
   isModal: boolean;
@@ -24,9 +27,36 @@ const INITIAlIZE_DATA: State = {
 };
 
 const Projects: React.FC<Props> = () => {
-  const [state, setState] = React.useState<State>(INITIAlIZE_DATA);
+  const { mutateAsync: createMutation } = useCreateProject();
 
+  const [state, setState] = React.useState<State>(INITIAlIZE_DATA);
   const { isModal, isDeleteModal, modalHeader, editModeldata, isAddUserModal } = state;
+
+  let { data: categoriesData, error: errorCategories, isLoading: isLoadingCategories } = useCategoryQuery({});
+  if (isLoadingCategories) return <div>Loading...</div>;
+  if (errorCategories) return null;
+
+  let categories: CategoryUpdateInput[] = categoriesData?.categories.data.results || [];
+
+  const handleModalClose = () => {
+    setState({
+      ...state, isModal: false, isDeleteModal: false, isAddUserModal: false,
+      modalHeader: "", editModeldata: ""
+    });
+  };
+
+  const createProject = () => {
+    Object.assign(editModeldata, { admin: 1 });
+    try {
+      let createInput = projectInput(editModeldata);
+      createMutation(createInput);
+      handleModalClose();
+    } catch (err) {
+      alert(err);
+    }
+  };
+
+
   return (
     <div className="container-xxl">
       <Tab.Container defaultActiveKey="All">
@@ -199,9 +229,7 @@ const Projects: React.FC<Props> = () => {
       </Tab.Container>
       <Modal
         show={isModal}
-        onHide={() => {
-          setState({ ...state, isModal: false, editModeldata: "" });
-        }}
+        onHide={handleModalClose}
       >
         <Modal.Header closeButton>
           <Modal.Title className="fw-bold">
@@ -218,26 +246,36 @@ const Projects: React.FC<Props> = () => {
               className="form-control"
               id="exampleFormControlInput77"
               placeholder="Explain what the Project Name"
-              value={editModeldata ? editModeldata.sl : ""}
+              value={editModeldata ? editModeldata.name : ""}
+              onChange={(e: any) => {
+                setState({
+                  ...state,
+                  editModeldata: { ...editModeldata, name: e.target.value },
+                });
+              }}
             />
           </div>
           <div className="mb-3">
             <label className="form-label">Project Category</label>
             <select
               className="form-select"
-              value={editModeldata ? editModeldata.title : ""}
+              value={categories ? categories[0].id : ""}
+              onChange={(e: any) => {
+                setState({
+                  ...state,
+                  editModeldata: {
+                    ...editModeldata,
+                    category: parseFloat(e.target.value),
+                  },
+                });
+              }}
             >
-              <option>Curriculum Development</option>
-              <option value="1">Technology Integration</option>
-              <option value="2">Teacher Training</option>
-              <option value="3">Assessment System</option>
-              <option value="4">Student Records</option>
-              <option value="5">Inclusive Education</option>
-              <option value="6">Technology Integration</option>
-              <option value="7">Educational Field Trips</option>
-              <option value="8">Parental Involvement</option>
-              <option value="9">Parental Feedback</option>
-              <option value="10">Other</option>
+              {categories.length > 0 && categories.map((d: any, i: number) => (
+                <option key={"sdf" + i} value={d.id}>
+                  {d.name}
+                </option>
+              ))
+              }
             </select>
           </div>
           <div className="mb-3">
@@ -248,8 +286,18 @@ const Projects: React.FC<Props> = () => {
               className="form-control"
               type="file"
               id="formFileMultipleone"
-							multiple={true}
-							// multiple=""
+              multiple={true}
+              onChange={(e: any) => {
+                setState({
+                  ...state,
+                  editModeldata: {
+                    ...editModeldata,
+                    images: e.target.files,
+                  },
+                });
+              }
+              }
+            // multiple=""
             />
           </div>
           <div className="deadline-form">
@@ -263,6 +311,16 @@ const Projects: React.FC<Props> = () => {
                     type="date"
                     className="form-control"
                     id="datepickerded"
+                    value={editModeldata ? editModeldata.startDate : ""}
+                    onChange={(e: any) => {
+                      setState({
+                        ...state,
+                        editModeldata: {
+                          ...editModeldata,
+                          startDate: e.target.value,
+                        },
+                      });
+                    }}
                   />
                 </div>
                 <div className="col">
@@ -273,13 +331,35 @@ const Projects: React.FC<Props> = () => {
                     type="date"
                     className="form-control"
                     id="datepickerdedone"
+                    value={editModeldata ? editModeldata.endDate : ""}
+                    onChange={(e: any) => {
+                      setState({
+                        ...state,
+                        editModeldata: {
+                          ...editModeldata,
+                          endDate: e.target.value,
+                        },
+                      });
+                    }}
+
                   />
                 </div>
               </div>
               <div className="row g-3 mb-3">
                 <div className="col-sm-12">
                   <label className="form-label">Notifation Sent</label>
-                  <select className="form-select">
+                  <select className="form-select"
+                    value={editModeldata ? editModeldata.notifationSent : ""}
+                    onChange={(e: any) => {
+                      setState({
+                        ...state,
+                        editModeldata: {
+                          ...editModeldata,
+                          notifationSent: parseFloat(e.target.value),
+                        },
+                      });
+                    }}
+                  >
                     <option>All</option>
                     <option value="1">Team Leader Only</option>
                     <option value="2">Team Member Only</option>
@@ -289,7 +369,18 @@ const Projects: React.FC<Props> = () => {
                   <label htmlFor="formFileMultipleone" className="form-label">
                     Task Assign Person
                   </label>
-                  <select className="form-select" multiple={true}>
+                  <select className="form-select" multiple={true}
+                    value={editModeldata ? editModeldata.assignPerson : ""}
+                    onChange={(e: any) => {
+                      setState({
+                        ...state,
+                        editModeldata: {
+                          ...editModeldata,
+                          assignPerson: parseFloat(e.target.value),
+                        },
+                      });
+                    }}
+                  >
                     <option>Lucinda Massey</option>
                     <option value="1">Ryan Nolan</option>
                     <option value="2">Oliver Black</option>
@@ -307,13 +398,35 @@ const Projects: React.FC<Props> = () => {
               <label htmlFor="formFileMultipleone" className="form-label">
                 Budget
               </label>
-              <input type="number" className="form-control" />
+              <input type="number" className="form-control"
+                value={editModeldata ? editModeldata.budget : ""}
+                onChange={(e: any) => {
+                  setState({
+                    ...state,
+                    editModeldata: {
+                      ...editModeldata,
+                      budget: parseFloat(e.target.value),
+                    },
+                  });
+                }}
+              />
             </div>
             <div className="col-sm">
               <label htmlFor="formFileMultipleone" className="form-label">
                 Priority
               </label>
-              <select className="form-select">
+              <select className="form-select"
+                value={editModeldata ? editModeldata.priority : ""}
+                onChange={(e: any) => {
+                  setState({
+                    ...state,
+                    editModeldata: {
+                      ...editModeldata,
+                      priority: parseFloat(e.target.value),
+                    },
+                  });
+                }}
+              >
                 <option>Highest</option>
                 <option value="1">Medium</option>
                 <option value="2">Low</option>
@@ -333,6 +446,16 @@ const Projects: React.FC<Props> = () => {
               id="exampleFormControlTextarea78"
               rows={3}
               placeholder="Add any extra details about the request"
+              value={editModeldata ? editModeldata.description : ""}
+              onChange={(e: any) => {
+                setState({
+                  ...state,
+                  editModeldata: {
+                    ...editModeldata,
+                    description: e.target.value,
+                  },
+                });
+              }}
             />
           </div>
         </Modal.Body>
@@ -340,13 +463,13 @@ const Projects: React.FC<Props> = () => {
           <button
             type="button"
             className="btn btn-secondary"
-            onClick={() => {
-              setState({ ...state, isModal: false, editModeldata: "" });
-            }}
+            onClick={handleModalClose}
           >
-            Done
+            Cancel
           </button>
-          <button type="button" className="btn btn-primary">
+          <button type="button" className="btn btn-primary"
+            onClick={createProject}
+          >
             Create
           </button>
         </Modal.Footer>

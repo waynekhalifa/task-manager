@@ -17,9 +17,14 @@ export const projectInput = (data: ProjectUpdateInput): ProjectUpdateInput => {
   return {
     id: data.id,
     admin: data.admin,
-    files: data.files,
     name: data.name,
     description: data.description,
-    category: data.category
+    category: data.category,
+    budget: data.budget,
+    startDate: data.startDate,
+    endDate: data.endDate,
+    assignPerson: data.assignPerson,
+    notifationSent: data.notifationSent,
+    priority: data.priority,
   };
 };

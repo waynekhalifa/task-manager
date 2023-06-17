@@ -13,8 +13,9 @@ const MainIndex: React.FC = () => {
   const { push } = useApp();
 
   useEffect(() => {
-    if (!session) push("/");
-
+    let access_token = localStorage.getItem("access_token");
+    if (!access_token) push("/login");
+    // if (!session) push("/");
     // eslint-disable-next-line
   }, []);
 
