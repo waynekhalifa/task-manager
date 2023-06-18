@@ -3,6 +3,7 @@ import { Dropdown, Modal } from "react-bootstrap";
 import OurClients from "components/Clients/OurClients";
 import PageHeader from "components/common/PageHeader";
 import { MembersData } from "components/Data/AppData";
+import {  useEmployeesQuery } from "framework/employee/getAllEmployees";
 
 interface Props {}
 interface State {
@@ -18,6 +19,14 @@ const INITIAlIZE_DATA: State = {
 const Members: React.FC<Props> = () => {
   const [state, setState] = React.useState(INITIAlIZE_DATA);
   const { isModal } = state;
+
+  let { data, error, isLoading } = useEmployeesQuery({});
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return null;
+
+  console.log(data?.employees.data.results);
+
+
 
   return (
     <div className="container-xxl">
