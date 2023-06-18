@@ -4,46 +4,175 @@ import OurClients from "components/Clients/OurClients";
 import PageHeader from "components/common/PageHeader";
 import { MembersData } from "components/Data/AppData";
 import { useEmployeesQuery } from "framework/employee/getAllEmployees";
-
+import FormInputs from "components/FormInputs/FormInputs";
+import { IField } from "types/formFields";
+import { EmployeeCreateInput } from "types/employee";
 interface Props { }
 
+enum ModelKeys {
+  NAME = "name",
+  CATEGORY = "category",
+  DESCRIPTION = "description",
+  START_DATE = "start_at",
+  END_DATE = "end_at",
+  ADMIN = "admin",
+  FILES = "files",
+}
 
 interface State {
   isModal: boolean;
   show: boolean;
-  fullName: string;
-  username: string;
-  email: string;
-  password1: string;
-  password2: string;
-  onboard_at: string;
-  employee_id: string;
-  phone: string;
-  department: string;
+  modelData: {} as EmployeeCreateInput;
+  // fullName: string;
+  // username: string;
+  // email: string;
+  // password1: string;
+  // password2: string;
+  // onboard_at: string;
+  // employee_id: string;
+  // phone: string;
+  // department: string;
 }
 const INITIAlIZE_DATA: State = {
   isModal: false,
   show: false,
-  fullName: "",
-  username: "",
-  email: "",
-  password1: "",
-  password2: "",
-  onboard_at: "",
-  employee_id: "",
-  phone: "",
-  department: "",
+  modelData: {} as EmployeeCreateInput,
+  // fullName: "",
+  // username: "",
+  // email: "",
+  // password1: "",
+  // password2: "",
+  // onboard_at: "",
+  // employee_id: "",
+  // phone: "",
+  // department: "",
 };
 
 const Members: React.FC<Props> = () => {
   const [state, setState] = React.useState(INITIAlIZE_DATA);
-  const { isModal, fullName, username, email, password1, password2, onboard_at, employee_id, phone, department } = state;
+  const { isModal, modelData : {
+    fullName: '',
+    username: '',
+    email: '',
+    password1: '',
+    password2: '',
+    onboard_at: '',
+    employee_id: '',
+    phone: '',
+    department: '',
+  } } = state;
 
   let { data, error, isLoading } = useEmployeesQuery({});
   if (isLoading) return <div>Loading...</div>;
   if (error) return null;
 
-  console.log(data?.employees.data.results);
+    const handleModelData = (key: string, value: any) => {
+    setState({
+      ...state,
+      modelData: {
+        ...modelData,
+        [key]: value,
+      },
+    });
+  };
+
+  const formFields: IField[] = [
+    {
+      label: "Project Name",
+      type: "text",
+      key: ModelKeys.NAME,
+      value: modelData?.name,
+      onChange: (e: any) => handleModelData(ModelKeys.NAME, e.target.value),
+      placeholder: "Enter Project Name",
+
+    },
+    {
+      label: "Department",
+      type: "select",
+      key: ModelKeys.CATEGORY,
+      value: modelData?.category,
+      onChange: (e: any) => handleModelData(ModelKeys.CATEGORY, e.target.value),
+      options: categories.map((category) => ({
+        label: category.name,
+        value: category.id,
+      })),
+      placeholder: "Select Category",
+    },
+    {
+      label: "Description",
+      type: "textarea",
+      key: ModelKeys.DESCRIPTION,
+      value: modelData?.description,
+      onChange: (e: any) =>
+        handleModelData(ModelKeys.DESCRIPTION, e.target.value),
+      placeholder: "Enter Description",
+    },
+    {
+      label: "Start Date",
+      type: "date",
+      key: ModelKeys.START_DATE,
+      value: modelData?.start_at,
+      onChange: (e: any) =>
+        handleModelData(ModelKeys.START_DATE, e.target.value),
+      placeholder: "Enter Start Date",
+    },
+    {
+      label: "End Date",
+      type: "date",
+      key: ModelKeys.END_DATE,
+      value: modelData?.end_at,
+      onChange: (e: any) =>
+        handleModelData(ModelKeys.END_DATE, e.target.value),
+      placeholder: "Enter End Date",
+    },
+    {
+      label: "Files",
+      type: "file",
+      key: ModelKeys.FILES,
+      value: modelData?.files,
+      onChange: (e: any) => {
+        let files: File[] = [];
+        for (let i = 0; i < e.target.files.length; i++) {
+          let file: File = e.target.files[i];
+          let reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = (url) => {
+            files.push(file);
+          };
+        }
+
+        handleModelData(ModelKeys.FILES, files)
+      },
+      placeholder: "Enter Files",
+    },
+    {
+      label: "Assign Admin",
+      type: "select",
+      key: ModelKeys.ADMIN,
+      value: modelData?.admin,
+      onChange: (e: any) => handleModelData(ModelKeys.ADMIN, e.target.value),
+      options: [
+        {
+          label: "Badr",
+          value: 1,
+        },
+        {
+          label: "Jo",
+          value: 1,
+        },
+        {
+          label: "Wani",
+          value: 1,
+        },
+      ]
+    },
+
+
+
+  ]
+
+
+
 
   const handleSubmit = () => {
     const name = fullName.split(" ");
@@ -729,6 +858,11 @@ const Members: React.FC<Props> = () => {
               </table>
             </div>
           </div>
+          <div className="modal-body">
+           <FormInputs
+                    formFields={formFields}
+            />
+            </div>
         </Modal.Body>
         <Modal.Footer>
           <button
