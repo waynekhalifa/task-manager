@@ -33,7 +33,7 @@ const SignIn: React.FC = () => {
       const result = await mutateAsync(data);
 
       setSession(result);
-      localStorage.setItem("access_token", result.access);
+      localStorage.setItem("session", JSON.stringify(result));
 
       push(Routes.DASHBOARD + Pages.SUMMARY);
     } catch (err: Error | any) {

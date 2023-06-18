@@ -10,30 +10,45 @@ import {
   projectInput,
   useCreateProject,
 } from "framework/project/create-project";
+import { Project } from "types/project";
+import FormInputs from "components/FormInputs/FormInputs";
+import { IField } from "types/formFields";
 
-interface Props {}
+interface Props { }
+
+enum ModelKeys {
+  NAME = "name",
+  CATEGORY = "category",
+  DESCRIPTION = "description",
+  START_DATE = "start_at",
+  END_DATE = "end_at",
+  ADMIN = "admin",
+  FILES = "files",
+}
 
 interface State {
-  isModal: boolean;
+  isAddModal: boolean;
+  isEditModal: boolean;
   isDeleteModal: boolean;
   isAddUserModal: boolean;
   modalHeader: any;
-  editModeldata: any;
+  modelData: Project;
 }
 
 const INITIAlIZE_DATA: State = {
-  isModal: false,
+  isAddModal: false,
+  isEditModal: false,
   isDeleteModal: false,
   isAddUserModal: false,
   modalHeader: "",
-  editModeldata: "",
+  modelData: {} as Project,
 };
 
 const Projects: React.FC<Props> = () => {
   const { mutateAsync: createMutation } = useCreateProject();
 
   const [state, setState] = React.useState<State>(INITIAlIZE_DATA);
-  const { isModal, isDeleteModal, modalHeader, editModeldata, isAddUserModal } =
+  const { isAddModal, isEditModal, isDeleteModal, modalHeader, modelData, isAddUserModal } =
     state;
 
   let {
@@ -50,24 +65,207 @@ const Projects: React.FC<Props> = () => {
   const handleModalClose = () => {
     setState({
       ...state,
-      isModal: false,
+      isAddModal: false,
+      isEditModal: false,
       isDeleteModal: false,
       isAddUserModal: false,
       modalHeader: "",
-      editModeldata: "",
+      modelData: {} as Project,
     });
   };
 
+  const handleOpenAddModal = () => {
+    setState({
+      ...state,
+      isAddModal: true,
+      modalHeader: "Create Project",
+    });
+  };
+
+  const handleOpenEditModal = () => {
+    setState({
+      ...state,
+      isEditModal: true,
+      modalHeader: "Edit Project",
+      modelData: {
+        name: "Project 1",
+        category: 0,
+        description: "Description 1",
+        admin: 0,
+        start_at: "2021-09-01",
+        end_at: "2021-09-01",
+        files: [],
+      },
+    });
+  };
+
+  const handleOpenDeleteModal = () => {
+    setState({
+      ...state,
+      isDeleteModal: true,
+    });
+  };
+
+  const handleOpenAddUserModal = () => {
+    setState({
+      ...state,
+      isAddUserModal: true,
+    });
+  };
+
+
+  const handleModelData = (key: string, value: any) => {
+    setState({
+      ...state,
+      modelData: {
+        ...modelData,
+        [key]: value,
+      },
+    });
+  };
+
+
+  const formFields: IField[] = [
+    {
+      label: "Project Name",
+      type: "text",
+      key: ModelKeys.NAME,
+      value: modelData?.name,
+      onChange: (e: any) => handleModelData(ModelKeys.NAME, e.target.value),
+      placeholder: "Enter Project Name",
+
+    },
+    {
+      label: "Department",
+      type: "select",
+      key: ModelKeys.CATEGORY,
+      value: modelData?.category,
+      onChange: (e: any) => handleModelData(ModelKeys.CATEGORY, e.target.value),
+      options: categories.map((category) => ({
+        label: category.name,
+        value: category.id,
+      })),
+      placeholder: "Select Category",
+    },
+    {
+      label: "Description",
+      type: "textarea",
+      key: ModelKeys.DESCRIPTION,
+      value: modelData?.description,
+      onChange: (e: any) =>
+        handleModelData(ModelKeys.DESCRIPTION, e.target.value),
+      placeholder: "Enter Description",
+    },
+    {
+      label: "Start Date",
+      type: "date",
+      key: ModelKeys.START_DATE,
+      value: modelData?.start_at,
+      onChange: (e: any) =>
+        handleModelData(ModelKeys.START_DATE, e.target.value),
+      placeholder: "Enter Start Date",
+    },
+    {
+      label: "End Date",
+      type: "date",
+      key: ModelKeys.END_DATE,
+      value: modelData?.end_at,
+      onChange: (e: any) =>
+        handleModelData(ModelKeys.END_DATE, e.target.value),
+      placeholder: "Enter End Date",
+    },
+    {
+      label: "Files",
+      type: "file",
+      key: ModelKeys.FILES,
+      value: modelData?.files,
+      onChange: (e: any) => {
+        let files: File[] = [];
+        for (let i = 0; i < e.target.files.length; i++) {
+          let file: File = e.target.files[i];
+          let reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = (url) => {
+            files.push(file);
+          };
+        }
+
+        handleModelData(ModelKeys.FILES, files)
+      },
+      placeholder: "Enter Files",
+    },
+    {
+      label: "Assign Admin",
+      type: "select",
+      key: ModelKeys.ADMIN,
+      value: modelData?.admin,
+      onChange: (e: any) => handleModelData(ModelKeys.ADMIN, e.target.value),
+      options: [
+        {
+          label: "Badr",
+          value: 1,
+        },
+        {
+          label: "Jo",
+          value: 1,
+        },
+        {
+          label: "Wani",
+          value: 1,
+        },
+      ]
+    },
+
+
+
+  ]
+
+
   const createProject = async () => {
-    Object.assign(editModeldata, { admin: 1 });
+    Object.assign(modelData, { admin: 1 });
     try {
-      let createInput = projectInput(editModeldata);
+      let createInput = projectInput(modelData);
       await createMutation(createInput);
       handleModalClose();
     } catch (err) {
       alert(err);
     }
   };
+
+  const editProject = async () => {
+    Object.assign(modelData, { admin: 1 });
+    try {
+      let createInput = projectInput(modelData);
+      await createMutation(createInput);
+      handleModalClose();
+    } catch (err) {
+      alert(err);
+    }
+  };
+
+  const deleteProject = async () => {
+    Object.assign(modelData, { admin: 1 });
+    try {
+      let createInput = projectInput(modelData);
+      await createMutation(createInput);
+      handleModalClose();
+    } catch (err) {
+      alert(err);
+    }
+  };
+
+  const addUser = async () => {
+    Object.assign(modelData, { admin: 1 });
+    try {
+      let createInput = projectInput(modelData);
+      await createMutation(createInput);
+      handleModalClose();
+    } catch (err) {
+      alert(err);
+    }
+  };
+
+
 
   return (
     <div className="container-xxl">
@@ -80,13 +278,7 @@ const Projects: React.FC<Props> = () => {
                 <button
                   type="button"
                   className="btn btn-dark w-sm-100"
-                  onClick={() => {
-                    setState({
-                      ...state,
-                      isModal: true,
-                      modalHeader: "Create Project",
-                    });
-                  }}
+                  onClick={handleOpenAddModal}
                 >
                   <i className="icofont-plus-circle me-2 fs-6" />
                   Create Project
@@ -129,20 +321,9 @@ const Projects: React.FC<Props> = () => {
                           logoBg={d.logoBg}
                           title={d.title}
                           sl={d.sl}
-                          onClickEdit={() => {
-                            setState({
-                              ...state,
-                              isModal: true,
-                              modalHeader: "Edit Project",
-                              editModeldata: d,
-                            });
-                          }}
-                          onClickDelete={() => {
-                            setState({ ...state, isDeleteModal: true });
-                          }}
-                          onClickAdd={() => {
-                            setState({ ...state, isAddUserModal: true });
-                          }}
+                          onClickEdit={handleOpenEditModal}
+                          onClickDelete={handleOpenDeleteModal}
+                          onClickAdd={handleOpenAddUserModal}
                         />
                       </div>
                     );
@@ -163,89 +344,39 @@ const Projects: React.FC<Props> = () => {
                           logoBg={d.logoBg}
                           title={d.title}
                           sl={d.sl}
-                          onClickEdit={() => {
-                            setState({ ...state, isModal: true });
-                          }}
-                          onClickDelete={() => {
-                            setState({ ...state, isDeleteModal: true });
-                          }}
-                          onClickAdd={() => {
-                            setState({ ...state, isAddUserModal: true });
-                          }}
+                          onClickEdit={handleOpenEditModal}
+                          onClickDelete={handleOpenDeleteModal}
+                          onClickAdd={handleOpenAddUserModal}
                         />
                       </div>
                     );
                   })}
                 </div>
               </Tab.Pane>
-              <Tab.Pane eventKey="Approval">
-                <div className="row g-3 gy-5 py-3 row-deck">
-                  {ProjectCardData.map((d: any, i: number) => {
-                    return (
-                      <div
-                        key={"ljsdhl" + i}
-                        className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6"
-                      >
-                        <CurrentClientProject
-                          teamImage={d.teamImage}
-                          logo={d.logo}
-                          logoBg={d.logoBg}
-                          title={d.title}
-                          sl={d.sl}
-                          onClickEdit={() => {
-                            setState({ ...state, isModal: true });
-                          }}
-                          onClickDelete={() => {
-                            setState({ ...state, isDeleteModal: true });
-                          }}
-                          onClickAdd={() => {
-                            setState({ ...state, isAddUserModal: true });
-                          }}
-                        />
-                      </div>
-                    );
-                  })}
-                </div>
-              </Tab.Pane>
-              <Tab.Pane eventKey="Completed">
-                <div className="row g-3 gy-5 py-3 row-deck">
-                  {ProjectCardData.map((d: any, i: number) => {
-                    return (
-                      <div
-                        key={"ljsdhl" + i}
-                        className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6"
-                      >
-                        <CurrentClientProject
-                          teamImage={d.teamImage}
-                          logo={d.logo}
-                          logoBg={d.logoBg}
-                          title={d.title}
-                          sl={d.sl}
-                          onClickEdit={() => {
-                            setState({ ...state, isModal: true });
-                          }}
-                          onClickDelete={() => {
-                            setState({ ...state, isDeleteModal: true });
-                          }}
-                          onClickAdd={() => {
-                            setState({ ...state, isAddUserModal: true });
-                          }}
-                        />
-                      </div>
-                    );
-                  })}
-                </div>
-              </Tab.Pane>
+
             </Tab.Content>
           </div>
         </div>
       </Tab.Container>
-      <Modal show={isModal} onHide={handleModalClose}>
+      <Modal show={isAddModal || isEditModal || isAddUserModal} onHide={handleModalClose}>
         <Modal.Header closeButton>
           <Modal.Title className="fw-bold">{modalHeader}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="mb-3">
+          <div className="row">
+            <div className="col-lg-12 col-md-12">
+              <div className="card">
+                <div className="card-body">
+                  <FormInputs
+                    formFields={formFields}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          {/* <div className="mb-3">
             <label htmlFor="exampleFormControlInput77" className="form-label">
               Project Name
             </label>
@@ -254,11 +385,11 @@ const Projects: React.FC<Props> = () => {
               className="form-control"
               id="exampleFormControlInput77"
               placeholder="Explain what the Project Name"
-              value={editModeldata ? editModeldata.name : ""}
+              value={modelData ? modelData.name : ""}
               onChange={(e: any) => {
                 setState({
                   ...state,
-                  editModeldata: { ...editModeldata, name: e.target.value },
+                  modelData: { ...modelData, name: e.target.value },
                 });
               }}
             />
@@ -268,15 +399,7 @@ const Projects: React.FC<Props> = () => {
             <select
               className="form-select"
               value={categories ? categories[0].id : ""}
-              onChange={(e: any) => {
-                setState({
-                  ...state,
-                  editModeldata: {
-                    ...editModeldata,
-                    category: parseFloat(e.target.value),
-                  },
-                });
-              }}
+              onChange={(e: any) => handleModelData("name", e.target.value)}
             >
               {categories.length > 0 &&
                 categories.map((d: any, i: number) => (
@@ -304,7 +427,7 @@ const Projects: React.FC<Props> = () => {
                   },
                 });
               }}
-              // multiple=""
+            // multiple=""
             />
           </div>
           <div className="deadline-form">
@@ -318,13 +441,13 @@ const Projects: React.FC<Props> = () => {
                     type="date"
                     className="form-control"
                     id="datepickerded"
-                    value={editModeldata ? editModeldata.startDate : ""}
+                    value={editModeldata ? editModeldata.start_at : ""}
                     onChange={(e: any) => {
                       setState({
                         ...state,
                         editModeldata: {
                           ...editModeldata,
-                          startDate: e.target.value,
+                          start_at: e.target.value,
                         },
                       });
                     }}
@@ -338,13 +461,13 @@ const Projects: React.FC<Props> = () => {
                     type="date"
                     className="form-control"
                     id="datepickerdedone"
-                    value={editModeldata ? editModeldata.endDate : ""}
+                    value={editModeldata ? editModeldata.end_at : ""}
                     onChange={(e: any) => {
                       setState({
                         ...state,
                         editModeldata: {
                           ...editModeldata,
-                          endDate: e.target.value,
+                          end_at: e.target.value,
                         },
                       });
                     }}
@@ -352,26 +475,6 @@ const Projects: React.FC<Props> = () => {
                 </div>
               </div>
               <div className="row g-3 mb-3">
-                <div className="col-sm-12">
-                  <label className="form-label">Notifation Sent</label>
-                  <select
-                    className="form-select"
-                    value={editModeldata ? editModeldata.notifationSent : ""}
-                    onChange={(e: any) => {
-                      setState({
-                        ...state,
-                        editModeldata: {
-                          ...editModeldata,
-                          notifationSent: parseFloat(e.target.value),
-                        },
-                      });
-                    }}
-                  >
-                    <option>All</option>
-                    <option value="1">Team Leader Only</option>
-                    <option value="2">Team Member Only</option>
-                  </select>
-                </div>
                 <div className="col-sm-12">
                   <label htmlFor="formFileMultipleone" className="form-label">
                     Task Assign Person
@@ -385,7 +488,7 @@ const Projects: React.FC<Props> = () => {
                         ...state,
                         editModeldata: {
                           ...editModeldata,
-                          assignPerson: parseFloat(e.target.value),
+                          admin: parseFloat(e.target.value),
                         },
                       });
                     }}
@@ -401,50 +504,6 @@ const Projects: React.FC<Props> = () => {
                 </div>
               </div>
             </form>
-          </div>
-          <div className="row g-3 mb-3">
-            <div className="col-sm">
-              <label htmlFor="formFileMultipleone" className="form-label">
-                Budget
-              </label>
-              <input
-                type="number"
-                className="form-control"
-                value={editModeldata ? editModeldata.budget : ""}
-                onChange={(e: any) => {
-                  setState({
-                    ...state,
-                    editModeldata: {
-                      ...editModeldata,
-                      budget: parseFloat(e.target.value),
-                    },
-                  });
-                }}
-              />
-            </div>
-            <div className="col-sm">
-              <label htmlFor="formFileMultipleone" className="form-label">
-                Priority
-              </label>
-              <select
-                className="form-select"
-                value={editModeldata ? editModeldata.priority : ""}
-                onChange={(e: any) => {
-                  setState({
-                    ...state,
-                    editModeldata: {
-                      ...editModeldata,
-                      priority: parseFloat(e.target.value),
-                    },
-                  });
-                }}
-              >
-                <option>Highest</option>
-                <option value="1">Medium</option>
-                <option value="2">Low</option>
-                <option value="3">Lowest</option>
-              </select>
-            </div>
           </div>
           <div className="mb-3">
             <label
@@ -469,7 +528,7 @@ const Projects: React.FC<Props> = () => {
                 });
               }}
             />
-          </div>
+          </div> */}
         </Modal.Body>
         <Modal.Footer>
           <button
