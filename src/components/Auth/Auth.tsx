@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 
 const Page404 = lazy(() => import("./Page404"));
 const PasswordReset = lazy(() => import("./PasswordReset"));
+const StepAuthentication = lazy(() => import("./StepAuthentication"));
 
 const Auth: React.FC = () => {
   let { slug } = useParams<{ slug: string }>();
@@ -12,6 +13,8 @@ const Auth: React.FC = () => {
     switch (slug) {
       case Pages.PASSWORD_RESET:
         return <PasswordReset />;
+      case Pages.VERIFY_EMAIL:
+        return <StepAuthentication />;
       default:
         return <Page404 />;
     }

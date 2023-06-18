@@ -1,5 +1,6 @@
 export enum Pages {
   PASSWORD_RESET = "password-reset",
+  VERIFY_EMAIL = "verify-email",
   SUMMARY = "summary",
   PROJECTS = "projects",
   TASKS = "tasks",
