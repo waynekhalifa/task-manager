@@ -1,4 +1,5 @@
 export enum Endpoints {
+  /** User Endpoints */
   LOGIN = "user/auth/login/", // POST
   REGISTER = "user/auth/register/", // POST
   CHANGE_PASSWORD = "user/auth/password/change/", // PUT - PATCH
@@ -9,6 +10,7 @@ export enum Endpoints {
   ACTIVATE_ACCOUNT = "user/utils/activate/{otp}/{user_id}", // GET
   PROMOTE = "user/utils/user/promote/", // GET
   PROMOTE_DETAILS = "user/utils/user/promote/{id}/", // PUT - PATCH
+  /** Management Endpoints */
   EMPLOYEE = "management/employee/",
   TASK = "management/task/",
   PROJECT = "management/project/",
