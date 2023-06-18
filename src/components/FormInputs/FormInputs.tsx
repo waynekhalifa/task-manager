@@ -20,8 +20,8 @@ const FormInputs: React.FC<Props> = ({ formFields }) => {
           {(formInfo.type === "text" || formInfo.type === "date") && <input type={formInfo.type} className="form-control" id="exampleFormControlInput77" placeholder={formInfo.placeholder} value={formInfo.value} onChange={formInfo.onChange} />}
           {formInfo.type === "select" && <select className="form-select" value={formInfo.value} onChange={formInfo.onChange}>
             {formInfo.options?.map((d: any, i: number) => {
-              return <option key={"ljsdhl" + i} value={formInfo.value}>
-                {formInfo.label}
+              return <option key={"ljsdhl" + i} value={d.value}>
+                {d.label}
               </option>;
             })}
           </select>}

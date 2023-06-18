@@ -62,6 +62,21 @@ const Projects: React.FC<Props> = () => {
   let categories: CategoryUpdateInput[] =
     categoriesData?.categories.data.results || [];
 
+  const admins = [
+    {
+      label: "Badr",
+      value: 1,
+    },
+    {
+      label: "Jo",
+      value: 1,
+    },
+    {
+      label: "Wani",
+      value: 1,
+    },
+  ]
+
   const handleModalClose = () => {
     setState({
       ...state,
@@ -200,24 +215,11 @@ const Projects: React.FC<Props> = () => {
       key: ModelKeys.ADMIN,
       value: modelData?.admin,
       onChange: (e: any) => handleModelData(ModelKeys.ADMIN, e.target.value),
-      options: [
-        {
-          label: "Badr",
-          value: 1,
-        },
-        {
-          label: "Jo",
-          value: 1,
-        },
-        {
-          label: "Wani",
-          value: 1,
-        },
-      ]
+      options: admins.map((admin) => ({
+        label: admin.label,
+        value: admin.value,
+      })),
     },
-
-
-
   ]
 
 
