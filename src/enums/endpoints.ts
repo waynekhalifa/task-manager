@@ -9,7 +9,7 @@ export enum Endpoints {
   TOKEN_REFRESH = "user/auth/token/refresh/", // POST
   ACTIVATE_ACCOUNT = "user/utils/activate/{otp}/{user_id}", // GET
   PROMOTE = "user/utils/user/promote/", // GET
-  PROMOTE_DETAILS = "user/utils/user/promote/{id}/", // PUT - PATCH
+  PROMOTE_DETAILS = "user/utils/user/promote/", // + {id}/ PUT - PATCH
   /** Management Endpoints */
   EMPLOYEE = "management/employee/",
   TASK = "management/task/",

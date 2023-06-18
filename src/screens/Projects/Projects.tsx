@@ -58,11 +58,11 @@ const Projects: React.FC<Props> = () => {
     });
   };
 
-  const createProject = () => {
+  const createProject = async () => {
     Object.assign(editModeldata, { admin: 1 });
     try {
       let createInput = projectInput(editModeldata);
-      createMutation(createInput);
+      await createMutation(createInput);
       handleModalClose();
     } catch (err) {
       alert(err);
