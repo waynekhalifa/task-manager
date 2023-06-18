@@ -1,26 +1,11 @@
-export interface ProjectCreateInput {
-  admin: number;
-  files?: any;
-  name: string;
-  description: string;
-  category: number;
-  budget: number;
-  startDate: string;
-  endDate: string;
-  assignPerson: number;
-  notifationSent: number;
-  priority: number;
-}
-export interface ProjectUpdateInput {
+export interface Project {
   id?: number;
-  admin?: number;
+  admin: number;
+  files: File[];
   name: string;
-  description: string;
+  description?: string;
   category: number;
-  budget: number;
-  startDate: string;
-  endDate: string;
-  assignPerson: number;
-  notifationSent: number;
-  priority: number;
+  start_at: string;
+  end_at: string;
 }
+
