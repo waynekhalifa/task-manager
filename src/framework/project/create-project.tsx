@@ -23,13 +23,4 @@ export const projectInput = (data: Project): FormData => {
     formData.append("files", data.files[i]);
   } 
   return formData;
-  // return {
-  //   admin: data.admin,
-  //   name: data.name,
-  //   description: data.description,
-  //   category: data.category,
-  //   start_at: data.start_at,
-  //   end_at: data.end_at,
-  //   files: data.files,
-  // };
 };
