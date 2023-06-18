@@ -12,48 +12,22 @@ interface Props {
 const FormInputs: React.FC<Props> = ({ formFields }) => {
   return (
     <form>
-      {formFields.map((d: any, i: number) => {
-        return (
-          <div key={"ljsdhl" + i} className="mb-3">
-            <label htmlFor="exampleFormControlInput77" className="form-label">
-              {d.label}
-            </label>
-            {(d.type === "text" || d.type === "date") && <input
-              type={d.type}
-              className="form-control"
-              id="exampleFormControlInput77"
-              placeholder={d.placeholder}
-              value={d.value}
-              onChange={d.onChange}
-            />}
-            {d.type === "select" && <select
-
-              className="form-select"
-              value={d.value}
-              onChange={d.onChange}
-            >
-              {d.options.map((d: any, i: number) => {
-                return (
-                  <option key={"ljsdhl" + i} value={d.value}>{d.label}</option>
-                );
-              })}
-            </select>}
-            {d.type === "textarea" && <textarea
-              className="form-control"
-              id="exampleFormControlTextarea1"
-              rows={3}
-              placeholder={d.placeholder}
-              value={d.value}
-              onChange={d.onChange}
-            />}
-            {d.type === "file" && <input
-              className="form-control"
-              type="file"
-              id="formFile"
-              onChange={d.onChange}
-            />}
-          </div>
-        );
+      {formFields.map((formInfo: any, i: number) => {
+        return <div key={"ljsdhl" + i} className="mb-3">
+          <label htmlFor="exampleFormControlInput77" className="form-label">
+            {formInfo.label}
+          </label>
+          {(formInfo.type === "text" || formInfo.type === "date") && <input type={formInfo.type} className="form-control" id="exampleFormControlInput77" placeholder={formInfo.placeholder} value={formInfo.value} onChange={formInfo.onChange} />}
+          {formInfo.type === "select" && <select className="form-select" value={formInfo.value} onChange={formInfo.onChange}>
+            {formInfo.options?.map((d: any, i: number) => {
+              return <option key={"ljsdhl" + i} value={formInfo.value}>
+                {formInfo.label}
+              </option>;
+            })}
+          </select>}
+          {formInfo.type === "textarea" && <textarea className="form-control" id="exampleFormControlTextarea1" rows={3} placeholder={formInfo.placeholder} value={formInfo.value} onChange={formInfo.onChange} />}
+          {formInfo.type === "file" && <input className="form-control" type="file" id="formFile" onChange={formInfo.onChange} />}
+        </div>;
       })}
     </form>
   )

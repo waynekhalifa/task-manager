@@ -12,6 +12,7 @@ import {
 } from "framework/project/create-project";
 import { Project } from "types/project";
 import FormInputs from "components/FormInputs/FormInputs";
+import { IField } from "types/formFields";
 
 interface Props { }
 
@@ -124,7 +125,7 @@ const Projects: React.FC<Props> = () => {
   };
 
 
-  const formFields = [
+  const formFields: IField[] = [
     {
       label: "Project Name",
       type: "text",

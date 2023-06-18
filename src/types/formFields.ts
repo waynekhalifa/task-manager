@@ -30,13 +30,11 @@ export interface IFormField {
 }
 
 export interface IField {
-  name?: string;
-  type?: string;
-  placeholder?: string;
-  value?: string;
-  label?: string;
+  label: string;
+  type: string;
   key?: string;
-  disabled?: boolean;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  value: any;
+  onChange: (e: any) => void;
+  placeholder?: string;
   options?: IOption[];
 }
