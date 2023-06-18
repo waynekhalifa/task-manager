@@ -8,6 +8,8 @@ import useApp from "hooks/useApp";
 import { RefreshTokenInput } from "types/refreshToken";
 import { useRefreshToken } from "framework/auth/refreshToken";
 import { useAuth } from "contexts/AuthContext";
+import { Screens } from "enums/screens";
+import { Pages } from "enums/pages";
 
 type IState = { initialized: boolean };
 const INITIAL_STATE: IState = { initialized: false };
@@ -46,11 +48,11 @@ const AuthIndex: React.FC = () => {
       );
 
       setState({ ...state, initialized: true });
+
+      push(Screens.DASHBOARD + Pages.SUMMARY);
     } catch (err: Error | any) {
       console.log(err);
       setState({ ...state, initialized: true });
-
-      push("/");
     }
   };
 
