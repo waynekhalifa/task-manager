@@ -11,6 +11,7 @@ import {
   useCreateProject,
 } from "framework/project/create-project";
 import { Project } from "types/project";
+import FormInputs from "components/FormInputs/FormInputs";
 
 interface Props { }
 
@@ -178,17 +179,17 @@ const Projects: React.FC<Props> = () => {
       key: ModelKeys.FILES,
       value: modelData?.files,
       onChange: (e: any) => {
-        let files:File[] = [];
+        let files: File[] = [];
         for (let i = 0; i < e.target.files.length; i++) {
-          let file:File = e.target.files[i];
+          let file: File = e.target.files[i];
           let reader = new FileReader();
           reader.readAsDataURL(file);
           reader.onload = (url) => {
             files.push(file);
           };
         }
-        
-        handleModelData(ModelKeys.FILES,files)
+
+        handleModelData(ModelKeys.FILES, files)
       },
       placeholder: "Enter Files",
     },
@@ -365,52 +366,9 @@ const Projects: React.FC<Props> = () => {
             <div className="col-lg-12 col-md-12">
               <div className="card">
                 <div className="card-body">
-                  <form>
-
-                    {formFields.map((d: any, i: number) => {
-                      return (
-                        <div key={"ljsdhl" + i} className="mb-3">
-                          <label htmlFor="exampleFormControlInput77" className="form-label">
-                            {d.label}
-                          </label>
-                          {(d.type === "text" || d.type === "date") && <input
-                            type={d.type}
-                            className="form-control"
-                            id="exampleFormControlInput77"
-                            placeholder={d.placeholder}
-                            value={d.value}
-                            onChange={d.onChange}
-                          />}
-                          {d.type === "select" && <select
-
-                            className="form-select"
-                            value={d.value}
-                            onChange={d.onChange}
-                          >
-                            {d.options.map((d: any, i: number) => {
-                              return (
-                                <option key={"ljsdhl" + i} value={d.value}>{d.label}</option>
-                              );
-                            })}
-                          </select>}
-                          {d.type === "textarea" && <textarea
-                            className="form-control"
-                            id="exampleFormControlTextarea1"
-                            rows={3}
-                            placeholder={d.placeholder}
-                            value={d.value}
-                            onChange={d.onChange}
-                          />}
-                          {d.type === "file" && <input
-                            className="form-control"
-                            type="file"
-                            id="formFile"
-                            onChange={d.onChange}
-                          />}
-                        </div>
-                      );
-                    })}
-                  </form>
+                  <FormInputs
+                    formFields={formFields}
+                  />
                 </div>
               </div>
             </div>
