@@ -22,9 +22,8 @@ export const projectInput = (data: Project): FormData => {
   formData.append("category", `${data.category}`);
   formData.append("start_at", data.start_at);
   formData.append("end_at", data.end_at);
-  for (let i = 0; i < data.files.length; i++) {
-    formData.append("files", data.files[i]);
-  } 
+  if (!data.file) return formData;
+  formData.append("files", data.file);
   return formData;
   // return {
   //   id: data.id,

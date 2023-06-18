@@ -53,7 +53,9 @@ const CurrentClientProject: React.FC<Props> = ({
             </button>
           </div>
         </div>
-        <div className="d-flex align-items-center">
+
+        {/* //TODO : Add team member
+         <div className="d-flex align-items-center">
           <div className="avatar-list avatar-list-stacked pt-2">
             {teamImage.map((d: any, i: any) => (
               <img
@@ -70,7 +72,7 @@ const CurrentClientProject: React.FC<Props> = ({
               <i className="icofont-ui-add"></i>
             </span>
           </div>
-        </div>
+        </div> */}
         <div className="row g-2 pt-4">
           <div className="col-6">
             <div className="d-flex align-items-center">

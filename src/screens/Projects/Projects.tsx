@@ -3,16 +3,17 @@ import { Modal, Nav, Tab } from "react-bootstrap";
 import CurrentClientProject from "../../components/Clients/CurrentClientProject";
 import AddNewUserModal from "../../components/common/AddNewUserModal";
 import PageHeader from "../../components/common/PageHeader";
-import { ProjectCardData } from "../../components/Data/AppData";
 import { useCategoryQuery } from "framework/category/getAllCategory";
 import { CategoryUpdateInput } from "types/category";
 import {
   projectInput,
   useCreateProject,
 } from "framework/project/create-project";
-import { Project } from "types/project";
+import { Project, SelectedProject } from "types/project";
 import FormInputs from "components/FormInputs/FormInputs";
 import { IField } from "types/formFields";
+import { useProjectsQuery } from "framework/project/get-all-projects";
+import { useDeleteProject } from "framework/project/delete.project";
 
 interface Props { }
 
@@ -23,6 +24,7 @@ enum ModelKeys {
   START_DATE = "start_at",
   END_DATE = "end_at",
   ADMIN = "admin",
+  FILE = "file",
   FILES = "files",
 }
 
@@ -33,6 +35,7 @@ interface State {
   isAddUserModal: boolean;
   modalHeader: any;
   modelData: Project;
+  selectedProject: SelectedProject;
 }
 
 const INITIAlIZE_DATA: State = {
@@ -42,22 +45,31 @@ const INITIAlIZE_DATA: State = {
   isAddUserModal: false,
   modalHeader: "",
   modelData: {} as Project,
+  selectedProject: {} as SelectedProject,
 };
 
 const Projects: React.FC<Props> = () => {
-  const { mutateAsync: createMutation } = useCreateProject();
+
 
   const [state, setState] = React.useState<State>(INITIAlIZE_DATA);
-  const { isAddModal, isEditModal, isDeleteModal, modalHeader, modelData, isAddUserModal } =
+  const { isAddModal, isEditModal, isDeleteModal, modalHeader, modelData, selectedProject, isAddUserModal } =
     state;
+  const { mutateAsync: createMutation } = useCreateProject();
+  const { mutateAsync: deleteMutation } = useDeleteProject();
+
+  let { data: projectData, error: errorProjects, isLoading: loadingProjects } = useProjectsQuery({});
+
 
   let {
     data: categoriesData,
     error: errorCategories,
     isLoading: isLoadingCategories,
   } = useCategoryQuery({});
-  if (isLoadingCategories) return <div>Loading...</div>;
-  if (errorCategories) return null;
+  if (isLoadingCategories || loadingProjects) return <div>Loading...</div>;
+  if (errorCategories || errorProjects) return null;
+
+
+  let projects: Project[] = projectData?.projects.data.results || [];
 
   let categories: CategoryUpdateInput[] =
     categoriesData?.categories.data.results || [];
@@ -97,27 +109,20 @@ const Projects: React.FC<Props> = () => {
     });
   };
 
-  const handleOpenEditModal = () => {
+  const handleOpenEditModal = (project: SelectedProject) => {
     setState({
       ...state,
       isEditModal: true,
       modalHeader: "Edit Project",
-      modelData: {
-        name: "Project 1",
-        category: 0,
-        description: "Description 1",
-        admin: 0,
-        start_at: "2021-09-01",
-        end_at: "2021-09-01",
-        files: [],
-      },
+      selectedProject: project
     });
   };
 
-  const handleOpenDeleteModal = () => {
+  const handleOpenDeleteModal = (project: SelectedProject) => {
     setState({
       ...state,
       isDeleteModal: true,
+      selectedProject: project
     });
   };
 
@@ -190,25 +195,41 @@ const Projects: React.FC<Props> = () => {
       placeholder: "Enter End Date",
     },
     {
-      label: "Files",
+      label: "Project thumbnail",
       type: "file",
       key: ModelKeys.FILES,
-      value: modelData?.files,
+      value: modelData?.file,
       onChange: (e: any) => {
-        let files: File[] = [];
-        for (let i = 0; i < e.target.files.length; i++) {
-          let file: File = e.target.files[i];
-          let reader = new FileReader();
-          reader.readAsDataURL(file);
-          reader.onload = (url) => {
-            files.push(file);
-          };
-        }
-
-        handleModelData(ModelKeys.FILES, files)
+        let file: File = e.target.files[0];
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (url) => {
+          handleModelData(ModelKeys.FILE, file)
+        };
       },
-      placeholder: "Enter Files",
+      placeholder: "Enter Thumbnail",
     },
+    // {
+    //   label: "Files",
+    //   type: "file",
+    //   key: ModelKeys.FILES,
+    //   value: modelData?.files,
+    //   onChange: (e: any) => {
+    //     let files: File[] = [];
+    //     for (let i = 0; i < e.target.files.length; i++) {
+    //       let file: File = e.target.files[i];
+    //       let reader = new FileReader();
+    //       reader.readAsDataURL(file);
+    //       reader.onload = (url) => {
+    //         files.push(file);
+    //       };
+    //     }
+
+    //     handleModelData(ModelKeys.FILES, files)
+    //   },
+    //   placeholder: "Enter Files",
+    //   multiple: true,
+    // },
     {
       label: "Assign Admin",
       type: "select",
@@ -223,11 +244,13 @@ const Projects: React.FC<Props> = () => {
   ]
 
 
+
   const createProject = async () => {
     Object.assign(modelData, { admin: 1 });
     try {
       let createInput = projectInput(modelData);
-      await createMutation(createInput);
+      let res = await createMutation(createInput);
+      projects.push(res);
       handleModalClose();
     } catch (err) {
       alert(err);
@@ -238,7 +261,13 @@ const Projects: React.FC<Props> = () => {
     Object.assign(modelData, { admin: 1 });
     try {
       let createInput = projectInput(modelData);
-      await createMutation(createInput);
+      let res = await createMutation(createInput);
+      projects.map((project) => {
+        if (project.id === res.id) {
+          return res;
+        }
+        return project;
+      });
       handleModalClose();
     } catch (err) {
       alert(err);
@@ -246,10 +275,10 @@ const Projects: React.FC<Props> = () => {
   };
 
   const deleteProject = async () => {
-    Object.assign(modelData, { admin: 1 });
     try {
-      let createInput = projectInput(modelData);
-      await createMutation(createInput);
+      await deleteMutation(selectedProject);
+      let currenProject = projects.find(project => project.id === selectedProject.id);
+      currenProject && projects.splice(projects.indexOf(currenProject), 1);
       handleModalClose();
     } catch (err) {
       alert(err);
@@ -311,20 +340,20 @@ const Projects: React.FC<Props> = () => {
             <Tab.Content>
               <Tab.Pane eventKey="All">
                 <div className="row g-3 gy-5 py-3 row-deck">
-                  {ProjectCardData.map((d: any, i: number) => {
+                  {projects && projects.length > 0 && projects.map((d: any, i: number) => {
                     return (
                       <div
                         key={"ljsdhl" + i}
                         className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6"
                       >
                         <CurrentClientProject
-                          teamImage={d.teamImage}
-                          logo={d.logo}
-                          logoBg={d.logoBg}
-                          title={d.title}
-                          sl={d.sl}
-                          onClickEdit={handleOpenEditModal}
-                          onClickDelete={handleOpenDeleteModal}
+                          teamImage={d.thumbnail}
+                          logo={d.thumbnail}
+                          logoBg={d.thumbnail}
+                          title={d.name}
+                          sl={d.category}
+                          onClickEdit={() => handleOpenEditModal(d)}
+                          onClickDelete={() => handleOpenDeleteModal(d)}
                           onClickAdd={handleOpenAddUserModal}
                         />
                       </div>
@@ -332,30 +361,6 @@ const Projects: React.FC<Props> = () => {
                   })}
                 </div>
               </Tab.Pane>
-              <Tab.Pane eventKey="Started">
-                <div className="row g-3 gy-5 py-3 row-deck">
-                  {ProjectCardData.map((d: any, i: number) => {
-                    return (
-                      <div
-                        key={"ljsdhl" + i}
-                        className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6"
-                      >
-                        <CurrentClientProject
-                          teamImage={d.teamImage}
-                          logo={d.logo}
-                          logoBg={d.logoBg}
-                          title={d.title}
-                          sl={d.sl}
-                          onClickEdit={handleOpenEditModal}
-                          onClickDelete={handleOpenDeleteModal}
-                          onClickAdd={handleOpenAddUserModal}
-                        />
-                      </div>
-                    );
-                  })}
-                </div>
-              </Tab.Pane>
-
             </Tab.Content>
           </div>
         </div>
@@ -552,9 +557,7 @@ const Projects: React.FC<Props> = () => {
       <Modal
         show={isDeleteModal}
         centered
-        onHide={() => {
-          setState({ ...state, isDeleteModal: false });
-        }}
+        onHide={handleModalClose}
       >
         <Modal.Header closeButton>
           <Modal.Title className="fw-bold">Delete Project</Modal.Title>
@@ -569,22 +572,20 @@ const Projects: React.FC<Props> = () => {
           <button
             type="button"
             className="btn btn-secondary"
-            onClick={() => {
-              setState({ ...state, isDeleteModal: false });
-            }}
+            onClick={handleModalClose}
           >
             Cancel
           </button>
-          <button type="button" className="btn btn-danger color-fff">
-            Create
+          <button type="button" className="btn btn-danger color-fff"
+            onClick={deleteProject}
+          >
+            Delete
           </button>
         </Modal.Footer>
       </Modal>
       <AddNewUserModal
         show={isAddUserModal}
-        onClose={() => {
-          setState({ ...state, isAddUserModal: false });
-        }}
+        onClose={handleModalClose}
       />
     </div>
   );

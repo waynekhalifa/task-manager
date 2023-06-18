@@ -26,7 +26,11 @@ const FormInputs: React.FC<Props> = ({ formFields }) => {
             })}
           </select>}
           {formInfo.type === "textarea" && <textarea className="form-control" id="exampleFormControlTextarea1" rows={3} placeholder={formInfo.placeholder} value={formInfo.value} onChange={formInfo.onChange} />}
-          {formInfo.type === "file" && <input className="form-control" type="file" id="formFile" onChange={formInfo.onChange} />}
+          {formInfo.type === "file" &&
+            <div className="form-group">
+              <input className="form-control" type="file" id="formFile" name="files[]" onChange={formInfo.onChange} multiple={formInfo.multiple} />
+            </div>
+          }
         </div>;
       })}
     </form>
