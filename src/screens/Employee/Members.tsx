@@ -3,28 +3,68 @@ import { Dropdown, Modal } from "react-bootstrap";
 import OurClients from "components/Clients/OurClients";
 import PageHeader from "components/common/PageHeader";
 import { MembersData } from "components/Data/AppData";
-import {  useEmployeesQuery } from "framework/employee/getAllEmployees";
+import { useEmployeesQuery } from "framework/employee/getAllEmployees";
 
-interface Props {}
+interface Props { }
+
+
 interface State {
   isModal: boolean;
   show: boolean;
+  fullName: string;
+  username: string;
+  email: string;
+  password1: string;
+  password2: string;
+  onboard_at: string;
+  employee_id: string;
+  phone: string;
+  department: string;
 }
-
 const INITIAlIZE_DATA: State = {
   isModal: false,
   show: false,
+  fullName: "",
+  username: "",
+  email: "",
+  password1: "",
+  password2: "",
+  onboard_at: "",
+  employee_id: "",
+  phone: "",
+  department: "",
 };
 
 const Members: React.FC<Props> = () => {
   const [state, setState] = React.useState(INITIAlIZE_DATA);
-  const { isModal } = state;
+  const { isModal, fullName, username, email, password1, password2, onboard_at, employee_id, phone, department } = state;
 
   let { data, error, isLoading } = useEmployeesQuery({});
   if (isLoading) return <div>Loading...</div>;
   if (error) return null;
 
   console.log(data?.employees.data.results);
+
+  const handleSubmit = () => {
+    const name = fullName.split(" ");
+    const first_name = name[0];
+    const last_name = name[1];
+    const data = {
+      first_name: first_name,
+      last_name: last_name,
+      username: username,
+      email: email,
+      password1: password1,
+      password2: password2,
+      employee: {
+        onboard_at: onboard_at,
+        employee_id: employee_id,
+        phone: phone,
+        department: department,
+      },
+    };
+    console.log(data);
+  }
 
 
 
@@ -112,6 +152,8 @@ const Members: React.FC<Props> = () => {
           setState((prevState) => ({ ...prevState, isModal: false }));
         }}
       >
+
+        
         <Modal.Header closeButton>
           <Modal.Title className="fw-bold">Add Employee</Modal.Title>
         </Modal.Header>
@@ -128,10 +170,11 @@ const Members: React.FC<Props> = () => {
                 type="text"
                 className="form-control"
                 id="exampleFormControlInput877"
-                placeholder="Explain what the Project Name"
+                placeholder="Employee Full Name"
+                onChange={(e) => setState((prevState) => ({ ...prevState, fullName: e.target.value }))}
               />
             </div>
-            <div className="mb-3">
+            {/* <div className="mb-3">
               <label
                 htmlFor="exampleFormControlInput977"
                 className="form-label"
@@ -144,7 +187,7 @@ const Members: React.FC<Props> = () => {
                 id="exampleFormControlInput977"
                 placeholder="Explain what the Project Name"
               />
-            </div>
+            </div> */}
             <div className="mb-3">
               <label htmlFor="formFileMultipleoneone" className="form-label">
                 Employee Profile Image
@@ -169,7 +212,8 @@ const Members: React.FC<Props> = () => {
                       type="text"
                       className="form-control"
                       id="exampleFormControlInput1778"
-                      placeholder="User Name"
+                      placeholder="ID or User Name"
+                      onChange={(e) => setState((prevState) => ({ ...prevState, employee_id: e.target.value }))}
                     />
                   </div>
                   <div className="col-sm-6">
@@ -183,6 +227,7 @@ const Members: React.FC<Props> = () => {
                       type="date"
                       className="form-control"
                       id="exampleFormControlInput2778"
+                      onChange={(e) => setState((prevState) => ({ ...prevState, joining_date: e.target.value }))}
                     />
                   </div>
                 </div>
@@ -199,6 +244,7 @@ const Members: React.FC<Props> = () => {
                       className="form-control"
                       id="exampleFormControlInput177"
                       placeholder="User Name"
+                      onChange={(e) => setState((prevState) => ({ ...prevState, username: e.target.value }))}
                     />
                   </div>
                   <div className="col-lg-6">
@@ -213,6 +259,7 @@ const Members: React.FC<Props> = () => {
                       className="form-control"
                       id="exampleFormControlInput277"
                       placeholder="Password"
+                      onChange={(e) => setState((prevState) => ({ ...prevState, password1: e.target.value, password2: e.target.value }))}
                     />
                   </div>
                 </div>
@@ -222,13 +269,14 @@ const Members: React.FC<Props> = () => {
                       htmlFor="exampleFormControlInput477"
                       className="form-label"
                     >
-                      Email ID
+                      Email
                     </label>
                     <input
                       type="email"
                       className="form-control"
                       id="exampleFormControlInput477"
                       placeholder="User Name"
+                      onChange={(e) => setState((prevState) => ({ ...prevState, email: e.target.value }))}
                     />
                   </div>
                   <div className="col-lg-6">
@@ -243,6 +291,7 @@ const Members: React.FC<Props> = () => {
                       className="form-control"
                       id="exampleFormControlInput777"
                       placeholder="User Name"
+                      onChange={(e) => setState((prevState) => ({ ...prevState, phone: e.target.value }))}
                     />
                   </div>
                 </div>
@@ -311,7 +360,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault1"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -321,7 +370,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault2"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -331,7 +380,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault3"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -341,7 +390,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault4"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -351,7 +400,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault5"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -361,7 +410,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault6"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                   </tr>
@@ -374,7 +423,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault7"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -384,7 +433,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault8"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -394,7 +443,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault9"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -404,7 +453,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault10"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -414,7 +463,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault11"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -424,7 +473,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault12"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                   </tr>
@@ -437,7 +486,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault13"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -447,7 +496,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault14"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -457,7 +506,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault15"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -467,7 +516,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault16"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -477,7 +526,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault17"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -487,7 +536,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault18"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                   </tr>
@@ -500,7 +549,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault19"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -510,7 +559,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault20"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -520,7 +569,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault21"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -530,7 +579,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault22"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -540,7 +589,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault23"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -550,7 +599,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault24"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                   </tr>
@@ -563,7 +612,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault25"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -581,7 +630,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault27"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -599,7 +648,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault29"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -609,7 +658,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault30"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                   </tr>
@@ -622,7 +671,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault31"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -632,7 +681,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault32"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -642,7 +691,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault33"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -652,7 +701,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault34"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -662,7 +711,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault35"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -672,7 +721,7 @@ const Members: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault36"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                   </tr>
@@ -687,6 +736,7 @@ const Members: React.FC<Props> = () => {
             className="btn btn-secondary"
             onClick={() => {
               setState({ ...state, show: false });
+              handleSubmit()
             }}
           >
             Done
@@ -694,7 +744,7 @@ const Members: React.FC<Props> = () => {
           <button type="button" className="btn btn-primary">
             Sent
           </button>
-        </Modal.Footer>
+          </Modal.Footer>
       </Modal>
     </div>
   );

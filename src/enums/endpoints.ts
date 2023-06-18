@@ -15,4 +15,6 @@ export enum Endpoints {
   TASK = "management/task/",
   PROJECT = "management/project/",
   CATEGORY = "category/",
+  /** Add New Employee === Register New User */
+  EMPLOYEE_CREATE = "user/auth/register/",
 }
