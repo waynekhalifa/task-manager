@@ -1,11 +1,10 @@
-import { useCreateCategory } from 'framework/category/create-category';
-import { useDeleteCategory } from 'framework/category/delete-category';
-import { useCategoryQuery } from 'framework/category/get-all-category';
-import { useUpdateCategory } from 'framework/category/update-category';
-import React from 'react';
-import { Modal } from 'react-bootstrap';
-import { CategoryCreateInput, CategoryUpdateInput } from 'types/category';
-
+import { useCreateCategory } from "framework/category/createCategory";
+import { useDeleteCategory } from "framework/category/deleteCategory";
+import { useCategoryQuery } from "framework/category/getAllCategory";
+import { useUpdateCategory } from "framework/category/updateCategory";
+import React from "react";
+import { Modal } from "react-bootstrap";
+import { CategoryCreateInput, CategoryUpdateInput } from "types/category";
 
 interface State {
   isDeleteModal: boolean;
@@ -20,7 +19,7 @@ const INITIAlIZE_DATA: State = {
   isAddModal: false,
   isEditModal: false,
   modalHeader: "",
-  editModeldata: ""
+  editModeldata: "",
 };
 
 const Categories: React.FC = () => {
@@ -28,8 +27,10 @@ const Categories: React.FC = () => {
   const { mutateAsync: editMutation } = useUpdateCategory();
   const { mutateAsync: deleteMutation } = useDeleteCategory();
   const [state, setState] = React.useState<State>(INITIAlIZE_DATA);
-  const { isDeleteModal, modalHeader, editModeldata, isAddModal, isEditModal } = state;
-  const [selectedCategory, setSelectedCategory] = React.useState<CategoryUpdateInput>({} as CategoryUpdateInput);
+  const { isDeleteModal, modalHeader, editModeldata, isAddModal, isEditModal } =
+    state;
+  const [selectedCategory, setSelectedCategory] =
+    React.useState<CategoryUpdateInput>({} as CategoryUpdateInput);
 
   let { data, error, isLoading } = useCategoryQuery({});
   if (isLoading) return <div>Loading...</div>;
@@ -41,7 +42,7 @@ const Categories: React.FC = () => {
     setState({
       ...state,
       isAddModal: true,
-      modalHeader: "Create Category"
+      modalHeader: "Create Category",
     });
   };
 
@@ -51,7 +52,7 @@ const Categories: React.FC = () => {
       ...state,
       isEditModal: true,
       modalHeader: "Edit Category",
-      editModeldata: category.name
+      editModeldata: category.name,
     });
   };
 
@@ -59,11 +60,10 @@ const Categories: React.FC = () => {
     setState({
       ...state,
       isDeleteModal: true,
-      modalHeader: "Delete Category"
+      modalHeader: "Delete Category",
     });
     setSelectedCategory(category);
   };
-
 
   const handleModalClose = () => {
     setState({
@@ -72,24 +72,24 @@ const Categories: React.FC = () => {
       isAddModal: false,
       isEditModal: false,
       modalHeader: "",
-      editModeldata: ""
+      editModeldata: "",
     });
     setSelectedCategory({} as CategoryUpdateInput);
   };
-
 
   const addCategory = () => {
     const inputData = {
       name: editModeldata.name,
     } as CategoryCreateInput;
 
-    createMutation(inputData).then((res) => {
-      categories.push(res.session.data);
-      handleModalClose();
-    }).catch((err) => {
-      alert(err);
-    }
-    );
+    createMutation(inputData)
+      .then((res) => {
+        categories.push(res.session.data);
+        handleModalClose();
+      })
+      .catch((err) => {
+        alert(err);
+      });
   };
   const editCategory = () => {
     const inputData = {
@@ -97,16 +97,18 @@ const Categories: React.FC = () => {
       name: editModeldata.name,
     } as CategoryUpdateInput;
 
-    editMutation(inputData).then((res) => {
-      categories.map((category: CategoryUpdateInput) => {
-        if (category.id === res.session.data.id) {
-          category.name = res.session.data.name;
-        }
+    editMutation(inputData)
+      .then((res) => {
+        categories.map((category: CategoryUpdateInput) => {
+          if (category.id === res.session.data.id) {
+            category.name = res.session.data.name;
+          }
+        });
+        handleModalClose();
+      })
+      .catch((err) => {
+        alert(err);
       });
-      handleModalClose();
-    }).catch((err) => {
-      alert(err);
-    });
   };
 
   const deleteCategory = () => {
@@ -115,32 +117,34 @@ const Categories: React.FC = () => {
       name: selectedCategory.name,
     } as CategoryUpdateInput;
 
-    deleteMutation(inputData).then((res) => {
-      categories = categories.splice(categories.indexOf(selectedCategory), 1);
-      handleModalClose();
-    }
-    ).catch((err) => {
-      alert(err);
-    }
-    );
+    deleteMutation(inputData)
+      .then((res) => {
+        categories = categories.splice(categories.indexOf(selectedCategory), 1);
+        handleModalClose();
+      })
+      .catch((err) => {
+        alert(err);
+      });
   };
-
 
   return (
     <div>
-      <div style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: "1rem",
-      }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "1rem",
+        }}
+      >
         <h2>List Categories</h2>
         <button
           type="button"
           className="btn btn-dark w-sm-100"
           onClick={handleAddCategory}
         >
-          <i className="icofont-plus-circle me-2 fs-6" />Create Category
+          <i className="icofont-plus-circle me-2 fs-6" />
+          Create Category
         </button>
       </div>
 
@@ -153,49 +157,45 @@ const Categories: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {categories.length > 0 && categories.map((category: CategoryUpdateInput) => (
-            <tr key={category.id}>
-              <th scope="row">{category.name}</th>
-              <td>
-                {category.created_at ? category.created_at.split("T")[0] : new Date().toISOString().split("T")[0]}
-              </td>
+          {categories.length > 0 &&
+            categories.map((category: CategoryUpdateInput) => (
+              <tr key={category.id}>
+                <th scope="row">{category.name}</th>
+                <td>
+                  {category.created_at
+                    ? category.created_at.split("T")[0]
+                    : new Date().toISOString().split("T")[0]}
+                </td>
 
-              <td>
-                <div
-                  className="btn-group"
-                  role="group"
-                  aria-label="Basic outlined example"
-                >
-                  <button
-                    type="button"
-                    className="btn btn-outline-secondary"
-                    onClick={() => handleEditCategory(category)}
+                <td>
+                  <div
+                    className="btn-group"
+                    role="group"
+                    aria-label="Basic outlined example"
                   >
-                    <i className="icofont-edit text-success"></i>
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-outline-secondary"
-                    onClick={() => handleDeleteCategory(category)}
-                  >
-                    <i className="icofont-ui-delete text-danger"></i>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          ))}
-
-
+                    <button
+                      type="button"
+                      className="btn btn-outline-secondary"
+                      onClick={() => handleEditCategory(category)}
+                    >
+                      <i className="icofont-edit text-success"></i>
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-outline-secondary"
+                      onClick={() => handleDeleteCategory(category)}
+                    >
+                      <i className="icofont-ui-delete text-danger"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
-      <Modal
-        show={isAddModal || isEditModal}
-        onHide={handleModalClose}
-      >
+      <Modal show={isAddModal || isEditModal} onHide={handleModalClose}>
         <Modal.Header closeButton>
-          <Modal.Title className="fw-bold">
-            {modalHeader}
-          </Modal.Title>
+          <Modal.Title className="fw-bold">{modalHeader}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="mb-3">
@@ -216,8 +216,6 @@ const Categories: React.FC = () => {
               }}
             />
           </div>
-
-
         </Modal.Body>
         <Modal.Footer>
           <button
@@ -227,23 +225,27 @@ const Categories: React.FC = () => {
           >
             Cancel
           </button>
-          {isAddModal && <button type="button" className="btn btn-primary"
-            onClick={addCategory}
-          >
-            Create
-          </button>}
-          {isEditModal && <button type="button" className="btn btn-primary"
-            onClick={editCategory}
-          >
-            Save
-          </button>}
+          {isAddModal && (
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={addCategory}
+            >
+              Create
+            </button>
+          )}
+          {isEditModal && (
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={editCategory}
+            >
+              Save
+            </button>
+          )}
         </Modal.Footer>
       </Modal>
-      <Modal
-        show={isDeleteModal}
-        centered
-        onHide={handleModalClose}
-      >
+      <Modal show={isDeleteModal} centered onHide={handleModalClose}>
         <Modal.Header closeButton>
           <Modal.Title className="fw-bold">Delete Project</Modal.Title>
         </Modal.Header>
@@ -261,7 +263,9 @@ const Categories: React.FC = () => {
           >
             Cancel
           </button>
-          <button type="button" className="btn btn-danger color-fff"
+          <button
+            type="button"
+            className="btn btn-danger color-fff"
             onClick={deleteCategory}
           >
             Delete
@@ -269,8 +273,7 @@ const Categories: React.FC = () => {
         </Modal.Footer>
       </Modal>
     </div>
-  )
-
+  );
 };
 
 export default Categories;

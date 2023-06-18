@@ -4,11 +4,14 @@ import CurrentClientProject from "../../components/Clients/CurrentClientProject"
 import AddNewUserModal from "../../components/common/AddNewUserModal";
 import PageHeader from "../../components/common/PageHeader";
 import { ProjectCardData } from "../../components/Data/AppData";
-import { useCategoryQuery } from "framework/category/get-all-category";
+import { useCategoryQuery } from "framework/category/getAllCategory";
 import { CategoryUpdateInput } from "types/category";
-import { projectInput, useCreateProject } from "framework/project/create-project";
+import {
+  projectInput,
+  useCreateProject,
+} from "framework/project/create-project";
 
-interface Props { }
+interface Props {}
 
 interface State {
   isModal: boolean;
@@ -23,25 +26,35 @@ const INITIAlIZE_DATA: State = {
   isDeleteModal: false,
   isAddUserModal: false,
   modalHeader: "",
-  editModeldata: ""
+  editModeldata: "",
 };
 
 const Projects: React.FC<Props> = () => {
   const { mutateAsync: createMutation } = useCreateProject();
 
   const [state, setState] = React.useState<State>(INITIAlIZE_DATA);
-  const { isModal, isDeleteModal, modalHeader, editModeldata, isAddUserModal } = state;
+  const { isModal, isDeleteModal, modalHeader, editModeldata, isAddUserModal } =
+    state;
 
-  let { data: categoriesData, error: errorCategories, isLoading: isLoadingCategories } = useCategoryQuery({});
+  let {
+    data: categoriesData,
+    error: errorCategories,
+    isLoading: isLoadingCategories,
+  } = useCategoryQuery({});
   if (isLoadingCategories) return <div>Loading...</div>;
   if (errorCategories) return null;
 
-  let categories: CategoryUpdateInput[] = categoriesData?.categories.data.results || [];
+  let categories: CategoryUpdateInput[] =
+    categoriesData?.categories.data.results || [];
 
   const handleModalClose = () => {
     setState({
-      ...state, isModal: false, isDeleteModal: false, isAddUserModal: false,
-      modalHeader: "", editModeldata: ""
+      ...state,
+      isModal: false,
+      isDeleteModal: false,
+      isAddUserModal: false,
+      modalHeader: "",
+      editModeldata: "",
     });
   };
 
@@ -55,7 +68,6 @@ const Projects: React.FC<Props> = () => {
       alert(err);
     }
   };
-
 
   return (
     <div className="container-xxl">
@@ -72,11 +84,12 @@ const Projects: React.FC<Props> = () => {
                     setState({
                       ...state,
                       isModal: true,
-                      modalHeader: "Create Project"
+                      modalHeader: "Create Project",
                     });
                   }}
                 >
-                  <i className="icofont-plus-circle me-2 fs-6" />Create Project
+                  <i className="icofont-plus-circle me-2 fs-6" />
+                  Create Project
                 </button>
                 <Nav
                   variant="pills"
@@ -121,7 +134,7 @@ const Projects: React.FC<Props> = () => {
                               ...state,
                               isModal: true,
                               modalHeader: "Edit Project",
-                              editModeldata: d
+                              editModeldata: d,
                             });
                           }}
                           onClickDelete={() => {
@@ -227,14 +240,9 @@ const Projects: React.FC<Props> = () => {
           </div>
         </div>
       </Tab.Container>
-      <Modal
-        show={isModal}
-        onHide={handleModalClose}
-      >
+      <Modal show={isModal} onHide={handleModalClose}>
         <Modal.Header closeButton>
-          <Modal.Title className="fw-bold">
-            {modalHeader}
-          </Modal.Title>
+          <Modal.Title className="fw-bold">{modalHeader}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="mb-3">
@@ -270,12 +278,12 @@ const Projects: React.FC<Props> = () => {
                 });
               }}
             >
-              {categories.length > 0 && categories.map((d: any, i: number) => (
-                <option key={"sdf" + i} value={d.id}>
-                  {d.name}
-                </option>
-              ))
-              }
+              {categories.length > 0 &&
+                categories.map((d: any, i: number) => (
+                  <option key={"sdf" + i} value={d.id}>
+                    {d.name}
+                  </option>
+                ))}
             </select>
           </div>
           <div className="mb-3">
@@ -295,9 +303,8 @@ const Projects: React.FC<Props> = () => {
                     images: e.target.files,
                   },
                 });
-              }
-              }
-            // multiple=""
+              }}
+              // multiple=""
             />
           </div>
           <div className="deadline-form">
@@ -341,14 +348,14 @@ const Projects: React.FC<Props> = () => {
                         },
                       });
                     }}
-
                   />
                 </div>
               </div>
               <div className="row g-3 mb-3">
                 <div className="col-sm-12">
                   <label className="form-label">Notifation Sent</label>
-                  <select className="form-select"
+                  <select
+                    className="form-select"
                     value={editModeldata ? editModeldata.notifationSent : ""}
                     onChange={(e: any) => {
                       setState({
@@ -369,7 +376,9 @@ const Projects: React.FC<Props> = () => {
                   <label htmlFor="formFileMultipleone" className="form-label">
                     Task Assign Person
                   </label>
-                  <select className="form-select" multiple={true}
+                  <select
+                    className="form-select"
+                    multiple={true}
                     value={editModeldata ? editModeldata.assignPerson : ""}
                     onChange={(e: any) => {
                       setState({
@@ -398,7 +407,9 @@ const Projects: React.FC<Props> = () => {
               <label htmlFor="formFileMultipleone" className="form-label">
                 Budget
               </label>
-              <input type="number" className="form-control"
+              <input
+                type="number"
+                className="form-control"
                 value={editModeldata ? editModeldata.budget : ""}
                 onChange={(e: any) => {
                   setState({
@@ -415,7 +426,8 @@ const Projects: React.FC<Props> = () => {
               <label htmlFor="formFileMultipleone" className="form-label">
                 Priority
               </label>
-              <select className="form-select"
+              <select
+                className="form-select"
                 value={editModeldata ? editModeldata.priority : ""}
                 onChange={(e: any) => {
                   setState({
@@ -467,7 +479,9 @@ const Projects: React.FC<Props> = () => {
           >
             Cancel
           </button>
-          <button type="button" className="btn btn-primary"
+          <button
+            type="button"
+            className="btn btn-primary"
             onClick={createProject}
           >
             Create
