@@ -1,9 +1,12 @@
+import { Suspense, useEffect, useState } from "react";
+import { Route, Routes } from "react-router-dom";
+
 import LeftSide from "components/Auth/LeftSide";
+import Auth from "components/Auth";
 import SignIn from "../components/Auth/SignIn";
-import { useEffect, useState } from "react";
+import useApp from "hooks/useApp";
 import { RefreshTokenInput } from "types/refreshToken";
 import { useRefreshToken } from "framework/auth/refreshToken";
-import useApp from "hooks/useApp";
 import { useAuth } from "contexts/AuthContext";
 
 type IState = { initialized: boolean };
@@ -59,7 +62,12 @@ const AuthIndex: React.FC = () => {
         <div className="container-xxl">
           <div className="row g-0">
             <LeftSide />
-            <SignIn />
+            <Suspense fallback={null}>
+              <Routes>
+                <Route path="/" element={<SignIn />} />
+                <Route path=":slug/*" element={<Auth />} />
+              </Routes>
+            </Suspense>
           </div>
         </div>
       </div>

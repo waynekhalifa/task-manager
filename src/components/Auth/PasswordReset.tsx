@@ -38,7 +38,7 @@ const PasswordReset: React.FC = () => {
           </div>
           <div className="col-12 text-center mt-4">
             <span className="text-muted">
-              <Link to="sign-in" className="text-secondary">
+              <Link to="/" className="text-secondary">
                 Back to Sign in
               </Link>
             </span>
