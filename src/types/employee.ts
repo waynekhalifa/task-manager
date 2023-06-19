@@ -7,3 +7,10 @@ export interface EmployeeUpdateInput {
   project: number;
   user: string;
 }
+
+export interface Employee {
+  onboard_at: string;
+  employee_id: number;
+  phone: string;
+  department: number;
+}

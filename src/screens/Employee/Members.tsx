@@ -3,6 +3,10 @@ import { Dropdown, Modal } from "react-bootstrap";
 import OurClients from "components/Clients/OurClients";
 import PageHeader from "components/common/PageHeader";
 import { MembersData } from "components/Data/AppData";
+import { useRegister } from "framework/auth/register";
+import { Employee } from "types/employee";
+import { AuthRegisterInput } from "types/register";
+import { formatDate } from "utils/dateFormat";
 
 interface Props {}
 interface State {
@@ -18,6 +22,34 @@ const INITIAlIZE_DATA: State = {
 const Members: React.FC<Props> = () => {
   const [state, setState] = React.useState(INITIAlIZE_DATA);
   const { isModal } = state;
+  const { mutateAsync: createUser } = useRegister();
+
+  const handleClick = async () => {
+    const employee: Employee = {
+      onboard_at: formatDate(new Date()),
+      employee_id: 0,
+      phone: "+201091098410",
+      department: 12,
+    };
+
+    const createInput: AuthRegisterInput = {
+      first_name: "wani",
+      last_name: "joseph",
+      username: "wani@123",
+      email: "wani-joseph@outlook.com",
+      password1: "Mac_bmug18",
+      password2: "Mac_bmug18",
+      employee,
+    };
+
+    try {
+      await createUser(createInput);
+
+      console.log("success");
+    } catch (err: Error | any) {
+      console.log(err);
+    }
+  };
 
   return (
     <div className="container-xxl">
@@ -682,7 +714,11 @@ const Members: React.FC<Props> = () => {
           >
             Done
           </button>
-          <button type="button" className="btn btn-primary">
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={handleClick}
+          >
             Sent
           </button>
         </Modal.Footer>
