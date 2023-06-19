@@ -1,4 +1,3 @@
-import { ProgressBar } from "react-bootstrap";
 
 interface Props {
   teamImage: any;
@@ -13,6 +12,9 @@ interface Props {
   onClickAddMember?: any;
   onClickAddAttachment?: any;
   onClickViewDescription?: any;
+  onClickAddComment: any;
+  members_count: number;
+  comments_count: number;
 }
 
 const CurrentClientProject: React.FC<Props> = ({
@@ -28,6 +30,9 @@ const CurrentClientProject: React.FC<Props> = ({
   onClickAddMember,
   onClickAddAttachment,
   onClickViewDescription,
+  onClickAddComment,
+  comments_count,
+  members_count
 }) => {
 
   const sumDateRange = () => {
@@ -121,7 +126,7 @@ const CurrentClientProject: React.FC<Props> = ({
           <div className="col-6">
             <div className="d-flex align-items-center">
               <i className="icofont-group-students "></i>
-              <span className="ms-2">5 Members</span>
+              <span className="ms-2">{members_count} Members</span>
               <span
                 className="avatar rounded-circle text-center pointer sm"
                 onClick={onClickAddMember}
@@ -133,7 +138,13 @@ const CurrentClientProject: React.FC<Props> = ({
           <div className="col-6">
             <div className="d-flex align-items-center">
               <i className="icofont-ui-text-chat"></i>
-              <span className="ms-2">10</span>
+              <span className="ms-2">{comments_count}</span>
+              <span
+                className="avatar rounded-circle text-center pointer sm"
+                onClick={onClickAddComment}
+              >
+                <i className="icofont-ui-add"></i>
+              </span>
             </div>
           </div>
           <div className="col-12">
@@ -151,12 +162,12 @@ const CurrentClientProject: React.FC<Props> = ({
         </div>
         <div className="dividers-block"></div>
         <div className="d-flex align-items-center justify-content-between mb-2">
-          <h4 className="small fw-bold mb-0">Progress</h4>
+          {/* <h4 className="small fw-bold mb-0">Progress</h4> */}
           <span className="small light-danger-bg  p-1 rounded">
             <i className="icofont-ui-clock"></i> {sumDaysLeftFromToDay()} Days Left
           </span>
         </div>
-        <ProgressBar style={{ height: "8px" }}>
+        {/* <ProgressBar style={{ height: "8px" }}>
           <ProgressBar variant="secondary" now={15} style={{ width: "25%" }} />
           <ProgressBar
             variant="secondary"
@@ -168,7 +179,7 @@ const CurrentClientProject: React.FC<Props> = ({
             now={10}
             style={{ width: "25%", marginLeft: 10 }}
           />
-        </ProgressBar>
+        </ProgressBar> */}
       </div>
     </div >
   );

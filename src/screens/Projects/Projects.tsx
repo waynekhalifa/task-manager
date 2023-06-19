@@ -17,6 +17,7 @@ import { useDeleteProject } from "framework/project/deleteProject";
 import AddNewAttachmentModal from "components/common/AddNewAttachmentModal";
 import DescriptionViewModal from "components/common/DescriptionViewModal";
 import { projectUpdateInput, useUpdateProject } from "framework/project/updateProject";
+import AddCommentModal from "components/common/AddCommentModal";
 
 interface Props { }
 
@@ -38,6 +39,7 @@ interface State {
   isAddUserModal: boolean;
   isAddAttachmentModal: boolean;
   isViewDescriptionModal: boolean;
+  isAddCommentModal: Boolean;
   modalHeader: any;
   modelData: Project;
   selectedProject: SelectedProject;
@@ -50,6 +52,7 @@ const INITIAlIZE_DATA: State = {
   isAddUserModal: false,
   isAddAttachmentModal: false,
   isViewDescriptionModal: false,
+  isAddCommentModal: false,
   modalHeader: "",
   modelData: {} as Project,
   selectedProject: {} as SelectedProject,
@@ -59,7 +62,7 @@ const Projects: React.FC<Props> = () => {
 
 
   const [state, setState] = React.useState<State>(INITIAlIZE_DATA);
-  const { isAddModal, isEditModal, isDeleteModal, modalHeader, modelData, selectedProject, isAddUserModal, isAddAttachmentModal, isViewDescriptionModal } =
+  const { isAddModal, isEditModal, isDeleteModal, modalHeader, modelData, selectedProject, isAddUserModal, isAddAttachmentModal, isViewDescriptionModal, isAddCommentModal } =
     state;
   const { mutateAsync: createMutation } = useCreateProject();
   const { mutateAsync: updateMutation } = useUpdateProject();
@@ -106,6 +109,7 @@ const Projects: React.FC<Props> = () => {
       isAddUserModal: false,
       isAddAttachmentModal: false,
       isViewDescriptionModal: false,
+      isAddCommentModal: false,
       modalHeader: "",
       modelData: {} as Project,
     });
@@ -157,6 +161,14 @@ const Projects: React.FC<Props> = () => {
       selectedProject: project,
     });
   };
+
+  const handleOpenAddCommentModal = (project: SelectedProject) => {
+    setState({
+      ...state,
+      isAddCommentModal: true,
+      selectedProject: project,
+    });
+  }
 
   const handleModelData = (key: string, value: any) => {
     if (isEditModal) {
@@ -387,6 +399,9 @@ const Projects: React.FC<Props> = () => {
                           onClickAddMember={handleOpenAddUserModal}
                           onClickAddAttachment={() => handleOpenAddAttachmentModal(d)}
                           onClickViewDescription={() => handleOpenViewDescriptionModal(d)}
+                          onClickAddComment={() => handleOpenAddCommentModal(d)}
+                          comments_count={d.comments_count}
+                          members_count={d.members_count}
                         />
                       </div>
                     );
@@ -634,6 +649,10 @@ const Projects: React.FC<Props> = () => {
       <DescriptionViewModal
         show={isViewDescriptionModal}
         data={selectedProject.description}
+        onClose={handleModalClose}
+      />
+      <AddCommentModal
+        show={isAddCommentModal}
         onClose={handleModalClose}
       />
     </div>
