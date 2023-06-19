@@ -352,6 +352,8 @@ const Projects: React.FC<Props> = () => {
                           logoBg={d.thumbnail}
                           title={d.name}
                           sl={d.category}
+                          startDate={d.start_at}
+                          endDate={d.end_at}
                           onClickEdit={() => handleOpenEditModal(d)}
                           onClickDelete={() => handleOpenDeleteModal(d)}
                           onClickAdd={handleOpenAddUserModal}
