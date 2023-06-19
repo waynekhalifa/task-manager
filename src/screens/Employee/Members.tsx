@@ -7,66 +7,54 @@ import { useEmployeesQuery } from "framework/employee/getAllEmployees";
 import FormInputs from "components/FormInputs/FormInputs";
 import { IField } from "types/formFields";
 import { EmployeeCreateInput } from "types/employee";
+import { usePermissionsQuery } from "framework/permissions/getAllPermissions";
+import { useCategoriesQuery } from "framework/category/getAllCategories";
+import { Category } from "types/category";
+
 interface Props { }
 
 enum ModelKeys {
-  NAME = "name",
-  CATEGORY = "category",
-  DESCRIPTION = "description",
-  START_DATE = "start_at",
-  END_DATE = "end_at",
-  ADMIN = "admin",
+  FIRST_NAME = "first_name",
+  LAST_NAME = "last_name",
+  USERNAME = "username",
+  EMAIL = "email",
+  PASSWORD = "password1",
+  ONBOARD_AT = "onboard_at",
+  EMPLOYEE_ID = "employee_id",
+  PHONE = "phone",
+  DEPARTMENT = "department",
   FILES = "files",
 }
 
 interface State {
   isModal: boolean;
   show: boolean;
-  modelData: {} as EmployeeCreateInput;
-  // fullName: string;
-  // username: string;
-  // email: string;
-  // password1: string;
-  // password2: string;
-  // onboard_at: string;
-  // employee_id: string;
-  // phone: string;
-  // department: string;
+  modelData: EmployeeCreateInput;
 }
+
 const INITIAlIZE_DATA: State = {
   isModal: false,
   show: false,
   modelData: {} as EmployeeCreateInput,
-  // fullName: "",
-  // username: "",
-  // email: "",
-  // password1: "",
-  // password2: "",
-  // onboard_at: "",
-  // employee_id: "",
-  // phone: "",
-  // department: "",
 };
 
 const Members: React.FC<Props> = () => {
   const [state, setState] = React.useState(INITIAlIZE_DATA);
-  const { isModal, modelData : {
-    fullName: '',
-    username: '',
-    email: '',
-    password1: '',
-    password2: '',
-    onboard_at: '',
-    employee_id: '',
-    phone: '',
-    department: '',
-  } } = state;
+  const { isModal, modelData } = state;
 
-  let { data, error, isLoading } = useEmployeesQuery({});
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return null;
+  const { data: employeeData, error: employeeError, isLoading: employeeIsLoading } = useEmployeesQuery({});
+  const { data: permissionsData, error: permissionsError, isLoading: permissionsIsLoading } = usePermissionsQuery({});
+  const { data: departmentData, error: departmentError, isLoading: departmentIsLoading } = useCategoriesQuery({});
 
-    const handleModelData = (key: string, value: any) => {
+  let permissions = permissionsData?.permissions?.data?.results || [];
+  let departments = departmentData?.categories?.data?.results || [];
+  console.log("permissions", permissions)
+  console.log("departments", departments)
+
+  if (employeeIsLoading || permissionsIsLoading || departmentIsLoading) return <div>Loading...</div>;
+  if (employeeError || permissionsError || departmentError) return null;
+
+  const handleModelData = (key: string, value: any) => {
     setState({
       ...state,
       modelData: {
@@ -76,60 +64,32 @@ const Members: React.FC<Props> = () => {
     });
   };
 
+
   const formFields: IField[] = [
     {
-      label: "Project Name",
+      label: "First Name",
       type: "text",
-      key: ModelKeys.NAME,
-      value: modelData?.name,
-      onChange: (e: any) => handleModelData(ModelKeys.NAME, e.target.value),
-      placeholder: "Enter Project Name",
-
+      width: "col-md-6",
+      key: ModelKeys.FIRST_NAME,
+      value: modelData?.first_name,
+      onChange: (e: any) => handleModelData(ModelKeys.FIRST_NAME, e.target.value),
+      placeholder: "Enter First Name",
+    },
+      {
+      label: "Last Name",
+        type: "text",
+      width: "col-md-6",
+      key: ModelKeys.FIRST_NAME,
+      value: modelData?.first_name,
+      onChange: (e: any) => handleModelData(ModelKeys.FIRST_NAME, e.target.value),
+      placeholder: "Enter Last Name",
     },
     {
-      label: "Department",
-      type: "select",
-      key: ModelKeys.CATEGORY,
-      value: modelData?.category,
-      onChange: (e: any) => handleModelData(ModelKeys.CATEGORY, e.target.value),
-      options: categories.map((category) => ({
-        label: category.name,
-        value: category.id,
-      })),
-      placeholder: "Select Category",
-    },
-    {
-      label: "Description",
-      type: "textarea",
-      key: ModelKeys.DESCRIPTION,
-      value: modelData?.description,
-      onChange: (e: any) =>
-        handleModelData(ModelKeys.DESCRIPTION, e.target.value),
-      placeholder: "Enter Description",
-    },
-    {
-      label: "Start Date",
-      type: "date",
-      key: ModelKeys.START_DATE,
-      value: modelData?.start_at,
-      onChange: (e: any) =>
-        handleModelData(ModelKeys.START_DATE, e.target.value),
-      placeholder: "Enter Start Date",
-    },
-    {
-      label: "End Date",
-      type: "date",
-      key: ModelKeys.END_DATE,
-      value: modelData?.end_at,
-      onChange: (e: any) =>
-        handleModelData(ModelKeys.END_DATE, e.target.value),
-      placeholder: "Enter End Date",
-    },
-    {
-      label: "Files",
+      label: "Employee Profile Image",
       type: "file",
+      width: "col-md-12",
       key: ModelKeys.FILES,
-      value: modelData?.files,
+      value: modelData?.employee?.files,
       onChange: (e: any) => {
         let files: File[] = [];
         for (let i = 0; i < e.target.files.length; i++) {
@@ -146,55 +106,97 @@ const Members: React.FC<Props> = () => {
       placeholder: "Enter Files",
     },
     {
-      label: "Assign Admin",
-      type: "select",
-      key: ModelKeys.ADMIN,
-      value: modelData?.admin,
-      onChange: (e: any) => handleModelData(ModelKeys.ADMIN, e.target.value),
-      options: [
-        {
-          label: "Badr",
-          value: 1,
-        },
-        {
-          label: "Jo",
-          value: 1,
-        },
-        {
-          label: "Wani",
-          value: 1,
-        },
-      ]
+      label: "Employee ID",
+      type: "text",
+      width: "col-md-6",
+      key: ModelKeys.USERNAME,
+      value: modelData?.username,
+      onChange: (e: any) => handleModelData(ModelKeys.USERNAME, e.target.value),
+      placeholder: "ID or User Name",
     },
-
-
-
+    {
+      label: "Joining Date",
+      type: "date",
+      width: "col-md-6",
+      key: ModelKeys.ONBOARD_AT,
+      value: modelData?.employee?.onboard_at,
+      onChange: (e: any) =>
+        handleModelData(ModelKeys.ONBOARD_AT, e.target.value),
+      placeholder: "Enter Start Date",
+    },
+    {
+      label: "Employee User Name",
+      type: "text",
+      width: "col-md-6",
+      key: ModelKeys.USERNAME,
+      value: modelData?.username,
+      onChange: (e: any) => handleModelData(ModelKeys.USERNAME, e.target.value),
+      placeholder: "User Name",
+    },
+    {
+      label: "Password",
+      type: "password",
+      width: "col-md-6",
+      key: ModelKeys.USERNAME,
+      value: modelData?.username,
+      onChange: (e: any) => handleModelData(ModelKeys.USERNAME, e.target.value),
+      placeholder: "Password",
+    },
+    {
+      label: "Email",
+      type: "text",
+      width: "col-md-6",
+      key: ModelKeys.USERNAME,
+      value: modelData?.username,
+      onChange: (e: any) => handleModelData(ModelKeys.USERNAME, e.target.value),
+      placeholder: "Email",
+    },
+    {
+      label: "Phone Number",
+      type: "text",
+      width: "col-md-6",
+      key: ModelKeys.USERNAME,
+      value: modelData?.username,
+      onChange: (e: any) => handleModelData(ModelKeys.USERNAME, e.target.value),
+      placeholder: "Phone Number",
+    },
+    {
+      label: "Department",
+      type: "select",
+      width: "col-md-6",
+      key: ModelKeys.DEPARTMENT,
+      value: modelData?.employee?.department,
+      onChange: (e: any) => handleModelData(ModelKeys.DEPARTMENT, e.target.value),
+      options: departments.map((department : Category) => ({
+        label: department.name,
+        value: department.id,
+      })),
+      placeholder: "Select Department",
+    },
+    {
+      label: "Designation",
+      type: "select",
+      width: "col-md-6",
+      key: ModelKeys.DESIGNATION,
+      value: modelData?.employee?.Designation,
+      onChange: (e: any) => handleModelData(ModelKeys.DEPARTMENT, e.target.value),
+      options: departments.map((department : Category) => ({
+        label: department.name,
+        value: department.id,
+      })),
+      placeholder: "Select Department",
+    },
+    {
+      label: "Description",
+      type: "textarea",
+      width: "col-md-12",
+      key: ModelKeys.EMAIL,
+      value: modelData?.email,
+      onChange: (e: any) =>
+        handleModelData(ModelKeys.EMAIL, e.target.value),
+      placeholder: "Enter Description",
+    },
   ]
-
-
-
-
-  const handleSubmit = () => {
-    const name = fullName.split(" ");
-    const first_name = name[0];
-    const last_name = name[1];
-    const data = {
-      first_name: first_name,
-      last_name: last_name,
-      username: username,
-      email: email,
-      password1: password1,
-      password2: password2,
-      employee: {
-        onboard_at: onboard_at,
-        employee_id: employee_id,
-        phone: phone,
-        department: department,
-      },
-    };
-    console.log(data);
-  }
-
 
 
   return (
@@ -287,196 +289,25 @@ const Members: React.FC<Props> = () => {
           <Modal.Title className="fw-bold">Add Employee</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="modal-body">
-            <div className="mb-3">
-              <label
-                htmlFor="exampleFormControlInput877"
-                className="form-label"
-              >
-                Employee Name
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                id="exampleFormControlInput877"
-                placeholder="Employee Full Name"
-                onChange={(e) => setState((prevState) => ({ ...prevState, fullName: e.target.value }))}
-              />
-            </div>
-            {/* <div className="mb-3">
-              <label
-                htmlFor="exampleFormControlInput977"
-                className="form-label"
-              >
-                Employee Company
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                id="exampleFormControlInput977"
-                placeholder="Explain what the Project Name"
-              />
-            </div> */}
-            <div className="mb-3">
-              <label htmlFor="formFileMultipleoneone" className="form-label">
-                Employee Profile Image
-              </label>
-              <input
-                className="form-control"
-                type="file"
-                id="formFileMultipleoneone"
-              />
-            </div>
-            <div className="deadline-form">
-              <form>
-                <div className="row g-3 mb-3">
-                  <div className="col-sm-6">
-                    <label
-                      htmlFor="exampleFormControlInput1778"
-                      className="form-label"
-                    >
-                      Employee ID
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="exampleFormControlInput1778"
-                      placeholder="ID or User Name"
-                      onChange={(e) => setState((prevState) => ({ ...prevState, employee_id: e.target.value }))}
-                    />
-                  </div>
-                  <div className="col-sm-6">
-                    <label
-                      htmlFor="exampleFormControlInput2778"
-                      className="form-label"
-                    >
-                      Joining Date
-                    </label>
-                    <input
-                      type="date"
-                      className="form-control"
-                      id="exampleFormControlInput2778"
-                      onChange={(e) => setState((prevState) => ({ ...prevState, joining_date: e.target.value }))}
-                    />
-                  </div>
-                </div>
-                <div className="row g-3 mb-3">
-                  <div className="col-lg-6">
-                    <label
-                      htmlFor="exampleFormControlInput177"
-                      className="form-label"
-                    >
-                      Employee User Name
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="exampleFormControlInput177"
-                      placeholder="User Name"
-                      onChange={(e) => setState((prevState) => ({ ...prevState, username: e.target.value }))}
-                    />
-                  </div>
-                  <div className="col-lg-6">
-                    <label
-                      htmlFor="exampleFormControlInput277"
-                      className="form-label"
-                    >
-                      Password
-                    </label>
-                    <input
-                      type="Password"
-                      className="form-control"
-                      id="exampleFormControlInput277"
-                      placeholder="Password"
-                      onChange={(e) => setState((prevState) => ({ ...prevState, password1: e.target.value, password2: e.target.value }))}
-                    />
-                  </div>
-                </div>
-                <div className="row g-3 mb-3">
-                  <div className="col-lg-6">
-                    <label
-                      htmlFor="exampleFormControlInput477"
-                      className="form-label"
-                    >
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      className="form-control"
-                      id="exampleFormControlInput477"
-                      placeholder="User Name"
-                      onChange={(e) => setState((prevState) => ({ ...prevState, email: e.target.value }))}
-                    />
-                  </div>
-                  <div className="col-lg-6">
-                    <label
-                      htmlFor="exampleFormControlInput777"
-                      className="form-label"
-                    >
-                      Phone
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="exampleFormControlInput777"
-                      placeholder="User Name"
-                      onChange={(e) => setState((prevState) => ({ ...prevState, phone: e.target.value }))}
-                    />
-                  </div>
-                </div>
-                <div className="row g-3 mb-3">
-                  <div className="col">
-                    <label className="form-label">Department</label>
-                    <select className="form-select">
-                      <option>Web Development</option>
-                      <option value="1">It Management</option>
-                      <option value="2">Marketing</option>
-                    </select>
-                  </div>
-                  <div className="col">
-                    <label className="form-label">Designation</label>
-                    <select className="form-select">
-                      <option>Curriculum Development</option>
-                      <option value="1">Technology Integration</option>
-                      <option value="2">Teacher Training</option>
-                      <option value="3">Assessment System</option>
-                      <option value="4">Student Records</option>
-                      <option value="5">Inclusive Education</option>
-                      <option value="6">Technology Integration</option>
-                      <option value="7">Educational Field Trips</option>
-                      <option value="8">Parental Involvement</option>
-                      <option value="9">Parental Feedback</option>
-                      <option value="10">Other</option>
-                    </select>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <div className="mb-3">
-              <label
-                htmlFor="exampleFormControlTextarea78"
-                className="form-label"
-              >
-                Description (optional)
-              </label>
-              <textarea
-                className="form-control"
-                id="exampleFormControlTextarea78"
-                rows={3}
-                placeholder="Add any extra details about the request"
-              ></textarea>
-            </div>
+            <div className="modal-body">
+            <FormInputs formFields={formFields} formName={"employee"} />
+            
             <div className="table-responsive">
-              <table className="table table-striped custom-table">
+              <table className="table table-striped custom-table mt-3">
                 <thead>
                   <tr>
                     <th>Project Permission</th>
-                    <th className="text-center">Read</th>
+                    {permissions.map((permission: any, i: number) => {
+                          return (
+                            <th key={"key" + i} className="text-center">{permission.name}</th>
+                          );
+                        })}
+                    {/* <th className="text-center">Read</th>
                     <th className="text-center">Write</th>
                     <th className="text-center">Create</th>
                     <th className="text-center">Delete</th>
                     <th className="text-center">Import</th>
-                    <th className="text-center">Export</th>
+                    <th className="text-center">Export</th> */}
                   </tr>
                 </thead>
                 <tbody>
@@ -857,11 +688,6 @@ const Members: React.FC<Props> = () => {
                 </tbody>
               </table>
             </div>
-          </div>
-          <div className="modal-body">
-           <FormInputs
-                    formFields={formFields}
-            />
             </div>
         </Modal.Body>
         <Modal.Footer>
@@ -869,14 +695,18 @@ const Members: React.FC<Props> = () => {
             type="button"
             className="btn btn-secondary"
             onClick={() => {
-              setState({ ...state, show: false });
+              setState({ ...state, isModal: false });
+            }}
+          >
+            Cancel
+          </button>
+          <button type="button" className="btn btn-primary"
+          onClick={() => {
+              setState({ ...state, isModal: false });
               handleSubmit()
             }}
           >
-            Done
-          </button>
-          <button type="button" className="btn btn-primary">
-            Sent
+            Add Employee
           </button>
           </Modal.Footer>
       </Modal>

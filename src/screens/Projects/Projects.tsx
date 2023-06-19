@@ -4,7 +4,7 @@ import CurrentClientProject from "../../components/Clients/CurrentClientProject"
 import AddNewUserModal from "../../components/common/AddNewUserModal";
 import PageHeader from "../../components/common/PageHeader";
 import { ProjectCardData } from "../../components/Data/AppData";
-import { useCategoryQuery } from "framework/category/getAllCategory";
+// import { useCategoryQuery } from "framework/permissions/getAllPermissions";
 import { CategoryUpdateInput } from "types/category";
 import {
   projectInput,
@@ -13,6 +13,7 @@ import {
 import { Project } from "types/project";
 import FormInputs from "components/FormInputs/FormInputs";
 import { IField } from "types/formFields";
+import { useCategoriesQuery } from "framework/category/getAllCategories";
 
 interface Props { }
 
@@ -55,7 +56,7 @@ const Projects: React.FC<Props> = () => {
     data: categoriesData,
     error: errorCategories,
     isLoading: isLoadingCategories,
-  } = useCategoryQuery({});
+  } = useCategoriesQuery({});
   if (isLoadingCategories) return <div>Loading...</div>;
   if (errorCategories) return null;
 
@@ -312,7 +313,7 @@ const Projects: React.FC<Props> = () => {
                   {ProjectCardData.map((d: any, i: number) => {
                     return (
                       <div
-                        key={"ljsdhl" + i}
+                        key={"key" + i}
                         className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6"
                       >
                         <CurrentClientProject
@@ -335,7 +336,7 @@ const Projects: React.FC<Props> = () => {
                   {ProjectCardData.map((d: any, i: number) => {
                     return (
                       <div
-                        key={"ljsdhl" + i}
+                        key={"key" + i}
                         className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6"
                       >
                         <CurrentClientProject

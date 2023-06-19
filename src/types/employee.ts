@@ -7,9 +7,10 @@ export interface EmployeeCreateInput {
   password2: string;
   employee: {
     onboard_at: string;
-    employee_id: number;
+    employee_id: number | string;
     phone: string;
     department: number;
+    files: any;
   };
 }
 

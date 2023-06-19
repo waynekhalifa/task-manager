@@ -8,7 +8,7 @@ export const getAllCategories = async ({ queryKey }: any) => {
   return { categories: { data: data as any } };
 };
 
-export const useCategoryQuery = (options: QueryOptionsType) => {
+export const useCategoriesQuery = (options: QueryOptionsType) => {
   return useQuery<{ categories: { data: any } }, Error>(
     [Endpoints.CATEGORY, options],
     getAllCategories
