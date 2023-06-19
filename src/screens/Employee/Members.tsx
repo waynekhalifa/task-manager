@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Dropdown, Modal } from "react-bootstrap";
 import OurClients from "components/Clients/OurClients";
 import PageHeader from "components/common/PageHeader";
@@ -30,33 +30,33 @@ interface State {
   isModal: boolean;
   show: boolean;
   modelData: EmployeeCreateInput;
-  selectedDepartment: string ;
+  departmentValue: string;
+  isDepartmentAdmin: boolean;
+
 }
 
 const INITIAlIZE_DATA: State = {
   isModal: false,
   show: false,
   modelData: {} as EmployeeCreateInput,
-  selectedDepartment: "",
+  departmentValue: "",
+  isDepartmentAdmin: false,
 };
 
 const Members: React.FC<Props> = () => {
-  const [state, setState] = React.useState(INITIAlIZE_DATA);
-  const { isModal, modelData, selectedDepartment } = state;
-
+  const [state, setState] = useState<State>(INITIAlIZE_DATA);
+  const { isModal, modelData, isDepartmentAdmin, departmentValue } = state;
   const { data: employeeData, error: employeeError, isLoading: employeeIsLoading } = useEmployeesQuery({});
-
   const { data: departmentData, error: departmentError, isLoading: departmentIsLoading } = useCategoriesQuery({});
+
   let departments = departmentData?.categories?.data?.results || [];
-
-
-  if (employeeIsLoading  || departmentIsLoading) return <div>Loading...</div>;
-  if (employeeError  || departmentError) return null;
-
+  
   const handleModelData = (key: string, value: any) => {
     if (key === ModelKeys.DEPARTMENT) {
-      setState({...state, selectedDepartment: value })
-     }
+      const stringValue = departments.find((department: any) => String(department.id) === value)?.name;
+      setState({ ...state, departmentValue: stringValue });
+    }
+
     setState({
       ...state,
       modelData: {
@@ -65,8 +65,18 @@ const Members: React.FC<Props> = () => {
       },
     });
   };
-
-
+  
+  
+  useEffect(() => {
+    if (departmentValue === 'Accounter') { 
+        console.log('this is working and must check all boxes')
+        setState({ ...state, isDepartmentAdmin: true });
+      }
+  }, [departmentValue]);
+  
+  if (employeeIsLoading || departmentIsLoading) return <div>Loading...</div>;
+  if (employeeError || departmentError) return null;
+  
   const formFields: IField[] = [
     {
       label: "First Name",
@@ -79,7 +89,7 @@ const Members: React.FC<Props> = () => {
     },
     {
       label: "Last Name",
-        type: "text",
+      type: "text",
       width: "col-md-6",
       key: ModelKeys.FIRST_NAME,
       value: modelData?.first_name,
@@ -165,29 +175,29 @@ const Members: React.FC<Props> = () => {
     {
       label: "Department",
       type: "select",
-      width: "col-md-6",
+      width: "col-md-12",
       key: ModelKeys.DEPARTMENT,
-      value: modelData?.employee?.department,
+      value: modelData?.employee?.department?.name,
       onChange: (e: any) => handleModelData(ModelKeys.DEPARTMENT, e.target.value),
-      options: departments.map((department : Category) => ({
+      options: departments.map((department: Category) => ({
         label: department.name,
         value: department.id,
       })),
       placeholder: "Select Department",
     },
-    {
-      label: "Designation",
-      type: "select",
-      width: "col-md-6",
-      key: ModelKeys.DESIGNATION,
-      value: modelData?.employee?.Designation,
-      onChange: (e: any) => handleModelData(ModelKeys.DEPARTMENT, e.target.value),
-      options: departments.map((department : Category) => ({
-        label: department.name,
-        value: department.id,
-      })),
-      placeholder: "Select Department",
-    },
+    // {
+    //   label: "Designation",
+    //   type: "select",
+    //   width: "col-md-6",
+    //   key: ModelKeys.DESIGNATION,
+    //   value: modelData?.employee?.Designation,
+    //   onChange: (e: any) => handleModelData(ModelKeys.DEPARTMENT, e.target.value),
+    //   options: departments.map((department: Category) => ({
+    //     label: department.name,
+    //     value: department.id,
+    //   })),
+    //   placeholder: "Select Department",
+    // },
     {
       label: "Description",
       type: "textarea",
@@ -200,6 +210,13 @@ const Members: React.FC<Props> = () => {
     },
   ]
 
+  const closeModal = () => {
+    setState({ ...state, isModal: false });
+  };
+
+  const openModal = () => {
+    setState({ ...state, isModal: true });
+  };
 
   return (
     <div className="container-xxl">
@@ -211,7 +228,7 @@ const Members: React.FC<Props> = () => {
               <button
                 className="btn btn-dark btn-set-task w-sm-100 me-2"
                 onClick={() => {
-                  setState((prevState) => ({ ...prevState, isModal: true }));
+                  openModal();
                 }}
               >
                 <i className="icofont-plus-circle me-2 fs-6"></i>Add Employee
@@ -270,7 +287,7 @@ const Members: React.FC<Props> = () => {
                 avatar={data.avatar}
                 post={data.post}
                 name={data.name}
-                Companyname={data.Companyname}
+                CompanyName={data.Companyname}
                 isMember={true}
               />
             </div>
@@ -285,39 +302,38 @@ const Members: React.FC<Props> = () => {
           setState((prevState) => ({ ...prevState, isModal: false }));
         }}
       >
-
-        
         <Modal.Header closeButton>
           <Modal.Title className="fw-bold">Add Employee</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            <div className="modal-body">
+          <div className="modal-body">
             <FormInputs formFields={formFields} formName={"employee"} />
-            <PermissionsTable department={selectedDepartment} />
-            </div>
+            <PermissionsTable isDepartmentAdmin={isDepartmentAdmin} />
+          </div>
         </Modal.Body>
         <Modal.Footer>
           <button
             type="button"
             className="btn btn-secondary"
             onClick={() => {
-              setState({ ...state, isModal: false });
+              closeModal()
             }}
           >
             Cancel
           </button>
           <button type="button" className="btn btn-primary"
-          onClick={() => {
-              setState({ ...state, isModal: false });
-              // handleSubmit()
+            onClick={() => {
+              closeModal()
             }}
           >
             Add Employee
           </button>
-          </Modal.Footer>
+        </Modal.Footer>
       </Modal>
     </div>
   );
 };
 
 export default Members;
+
+

@@ -7,10 +7,10 @@ export interface EmployeeCreateInput {
   password2: string;
   employee: {
     onboard_at: string;
-    employee_id: number | string;
+    employee_id: string | Blob;
     phone: string;
-    department: number;
-    files: any;
+    department: any;
+    files?: any;
   };
 }
 

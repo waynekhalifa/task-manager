@@ -12,32 +12,15 @@ export const useCreateEmployee = () => {
 
 export const employeeInput = (
   data: EmployeeCreateInput
-): EmployeeCreateInput => {
-  // return {
-  //   first_name: data.first_name,
-  //   last_name: data.last_name,
-  //   username: data.username,
-  //   email: data.email,
-  //   password1: data.password1,
-  //   password2: data.password2,
-  //   employee: {
-  //     onboard_at: data.employee.onboard_at,
-  //     employee_id: data.employee.employee_id,
-  //     phone: data.employee.phone,
-  //     department: data.employee.department
-  //   }
-  // };
+): FormData => {
   const formData = new FormData();
 
   formData.append("first_name", `${data.first_name}`);
   formData.append("last_name", data.last_name);
-  formData.append("username", data?.username!);
+  formData.append("username", data?.username);
   formData.append("email", `${data.email}`);
   formData.append("password1", data.password1);
   formData.append("password2", data.password2);
-
-
-
   formData.append("onboard_at", data.employee.onboard_at);
   formData.append("employee_id", data.employee.employee_id);
   formData.append("phone", data.employee.phone);

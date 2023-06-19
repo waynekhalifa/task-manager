@@ -1,400 +1,116 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { usePermissionsQuery } from "framework/permissions/getAllPermissions";
 
 interface Props {
-  selectedDepartment: string;
+  isDepartmentAdmin: boolean;
 }
 
-type State = {
-  isSubSuperAdmin: boolean;
-};
+interface Permission {
+  id: number;
+  model: string;
+  can_read: boolean;
+  can_write: boolean;
+  can_create: boolean;
+  can_delete: boolean;
+}
 
-const INITIAlIZE_DATA: State = {
-  isSubSuperAdmin: false,
-};
+interface CheckedState {
+  [key: string]: { [key: string]: boolean };
+}
 
-const PermissionsTable: React.FC<Props> = ({ selectedDepartment }) => {
-  const [state, setState] = React.useState(INITIAlIZE_DATA);
-  const { isSubSuperAdmin } = state;
+const PermissionsTable: React.FC<Props> = ({ isDepartmentAdmin }): JSX.Element => {
   const { data, error, isLoading } = usePermissionsQuery({});
-  let permissions = data?.permissions?.data?.results || [];
-  console.log({ permissions })
+  const [checkedState, setCheckedState] = useState<CheckedState>({});
+  const permissions: Permission[] = useMemo(() => data?.permissions?.data?.results || [], [data]);
 
+  useEffect(() => {
+    const initialCheckedState: CheckedState = {};
+    console.log('from child', isDepartmentAdmin)
+    permissions.forEach((permission: Permission) => {
+      if (!initialCheckedState[permission.model]) {
+        initialCheckedState[permission.model] = {};
+      }
 
-  const permissionsTypes = [
-    "Can Read",
-    "Can Write",
-    "Can Create",
-    "Can Delete",
-  ]
+      initialCheckedState[permission.model] = {
+        ...initialCheckedState[permission.model],
+        can_read: false,
+        can_write: false,
+        can_create: false,
+        can_delete: false,
+      };
+    });
 
-  const handleTableHeader = () => {
+    setCheckedState(initialCheckedState);
+  }, [permissions, isDepartmentAdmin]);
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <></>;
+
+  const permissionTypes = [
+    { name: "Can Read", key: "can_read" },
+    { name: "Can Write", key: "can_write" },
+    { name: "Can Create", key: "can_create" },
+    { name: "Can Delete", key: "can_delete" },
+  ];
+
+  const handleTableHeader = (): JSX.Element => {
     return (
       <thead>
         <tr>
           <th>Project Permission</th>
-          {permissionsTypes.map((permission: any, i: number) => {
-            return (
-              <th key={"key" + i} className="text-center">
-                {permission}
-              </th>
-            );
-          })}
+          {permissionTypes.map((permissionType, i) => (
+            <th key={`header-${i}`} className="text-center">
+              {permissionType.name}
+            </th>
+          ))}
         </tr>
       </thead>
-    )
-  }
+    );
+  };
 
-
-  // this function takes
-  const handleTableContent = (element: string) => {
-    const rowCheckBoxes = permissions.filter((permission: any) => permission.model === element);
-    console.log({ rowCheckBoxes })
-
-    return rowCheckBoxes.map((permission: any) => {
-      console.log({ permission })
+  const handleTableContent = (element: string): JSX.Element[] => {
+    return permissionTypes.map((permissionType, i) => {
+      const isChecked = checkedState[element]?.[permissionType.key] || isDepartmentAdmin;
       return (
-        <td className="text-center">
+        <td key={`content-${i}`} className="text-center">
           <input
             className="form-check-input"
             type="checkbox"
             value=""
-            id="flexCheckDefault3"
-            checked={isSubSuperAdmin ? true : false}
-            onChange={() => { }}
+            id={`flexCheckDefault${i}`}
+            checked={isChecked}
+            onChange={() => {
+              const newCheckedState: CheckedState = {
+                ...checkedState,
+                [element]: {
+                  ...checkedState[element],
+                  [permissionType.key]: !checkedState[element]?.[permissionType.key],
+                },
+              };
+              setCheckedState(newCheckedState);
+            }}
           />
         </td>
-      )
-    })
-    // for (let index = 0; index < rowCheckBoxes.length; index++) {
-    //   const element = rowCheckBoxes[index];
-    //   console.log({element})
-    //   return (
-    //       <input
-    //         className="form-check-input"
-    //         type="checkbox"
-    //         value=""
-    //         id="flexCheckDefault3"
-    //         checked={isSubSuperAdmin? true : false}
-    //         onChange={() => { }}
-    //       />
-    //   )
-    // }
-  }
+      );
+    });
+  };
 
-  const handleTableRow = () => {
-    const mainCategories = permissions.map((permission: any) => permission.model);
-    console.log({ mainCategories })
+  const handleTableRow = (): JSX.Element[] => {
+    const mainCategories = [...new Set(permissions.map((permission: any) => permission.model))];
 
-    var uniqueCategories = mainCategories.filter((value: string, index: number, array: string[]) => array.indexOf(value) === index);
-    console.log({ uniqueCategories })
-    for (let index = 0; index < uniqueCategories.length; index++) {
-      const element = uniqueCategories[index];
-      console.log({ element })
-      return (
-        <tr>
-          <td className="fw-bold">{element}</td>
-          {handleTableContent(element)}
-        </tr>
-      )
-    }
-
-
-
-
-    // for (let index = 0; index < mainCategories.length; index++) {
-    //   const element = mainCategories[index];
-    //   console.log({ element })
-    //   return (
-    //     <tr>
-    //       <td className="fw-bold">{element}</td>
-    //       {handleTableContent(element)}
-    //     </tr>
-    //   )
-    // }
-  }
-
-
-
-
-
-
-
-  useEffect(() => {
-    if (selectedDepartment === "All") {
-      setState({
-        ...state,
-        isSubSuperAdmin: true,
-      })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedDepartment])
-
-
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return null;
+    return mainCategories.map((element: string, i) => (
+      <tr key={`row-${i}`}>
+        <td className="fw-bold">{element}</td>
+        {handleTableContent(element)}
+      </tr>
+    ));
+  };
 
   return (
     <div className="table-responsive">
       <table className="table table-striped custom-table mt-3">
         {handleTableHeader()}
-        <tbody>
-          {handleTableRow()}
-          {/* <tr>
-            <td className="fw-bold">Projects</td>
-            <td className="text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault3"
-                checked={isSubSuperAdmin? true : false}
-                onChange={() => { }}
-              />
-            </td>
-            <td className="text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault4"
-                checked={true}
-                onChange={() => { }}
-              />
-            </td>
-            <td className="text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault5"
-                checked={true}
-                onChange={() => { }}
-              />
-            </td>
-            <td className="text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault6"
-                checked={true}
-                onChange={() => { }}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className="fw-bold">Tasks</td>
-            <td className="text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault9"
-                checked={isSubSuperAdmin? true : false}
-                onChange={() => { }}
-              />
-            </td>
-            <td className="text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault10"
-                checked={true}
-                onChange={() => { }}
-              />
-            </td>
-            <td className="text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault11"
-                checked={true}
-                onChange={() => { }}
-              />
-            </td>
-            <td className="text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault12"
-                checked={true}
-                onChange={() => { }}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className="fw-bold">Chat</td>
-            <td className="text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault15"
-                checked={isSubSuperAdmin? true : false}
-                onChange={() => { }}
-              />
-            </td>
-            <td className="text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault16"
-                checked={true}
-                onChange={() => { }}
-              />
-            </td>
-            <td className="text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault17"
-                checked={true}
-                onChange={() => { }}
-              />
-            </td>
-            <td className="text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault18"
-                checked={true}
-                onChange={() => { }}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className="fw-bold">Estimates</td>
-            <td className="text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault21"
-                checked={isSubSuperAdmin? true : false}
-                onChange={() => { }}
-              />
-            </td>
-            <td className="text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault22"
-                checked={true}
-                onChange={() => { }}
-              />
-            </td>
-            <td className="text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault23"
-                checked={true}
-                onChange={() => { }}
-              />
-            </td>
-            <td className="text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault24"
-                checked={true}
-                onChange={() => { }}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className="fw-bold">Invoices</td>
-            <td className="text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault25"
-                checked={isSubSuperAdmin? true : false}
-                onChange={() => { }}
-              />
-            </td>
-            <td className="text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault26"
-              />
-            </td>
-            <td className="text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault27"
-                checked={true}
-                onChange={() => { }}
-              />
-            </td>
-            <td className="text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault28"
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className="fw-bold">Timing Sheets</td>
-            <td className="text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault31"
-                checked={isSubSuperAdmin? true : false}
-                onChange={() => { }}
-              />
-            </td>
-            <td className="text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault34"
-                checked={true}
-                onChange={() => { }}
-              />
-            </td>
-            <td className="text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault35"
-                checked={true}
-                onChange={() => { }}
-              />
-            </td>
-            <td className="text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault36"
-                checked={true}
-                onChange={() => { }}
-              />
-            </td>
-          </tr> */}
-        </tbody>
+        <tbody>{handleTableRow()}</tbody>
       </table>
     </div>
   );
