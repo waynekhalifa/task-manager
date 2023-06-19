@@ -34,6 +34,8 @@ const SignIn: React.FC = () => {
 
       setSession(result);
       localStorage.setItem("session", JSON.stringify(result));
+      localStorage.setItem("access_token", result.access);
+
 
       push(Screens.DASHBOARD + Pages.SUMMARY);
     } catch (err: Error | any) {

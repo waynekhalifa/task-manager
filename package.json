@@ -27,6 +27,7 @@
     "react-data-table-component": "^7.5.3",
     "react-dom": "^18.2.0",
     "react-drag-and-drop": "^3.0.0",
+    "react-dropzone": "^14.2.3",
     "react-hook-form": "latest",
     "react-nestable": "^2.0.0",
     "react-router-dom": "^6.12.1",

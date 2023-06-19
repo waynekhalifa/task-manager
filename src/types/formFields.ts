@@ -37,4 +37,6 @@ export interface IField {
   onChange: (e: any) => void;
   placeholder?: string;
   options?: IOption[];
+  multiple?: boolean;
+  hide?: boolean;
 }

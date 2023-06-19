@@ -1,7 +1,6 @@
 import React from "react";
 import ClientProfileCard from "components/Clients/ClientProfileCard";
 import PageHeader from "components/common/PageHeader";
-import CurrentClientProject from "components/Clients/CurrentClientProject";
 import { clentProfileData, employeeInformationDetails } from "components/Data/AppData";
 import PersonalInformations from "components/Employees/PersonalInformations";
 import CurrentTask from "components/Employees/CurrentTask";
@@ -38,7 +37,7 @@ const EmployeeProfile: React.FC<Props> = () => {
                             {
                                 clentProfileData.map((d: any, i: number) => {
                                     return <div key={"ljsdhl" + i} className="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12">
-                                        <CurrentClientProject teamImage={d.teamImage} logo={d.logo} logoBg={d.logoBg} title={d.title} sl={d.sl} />
+                                        {/* <CurrentClientProject teamImage={d.teamImage} logo={d.logo} logoBg={d.logoBg} title={d.title} sl={d.sl} /> */}
                                     </div>
                                 })
                             }

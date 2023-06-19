@@ -3,16 +3,21 @@ import { Modal, Nav, Tab } from "react-bootstrap";
 import CurrentClientProject from "../../components/Clients/CurrentClientProject";
 import AddNewUserModal from "../../components/common/AddNewUserModal";
 import PageHeader from "../../components/common/PageHeader";
-import { ProjectCardData } from "../../components/Data/AppData";
 import { useCategoryQuery } from "framework/category/getAllCategory";
 import { CategoryUpdateInput } from "types/category";
 import {
   projectInput,
   useCreateProject,
-} from "framework/project/create-project";
-import { Project } from "types/project";
+} from "framework/project/createProject";
+import { Project, SelectedProject } from "types/project";
 import FormInputs from "components/FormInputs/FormInputs";
 import { IField } from "types/formFields";
+import { useProjectsQuery } from "framework/project/getAllProjects";
+import { useDeleteProject } from "framework/project/deleteProject";
+import AddNewAttachmentModal from "components/common/AddNewAttachmentModal";
+import DescriptionViewModal from "components/common/DescriptionViewModal";
+import { projectUpdateInput, useUpdateProject } from "framework/project/updateProject";
+import AddCommentModal from "components/common/AddCommentModal";
 
 interface Props { }
 
@@ -23,6 +28,7 @@ enum ModelKeys {
   START_DATE = "start_at",
   END_DATE = "end_at",
   ADMIN = "admin",
+  FILE = "file",
   FILES = "files",
 }
 
@@ -31,8 +37,12 @@ interface State {
   isEditModal: boolean;
   isDeleteModal: boolean;
   isAddUserModal: boolean;
+  isAddAttachmentModal: boolean;
+  isViewDescriptionModal: boolean;
+  isAddCommentModal: Boolean;
   modalHeader: any;
   modelData: Project;
+  selectedProject: SelectedProject;
 }
 
 const INITIAlIZE_DATA: State = {
@@ -40,24 +50,37 @@ const INITIAlIZE_DATA: State = {
   isEditModal: false,
   isDeleteModal: false,
   isAddUserModal: false,
+  isAddAttachmentModal: false,
+  isViewDescriptionModal: false,
+  isAddCommentModal: false,
   modalHeader: "",
   modelData: {} as Project,
+  selectedProject: {} as SelectedProject,
 };
 
 const Projects: React.FC<Props> = () => {
-  const { mutateAsync: createMutation } = useCreateProject();
+
 
   const [state, setState] = React.useState<State>(INITIAlIZE_DATA);
-  const { isAddModal, isEditModal, isDeleteModal, modalHeader, modelData, isAddUserModal } =
+  const { isAddModal, isEditModal, isDeleteModal, modalHeader, modelData, selectedProject, isAddUserModal, isAddAttachmentModal, isViewDescriptionModal, isAddCommentModal } =
     state;
+  const { mutateAsync: createMutation } = useCreateProject();
+  const { mutateAsync: updateMutation } = useUpdateProject();
+  const { mutateAsync: deleteMutation } = useDeleteProject();
+
+  let { data: projectData, error: errorProjects, isLoading: loadingProjects } = useProjectsQuery({});
+
 
   let {
     data: categoriesData,
     error: errorCategories,
     isLoading: isLoadingCategories,
   } = useCategoryQuery({});
-  if (isLoadingCategories) return <div>Loading...</div>;
-  if (errorCategories) return null;
+  if (isLoadingCategories || loadingProjects) return <div>Loading...</div>;
+  if (errorCategories || errorProjects) return null;
+
+
+  let projects: SelectedProject[] = projectData?.projects.data.results || [];
 
   let categories: CategoryUpdateInput[] =
     categoriesData?.categories.data.results || [];
@@ -84,6 +107,9 @@ const Projects: React.FC<Props> = () => {
       isEditModal: false,
       isDeleteModal: false,
       isAddUserModal: false,
+      isAddAttachmentModal: false,
+      isViewDescriptionModal: false,
+      isAddCommentModal: false,
       modalHeader: "",
       modelData: {} as Project,
     });
@@ -97,27 +123,20 @@ const Projects: React.FC<Props> = () => {
     });
   };
 
-  const handleOpenEditModal = () => {
+  const handleOpenEditModal = (project: SelectedProject) => {
     setState({
       ...state,
       isEditModal: true,
       modalHeader: "Edit Project",
-      modelData: {
-        name: "Project 1",
-        category: 0,
-        description: "Description 1",
-        admin: 0,
-        start_at: "2021-09-01",
-        end_at: "2021-09-01",
-        files: [],
-      },
+      selectedProject: project,
     });
   };
 
-  const handleOpenDeleteModal = () => {
+  const handleOpenDeleteModal = (project: SelectedProject) => {
     setState({
       ...state,
       isDeleteModal: true,
+      selectedProject: project
     });
   };
 
@@ -127,9 +146,41 @@ const Projects: React.FC<Props> = () => {
       isAddUserModal: true,
     });
   };
+  const handleOpenAddAttachmentModal = (project: Project) => {
+    setState({
+      ...state,
+      isAddAttachmentModal: true,
+      modelData: project
+    });
+  };
 
+  const handleOpenViewDescriptionModal = (project: SelectedProject) => {
+    setState({
+      ...state,
+      isViewDescriptionModal: true,
+      selectedProject: project,
+    });
+  };
+
+  const handleOpenAddCommentModal = (project: SelectedProject) => {
+    setState({
+      ...state,
+      isAddCommentModal: true,
+      selectedProject: project,
+    });
+  }
 
   const handleModelData = (key: string, value: any) => {
+    if (isEditModal) {
+      setState({
+        ...state,
+        selectedProject: {
+          ...selectedProject,
+          [key]: value,
+        },
+      });
+      return;
+    }
     setState({
       ...state,
       modelData: {
@@ -139,13 +190,18 @@ const Projects: React.FC<Props> = () => {
     });
   };
 
+  const getCategory = (id: number) => {
+    let category = categories.find((category) => category.id === id);
+    return category?.name;
+  };
+
 
   const formFields: IField[] = [
     {
       label: "Project Name",
       type: "text",
       key: ModelKeys.NAME,
-      value: modelData?.name,
+      value: isEditModal ? selectedProject.name : modelData?.name,
       onChange: (e: any) => handleModelData(ModelKeys.NAME, e.target.value),
       placeholder: "Enter Project Name",
 
@@ -154,7 +210,7 @@ const Projects: React.FC<Props> = () => {
       label: "Department",
       type: "select",
       key: ModelKeys.CATEGORY,
-      value: modelData?.category,
+      value: isEditModal ? selectedProject.category : modelData?.category,
       onChange: (e: any) => handleModelData(ModelKeys.CATEGORY, e.target.value),
       options: categories.map((category) => ({
         label: category.name,
@@ -166,7 +222,7 @@ const Projects: React.FC<Props> = () => {
       label: "Description",
       type: "textarea",
       key: ModelKeys.DESCRIPTION,
-      value: modelData?.description,
+      value: isEditModal ? selectedProject.description : modelData?.description,
       onChange: (e: any) =>
         handleModelData(ModelKeys.DESCRIPTION, e.target.value),
       placeholder: "Enter Description",
@@ -175,7 +231,7 @@ const Projects: React.FC<Props> = () => {
       label: "Start Date",
       type: "date",
       key: ModelKeys.START_DATE,
-      value: modelData?.start_at,
+      value: isEditModal ? selectedProject.start_at : modelData?.start_at,
       onChange: (e: any) =>
         handleModelData(ModelKeys.START_DATE, e.target.value),
       placeholder: "Enter Start Date",
@@ -184,36 +240,32 @@ const Projects: React.FC<Props> = () => {
       label: "End Date",
       type: "date",
       key: ModelKeys.END_DATE,
-      value: modelData?.end_at,
+      value: isEditModal ? selectedProject.end_at : modelData?.end_at,
       onChange: (e: any) =>
         handleModelData(ModelKeys.END_DATE, e.target.value),
       placeholder: "Enter End Date",
     },
     {
-      label: "Files",
+      label: "Project thumbnail",
       type: "file",
       key: ModelKeys.FILES,
-      value: modelData?.files,
+      value: isEditModal ? selectedProject.file : modelData?.file,
       onChange: (e: any) => {
-        let files: File[] = [];
-        for (let i = 0; i < e.target.files.length; i++) {
-          let file: File = e.target.files[i];
-          let reader = new FileReader();
-          reader.readAsDataURL(file);
-          reader.onload = (url) => {
-            files.push(file);
-          };
-        }
-
-        handleModelData(ModelKeys.FILES, files)
+        let file: File = e.target.files[0];
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (url) => {
+          handleModelData(ModelKeys.FILE, file)
+        };
       },
-      placeholder: "Enter Files",
+      placeholder: "Enter Thumbnail",
+      hide: isEditModal
     },
     {
       label: "Assign Admin",
       type: "select",
       key: ModelKeys.ADMIN,
-      value: modelData?.admin,
+      value: isEditModal ? selectedProject.admin : modelData?.admin,
       onChange: (e: any) => handleModelData(ModelKeys.ADMIN, e.target.value),
       options: admins.map((admin) => ({
         label: admin.label,
@@ -223,11 +275,13 @@ const Projects: React.FC<Props> = () => {
   ]
 
 
+
   const createProject = async () => {
     Object.assign(modelData, { admin: 1 });
     try {
       let createInput = projectInput(modelData);
-      await createMutation(createInput);
+      let res = await createMutation(createInput);
+      projects.push(res.session.data);
       handleModalClose();
     } catch (err) {
       alert(err);
@@ -235,10 +289,25 @@ const Projects: React.FC<Props> = () => {
   };
 
   const editProject = async () => {
-    Object.assign(modelData, { admin: 1 });
+    // Object.assign(selectedProject, { admin: 1 });
     try {
-      let createInput = projectInput(modelData);
-      await createMutation(createInput);
+      let createInput = projectUpdateInput(selectedProject);
+      let res = await updateMutation(createInput);
+      let updatedProject = res.session.data;
+      projects.map((project) => {
+        if (project.id === updatedProject.id) {
+          return {
+            name: updatedProject.name,
+            description: updatedProject.description,
+            start_at: updatedProject.start_at,
+            end_at: updatedProject.end_at,
+            category: updatedProject.category,
+            admin: updatedProject.admin,
+            ...project,
+          };
+        }
+        else return project;
+      });
       handleModalClose();
     } catch (err) {
       alert(err);
@@ -246,10 +315,10 @@ const Projects: React.FC<Props> = () => {
   };
 
   const deleteProject = async () => {
-    Object.assign(modelData, { admin: 1 });
     try {
-      let createInput = projectInput(modelData);
-      await createMutation(createInput);
+      await deleteMutation(selectedProject);
+      let currenProject = projects.find(project => project.id === selectedProject.id);
+      currenProject && projects.splice(projects.indexOf(currenProject), 1);
       handleModalClose();
     } catch (err) {
       alert(err);
@@ -311,56 +380,40 @@ const Projects: React.FC<Props> = () => {
             <Tab.Content>
               <Tab.Pane eventKey="All">
                 <div className="row g-3 gy-5 py-3 row-deck">
-                  {ProjectCardData.map((d: any, i: number) => {
+                  {projects && projects.length > 0 && projects.map((d: any, i: number) => {
                     return (
                       <div
                         key={"ljsdhl" + i}
                         className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6"
                       >
                         <CurrentClientProject
-                          teamImage={d.teamImage}
-                          logo={d.logo}
-                          logoBg={d.logoBg}
-                          title={d.title}
-                          sl={d.sl}
-                          onClickEdit={handleOpenEditModal}
-                          onClickDelete={handleOpenDeleteModal}
-                          onClickAdd={handleOpenAddUserModal}
+                          teamImage={d.file}
+                          logo={d.file}
+                          logoBg={d.file}
+                          title={d.name}
+                          category={getCategory(d.category)}
+                          startDate={d.start_at}
+                          endDate={d.end_at}
+                          onClickEdit={() => handleOpenEditModal(d)}
+                          onClickDelete={() => handleOpenDeleteModal(d)}
+                          onClickAddMember={handleOpenAddUserModal}
+                          onClickAddAttachment={() => handleOpenAddAttachmentModal(d)}
+                          onClickViewDescription={() => handleOpenViewDescriptionModal(d)}
+                          onClickAddComment={() => handleOpenAddCommentModal(d)}
+                          comments_count={d.comments_count}
+                          members_count={d.members_count}
+                          attachment_count={d.projectfile_set.length}
                         />
                       </div>
                     );
                   })}
                 </div>
               </Tab.Pane>
-              <Tab.Pane eventKey="Started">
-                <div className="row g-3 gy-5 py-3 row-deck">
-                  {ProjectCardData.map((d: any, i: number) => {
-                    return (
-                      <div
-                        key={"ljsdhl" + i}
-                        className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6"
-                      >
-                        <CurrentClientProject
-                          teamImage={d.teamImage}
-                          logo={d.logo}
-                          logoBg={d.logoBg}
-                          title={d.title}
-                          sl={d.sl}
-                          onClickEdit={handleOpenEditModal}
-                          onClickDelete={handleOpenDeleteModal}
-                          onClickAdd={handleOpenAddUserModal}
-                        />
-                      </div>
-                    );
-                  })}
-                </div>
-              </Tab.Pane>
-
             </Tab.Content>
           </div>
         </div>
       </Tab.Container>
-      <Modal show={isAddModal || isEditModal || isAddUserModal} onHide={handleModalClose}>
+      <Modal show={isAddModal || isEditModal} onHide={handleModalClose}>
         <Modal.Header closeButton>
           <Modal.Title className="fw-bold">{modalHeader}</Modal.Title>
         </Modal.Header>
@@ -540,21 +593,26 @@ const Projects: React.FC<Props> = () => {
           >
             Cancel
           </button>
-          <button
+          {isAddModal && <button
             type="button"
             className="btn btn-primary"
             onClick={createProject}
           >
             Create
-          </button>
+          </button>}
+          {isEditModal && <button
+            type="button"
+            className="btn btn-primary"
+            onClick={editProject}
+          >
+            Save
+          </button>}
         </Modal.Footer>
       </Modal>
       <Modal
         show={isDeleteModal}
         centered
-        onHide={() => {
-          setState({ ...state, isDeleteModal: false });
-        }}
+        onHide={handleModalClose}
       >
         <Modal.Header closeButton>
           <Modal.Title className="fw-bold">Delete Project</Modal.Title>
@@ -569,22 +627,34 @@ const Projects: React.FC<Props> = () => {
           <button
             type="button"
             className="btn btn-secondary"
-            onClick={() => {
-              setState({ ...state, isDeleteModal: false });
-            }}
+            onClick={handleModalClose}
           >
             Cancel
           </button>
-          <button type="button" className="btn btn-danger color-fff">
-            Create
+          <button type="button" className="btn btn-danger color-fff"
+            onClick={deleteProject}
+          >
+            Delete
           </button>
         </Modal.Footer>
       </Modal>
       <AddNewUserModal
         show={isAddUserModal}
-        onClose={() => {
-          setState({ ...state, isAddUserModal: false });
-        }}
+        onClose={handleModalClose}
+      />
+      <AddNewAttachmentModal
+        show={isAddAttachmentModal}
+        onClose={handleModalClose}
+        project={modelData}
+      />
+      <DescriptionViewModal
+        show={isViewDescriptionModal}
+        data={selectedProject.description}
+        onClose={handleModalClose}
+      />
+      <AddCommentModal
+        show={isAddCommentModal}
+        onClose={handleModalClose}
       />
     </div>
   );
