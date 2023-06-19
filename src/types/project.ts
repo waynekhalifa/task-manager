@@ -21,3 +21,9 @@ export interface SelectedProject {
   end_at?: string;
 }
 
+
+export interface Attachment {
+  id?: number;
+  files: File[];
+  project: number;
+ }

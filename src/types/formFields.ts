@@ -38,4 +38,5 @@ export interface IField {
   placeholder?: string;
   options?: IOption[];
   multiple?: boolean;
+  hide?: boolean;
 }

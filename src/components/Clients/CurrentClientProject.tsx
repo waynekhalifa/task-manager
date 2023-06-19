@@ -7,10 +7,12 @@ interface Props {
   title: any;
   startDate: any;
   endDate: any;
-  sl: any;
+  category: any;
   onClickEdit?: any;
   onClickDelete?: any;
-  onClickAdd?: any;
+  onClickAddMember?: any;
+  onClickAddAttachment?: any;
+  onClickViewDescription?: any;
 }
 
 const CurrentClientProject: React.FC<Props> = ({
@@ -18,12 +20,14 @@ const CurrentClientProject: React.FC<Props> = ({
   logo,
   logoBg,
   title,
-  sl,
+  category,
   startDate,
   endDate,
   onClickEdit,
   onClickDelete,
-  onClickAdd,
+  onClickAddMember,
+  onClickAddAttachment,
+  onClickViewDescription,
 }) => {
 
   const sumDateRange = () => {
@@ -48,10 +52,10 @@ const CurrentClientProject: React.FC<Props> = ({
       <div className="card-body">
         <div className="d-flex align-items-center justify-content-between mt-5">
           <div className="lesson_name">
-            <div className={"project-block " + logoBg}>
-              <i className={logo}></i>
+            <div className={"project-block " + title}>
+              <img src={logo} className={title} alt={title} width={50} height={50} />
             </div>
-            <span className="small text-muted project_name fw-bold">{sl}</span>
+            <span className="small text-muted project_name fw-bold">{category}</span>
             <h6 className="mb-0 fw-bold  fs-6  mb-2">{title}</h6>
           </div>
           <div
@@ -100,6 +104,12 @@ const CurrentClientProject: React.FC<Props> = ({
             <div className="d-flex align-items-center">
               <i className="icofont-paper-clip"></i>
               <span className="ms-2">5 Attach</span>
+              <span
+                className="avatar rounded-circle text-center pointer sm"
+                onClick={onClickAddAttachment}
+              >
+                <i className="icofont-ui-add"></i>
+              </span>
             </div>
           </div>
           <div className="col-6">
@@ -112,12 +122,30 @@ const CurrentClientProject: React.FC<Props> = ({
             <div className="d-flex align-items-center">
               <i className="icofont-group-students "></i>
               <span className="ms-2">5 Members</span>
+              <span
+                className="avatar rounded-circle text-center pointer sm"
+                onClick={onClickAddMember}
+              >
+                <i className="icofont-ui-add"></i>
+              </span>
             </div>
           </div>
           <div className="col-6">
             <div className="d-flex align-items-center">
               <i className="icofont-ui-text-chat"></i>
               <span className="ms-2">10</span>
+            </div>
+          </div>
+          <div className="col-12">
+            <div className="d-flex align-items-center">
+              <i className="icofont-align-left "></i>
+              <span className="ms-2">Description</span>
+              <span
+                className="avatar rounded-circle text-center pointer sm"
+                onClick={onClickViewDescription}
+              >
+                <i className="icofont-eye-alt"></i>
+              </span>
             </div>
           </div>
         </div>
@@ -142,7 +170,7 @@ const CurrentClientProject: React.FC<Props> = ({
           />
         </ProgressBar>
       </div>
-    </div>
+    </div >
   );
 };
 
