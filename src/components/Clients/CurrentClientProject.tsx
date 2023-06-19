@@ -15,6 +15,7 @@ interface Props {
   onClickAddComment: any;
   members_count: number;
   comments_count: number;
+  attachment_count: number
 }
 
 const CurrentClientProject: React.FC<Props> = ({
@@ -32,7 +33,8 @@ const CurrentClientProject: React.FC<Props> = ({
   onClickViewDescription,
   onClickAddComment,
   comments_count,
-  members_count
+  members_count,
+  attachment_count
 }) => {
 
   const sumDateRange = () => {
@@ -106,12 +108,14 @@ const CurrentClientProject: React.FC<Props> = ({
         </div> */}
         <div className="row g-2 pt-4">
           <div className="col-6">
-            <div className="d-flex align-items-center">
+            <div className="d-flex align-items-center"
+              style={{ cursor: 'pointer' }}
+              onClick={onClickAddAttachment}
+            >
               <i className="icofont-paper-clip"></i>
-              <span className="ms-2">5 Attach</span>
+              <span className="ms-2">{attachment_count} Attach</span>
               <span
                 className="avatar rounded-circle text-center pointer sm"
-                onClick={onClickAddAttachment}
               >
                 <i className="icofont-ui-add"></i>
               </span>
@@ -124,36 +128,42 @@ const CurrentClientProject: React.FC<Props> = ({
             </div>
           </div>
           <div className="col-6">
-            <div className="d-flex align-items-center">
+            <div className="d-flex align-items-center"
+              style={{ cursor: 'pointer' }}
+              onClick={onClickAddMember}
+            >
               <i className="icofont-group-students "></i>
               <span className="ms-2">{members_count} Members</span>
               <span
                 className="avatar rounded-circle text-center pointer sm"
-                onClick={onClickAddMember}
               >
                 <i className="icofont-ui-add"></i>
               </span>
             </div>
           </div>
           <div className="col-6">
-            <div className="d-flex align-items-center">
+            <div className="d-flex align-items-center"
+              style={{ cursor: 'pointer' }}
+              onClick={onClickAddComment}
+            >
               <i className="icofont-ui-text-chat"></i>
               <span className="ms-2">{comments_count}</span>
               <span
                 className="avatar rounded-circle text-center pointer sm"
-                onClick={onClickAddComment}
               >
                 <i className="icofont-ui-add"></i>
               </span>
             </div>
           </div>
           <div className="col-12">
-            <div className="d-flex align-items-center">
+            <div className="d-flex align-items-center"
+              style={{ cursor: 'pointer' }}
+              onClick={onClickViewDescription}
+            >
               <i className="icofont-align-left "></i>
               <span className="ms-2">Description</span>
               <span
                 className="avatar rounded-circle text-center pointer sm"
-                onClick={onClickViewDescription}
               >
                 <i className="icofont-eye-alt"></i>
               </span>

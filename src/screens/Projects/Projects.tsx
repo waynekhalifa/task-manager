@@ -402,6 +402,7 @@ const Projects: React.FC<Props> = () => {
                           onClickAddComment={() => handleOpenAddCommentModal(d)}
                           comments_count={d.comments_count}
                           members_count={d.members_count}
+                          attachment_count={d.projectfile_set.length}
                         />
                       </div>
                     );

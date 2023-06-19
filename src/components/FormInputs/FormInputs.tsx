@@ -14,7 +14,7 @@ const FormInputs: React.FC<Props> = ({ formFields }) => {
     <form>
       {formFields.map((formInfo: any, i: number) => {
         return <div key={"ljsdhl" + i} className="mb-3">
-          <label htmlFor="exampleFormControlInput77" className="form-label">
+          <label htmlFor="exampleFormControlInput77" className="form-label" hidden={formInfo.hide}>
             {formInfo.label}
           </label>
           {(formInfo.type === "text" || formInfo.type === "date") && <input type={formInfo.type} className="form-control" id="exampleFormControlInput77" placeholder={formInfo.placeholder} value={formInfo.value} onChange={formInfo.onChange} hidden={formInfo.hide} />}
