@@ -25,6 +25,7 @@ const Header: React.FC = () => {
   const handleLogout = () => {
     setSession(null);
     localStorage.removeItem("session");
+    localStorage.removeItem("access_token");
 
     push("/");
   };
