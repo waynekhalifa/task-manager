@@ -5,13 +5,14 @@ interface Props {
   onClose: any;
   show: any;
   data: any;
+  modalHeader: string;
 }
 
-const DescriptionViewModal: React.FC<Props> = ({ onClose, show, data }) => {
+const DescriptionViewModal: React.FC<Props> = ({ onClose, show, data,modalHeader }) => {
   return (
     <Modal centered size="lg" show={show} onHide={onClose}>
       <Modal.Header closeButton>
-        <Modal.Title className="fw-bold">Project Description</Modal.Title>
+        <Modal.Title className="fw-bold">{modalHeader}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {/* view project description here  */}

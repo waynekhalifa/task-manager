@@ -8,6 +8,7 @@ interface Props {
   onClose: any;
   show: any;
   project: any;
+  modalHeader: string;
 }
 
 enum ModelKeys {
@@ -32,7 +33,7 @@ const INITIAlIZE_DATA: State = {
   },
 };
 
-const AddNewAttachmentModal: React.FC<Props> = ({ onClose, show, project }) => {
+const AddNewAttachmentModal: React.FC<Props> = ({ onClose, show, project, modalHeader }) => {
   const [state, setState] = React.useState<State>(INITIAlIZE_DATA);
   const { modelData } = state;
 
@@ -141,7 +142,7 @@ const AddNewAttachmentModal: React.FC<Props> = ({ onClose, show, project }) => {
   return (
     <Modal centered size="lg" show={show} onHide={onClose}>
       <Modal.Header closeButton>
-        <Modal.Title className="fw-bold">Add New Attachment</Modal.Title>
+        <Modal.Title className="fw-bold">{modalHeader}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Dropzone onDrop={onDrop} files={modelData.files} cloudFiles={modelData.cloudFiles} onDelete={handleDeleteFile} onDeleteCloud={handleDeleteCloudFile} />

@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Nav, Tab } from "react-bootstrap";
+import { Nav, Tab } from "react-bootstrap";
 import CurrentClientProject from "../../components/Clients/CurrentClientProject";
 import AddNewUserModal from "../../components/common/AddNewUserModal";
 import PageHeader from "../../components/common/PageHeader";
@@ -10,7 +10,6 @@ import {
   useCreateProject,
 } from "framework/project/createProject";
 import { Project, SelectedProject } from "types/project";
-import FormInputs from "components/FormInputs/FormInputs";
 import { IField } from "types/formFields";
 import { useProjectsQuery } from "framework/project/getAllProjects";
 import { useDeleteProject } from "framework/project/deleteProject";
@@ -18,6 +17,10 @@ import AddNewAttachmentModal from "components/common/AddNewAttachmentModal";
 import DescriptionViewModal from "components/common/DescriptionViewModal";
 import { projectUpdateInput, useUpdateProject } from "framework/project/updateProject";
 import AddCommentModal from "components/common/AddCommentModal";
+import ViewTasksModal from "components/common/ViewTasksModal";
+import ProjectModal from "components/common/AddProjectModal";
+import TaskModal from "components/common/AddTaskModal";
+import DeleteModal from "components/common/DeleteModal";
 
 interface Props { }
 
@@ -40,6 +43,8 @@ interface State {
   isAddAttachmentModal: boolean;
   isViewDescriptionModal: boolean;
   isAddCommentModal: Boolean;
+  isAddTaskModal: boolean;
+  isViewTaskModal: boolean;
   modalHeader: any;
   modelData: Project;
   selectedProject: SelectedProject;
@@ -53,6 +58,8 @@ const INITIAlIZE_DATA: State = {
   isAddAttachmentModal: false,
   isViewDescriptionModal: false,
   isAddCommentModal: false,
+  isAddTaskModal: false,
+  isViewTaskModal: false,
   modalHeader: "",
   modelData: {} as Project,
   selectedProject: {} as SelectedProject,
@@ -62,7 +69,7 @@ const Projects: React.FC<Props> = () => {
 
 
   const [state, setState] = React.useState<State>(INITIAlIZE_DATA);
-  const { isAddModal, isEditModal, isDeleteModal, modalHeader, modelData, selectedProject, isAddUserModal, isAddAttachmentModal, isViewDescriptionModal, isAddCommentModal } =
+  const { isAddModal, isEditModal, isDeleteModal, modalHeader, modelData, selectedProject, isAddUserModal, isAddAttachmentModal, isViewDescriptionModal, isAddCommentModal, isAddTaskModal, isViewTaskModal } =
     state;
   const { mutateAsync: createMutation } = useCreateProject();
   const { mutateAsync: updateMutation } = useUpdateProject();
@@ -110,6 +117,8 @@ const Projects: React.FC<Props> = () => {
       isAddAttachmentModal: false,
       isViewDescriptionModal: false,
       isAddCommentModal: false,
+      isAddTaskModal: false,
+      isViewTaskModal: false,
       modalHeader: "",
       modelData: {} as Project,
     });
@@ -136,7 +145,8 @@ const Projects: React.FC<Props> = () => {
     setState({
       ...state,
       isDeleteModal: true,
-      selectedProject: project
+      selectedProject: project,
+      modalHeader: "Delete Project",
     });
   };
 
@@ -144,13 +154,15 @@ const Projects: React.FC<Props> = () => {
     setState({
       ...state,
       isAddUserModal: true,
+      modalHeader: "Add User",
     });
   };
   const handleOpenAddAttachmentModal = (project: Project) => {
     setState({
       ...state,
       isAddAttachmentModal: true,
-      modelData: project
+      modelData: project,
+      modalHeader: "Add Attachment",
     });
   };
 
@@ -159,6 +171,7 @@ const Projects: React.FC<Props> = () => {
       ...state,
       isViewDescriptionModal: true,
       selectedProject: project,
+      modalHeader: "View Description",
     });
   };
 
@@ -167,6 +180,25 @@ const Projects: React.FC<Props> = () => {
       ...state,
       isAddCommentModal: true,
       selectedProject: project,
+      modalHeader: "Add Comment",
+    });
+  }
+
+  const handleOpenAddTaskModal = (project: SelectedProject) => {
+    setState({
+      ...state,
+      isAddTaskModal: true,
+      selectedProject: project,
+      modalHeader: "Add Task",
+    });
+  }
+
+  const handleOpenViewTaskModal = (project: SelectedProject) => {
+    setState({
+      ...state,
+      isViewTaskModal: true,
+      selectedProject: project,
+      modalHeader: "View Tasks",
     });
   }
 
@@ -362,7 +394,7 @@ const Projects: React.FC<Props> = () => {
                     <Nav.Link eventKey="All">All</Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="Started">Started</Nav.Link>
+                    <Nav.Link eventKey="Scheduled">Scheduled</Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
                     <Nav.Link eventKey="Approval">Approval</Nav.Link>
@@ -400,9 +432,12 @@ const Projects: React.FC<Props> = () => {
                           onClickAddAttachment={() => handleOpenAddAttachmentModal(d)}
                           onClickViewDescription={() => handleOpenViewDescriptionModal(d)}
                           onClickAddComment={() => handleOpenAddCommentModal(d)}
+                          onClickAddTask={() => handleOpenAddTaskModal(d)}
+                          onClickViewTasks={() => handleOpenViewTaskModal(d)}
                           comments_count={d.comments_count}
                           members_count={d.members_count}
                           attachment_count={d.projectfile_set.length}
+                          tasks_count={d.tasks_count || 0}
                         />
                       </div>
                     );
@@ -413,248 +448,57 @@ const Projects: React.FC<Props> = () => {
           </div>
         </div>
       </Tab.Container>
-      <Modal show={isAddModal || isEditModal} onHide={handleModalClose}>
-        <Modal.Header closeButton>
-          <Modal.Title className="fw-bold">{modalHeader}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="row">
-            <div className="col-lg-12 col-md-12">
-              <div className="card">
-                <div className="card-body">
-                  <FormInputs
-                    formFields={formFields}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-
-          {/* <div className="mb-3">
-            <label htmlFor="exampleFormControlInput77" className="form-label">
-              Project Name
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="exampleFormControlInput77"
-              placeholder="Explain what the Project Name"
-              value={modelData ? modelData.name : ""}
-              onChange={(e: any) => {
-                setState({
-                  ...state,
-                  modelData: { ...modelData, name: e.target.value },
-                });
-              }}
-            />
-          </div>
-          <div className="mb-3">
-            <label className="form-label">Project Category</label>
-            <select
-              className="form-select"
-              value={categories ? categories[0].id : ""}
-              onChange={(e: any) => handleModelData("name", e.target.value)}
-            >
-              {categories.length > 0 &&
-                categories.map((d: any, i: number) => (
-                  <option key={"sdf" + i} value={d.id}>
-                    {d.name}
-                  </option>
-                ))}
-            </select>
-          </div>
-          <div className="mb-3">
-            <label htmlFor="formFileMultipleone" className="form-label">
-              Project Images &amp; Document
-            </label>
-            <input
-              className="form-control"
-              type="file"
-              id="formFileMultipleone"
-              multiple={true}
-              onChange={(e: any) => {
-                setState({
-                  ...state,
-                  editModeldata: {
-                    ...editModeldata,
-                    images: e.target.files,
-                  },
-                });
-              }}
-            // multiple=""
-            />
-          </div>
-          <div className="deadline-form">
-            <form>
-              <div className="row g-3 mb-3">
-                <div className="col">
-                  <label htmlFor="datepickerded" className="form-label">
-                    Project Start Date
-                  </label>
-                  <input
-                    type="date"
-                    className="form-control"
-                    id="datepickerded"
-                    value={editModeldata ? editModeldata.start_at : ""}
-                    onChange={(e: any) => {
-                      setState({
-                        ...state,
-                        editModeldata: {
-                          ...editModeldata,
-                          start_at: e.target.value,
-                        },
-                      });
-                    }}
-                  />
-                </div>
-                <div className="col">
-                  <label htmlFor="datepickerdedone" className="form-label">
-                    Project End Date
-                  </label>
-                  <input
-                    type="date"
-                    className="form-control"
-                    id="datepickerdedone"
-                    value={editModeldata ? editModeldata.end_at : ""}
-                    onChange={(e: any) => {
-                      setState({
-                        ...state,
-                        editModeldata: {
-                          ...editModeldata,
-                          end_at: e.target.value,
-                        },
-                      });
-                    }}
-                  />
-                </div>
-              </div>
-              <div className="row g-3 mb-3">
-                <div className="col-sm-12">
-                  <label htmlFor="formFileMultipleone" className="form-label">
-                    Task Assign Person
-                  </label>
-                  <select
-                    className="form-select"
-                    multiple={true}
-                    value={editModeldata ? editModeldata.assignPerson : ""}
-                    onChange={(e: any) => {
-                      setState({
-                        ...state,
-                        editModeldata: {
-                          ...editModeldata,
-                          admin: parseFloat(e.target.value),
-                        },
-                      });
-                    }}
-                  >
-                    <option>Lucinda Massey</option>
-                    <option value="1">Ryan Nolan</option>
-                    <option value="2">Oliver Black</option>
-                    <option value="3">Adam Walker</option>
-                    <option value="4">Brian Skinner</option>
-                    <option value="5">Dan Short</option>
-                    <option value="5">Jack Glover</option>
-                  </select>
-                </div>
-              </div>
-            </form>
-          </div>
-          <div className="mb-3">
-            <label
-              htmlFor="exampleFormControlTextarea78"
-              className="form-label"
-            >
-              Description (optional)
-            </label>
-            <textarea
-              className="form-control"
-              id="exampleFormControlTextarea78"
-              rows={3}
-              placeholder="Add any extra details about the request"
-              value={editModeldata ? editModeldata.description : ""}
-              onChange={(e: any) => {
-                setState({
-                  ...state,
-                  editModeldata: {
-                    ...editModeldata,
-                    description: e.target.value,
-                  },
-                });
-              }}
-            />
-          </div> */}
-        </Modal.Body>
-        <Modal.Footer>
-          <button
-            type="button"
-            className="btn btn-secondary"
-            onClick={handleModalClose}
-          >
-            Cancel
-          </button>
-          {isAddModal && <button
-            type="button"
-            className="btn btn-primary"
-            onClick={createProject}
-          >
-            Create
-          </button>}
-          {isEditModal && <button
-            type="button"
-            className="btn btn-primary"
-            onClick={editProject}
-          >
-            Save
-          </button>}
-        </Modal.Footer>
-      </Modal>
-      <Modal
+      <ProjectModal
+        onClose={handleModalClose}
+        modalHeader={modalHeader}
+        isAddModal={isAddModal}
+        isEditModal={isEditModal}
+        handleModelData={handleModelData}
+        selectedProject={selectedProject}
+        modelData={modelData}
+        categories={categories}
+        admins={admins}
+        onCreate={createProject}
+        onUpdate={editProject}
+      />
+      <DeleteModal
         show={isDeleteModal}
-        centered
-        onHide={handleModalClose}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title className="fw-bold">Delete Project</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="justify-content-center flex-column d-flex">
-          <i className="icofont-ui-delete text-danger display-2 text-center mt-2" />
-          <p className="mt-4 fs-5 text-center">
-            You can only delete this item Permanently
-          </p>
-        </Modal.Body>
-        <Modal.Footer>
-          <button
-            type="button"
-            className="btn btn-secondary"
-            onClick={handleModalClose}
-          >
-            Cancel
-          </button>
-          <button type="button" className="btn btn-danger color-fff"
-            onClick={deleteProject}
-          >
-            Delete
-          </button>
-        </Modal.Footer>
-      </Modal>
+        onClose={handleModalClose}
+        onDelete={deleteProject}
+        message="Are you sure you want to delete this project?"
+        modalHeader={modalHeader}
+      />
       <AddNewUserModal
         show={isAddUserModal}
         onClose={handleModalClose}
+        modalHeader={modalHeader}
       />
       <AddNewAttachmentModal
         show={isAddAttachmentModal}
         onClose={handleModalClose}
         project={modelData}
+        modalHeader={modalHeader}
       />
       <DescriptionViewModal
         show={isViewDescriptionModal}
         data={selectedProject.description}
         onClose={handleModalClose}
+        modalHeader={modalHeader}
       />
       <AddCommentModal
         show={isAddCommentModal}
         onClose={handleModalClose}
+        modalHeader={modalHeader}
+      />
+      <TaskModal
+        show={isAddTaskModal}
+        onClose={handleModalClose}
+        modalHeader={modalHeader}
+      />
+      <ViewTasksModal
+        show={isViewTaskModal}
+        onClose={handleModalClose}
+        modalHeader={modalHeader}
       />
     </div>
   );

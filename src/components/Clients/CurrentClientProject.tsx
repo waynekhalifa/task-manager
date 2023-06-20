@@ -12,10 +12,13 @@ interface Props {
   onClickAddMember?: any;
   onClickAddAttachment?: any;
   onClickViewDescription?: any;
+  onClickViewTasks?: any;
+  onClickAddTask?: any;
   onClickAddComment: any;
   members_count: number;
   comments_count: number;
-  attachment_count: number
+  attachment_count: number;
+  tasks_count: number;
 }
 
 const CurrentClientProject: React.FC<Props> = ({
@@ -32,9 +35,12 @@ const CurrentClientProject: React.FC<Props> = ({
   onClickAddAttachment,
   onClickViewDescription,
   onClickAddComment,
+  onClickViewTasks,
+  onClickAddTask,
   comments_count,
   members_count,
-  attachment_count
+  attachment_count,
+  tasks_count
 }) => {
 
   const sumDateRange = () => {
@@ -113,7 +119,7 @@ const CurrentClientProject: React.FC<Props> = ({
               onClick={onClickAddAttachment}
             >
               <i className="icofont-paper-clip"></i>
-              <span className="ms-2">{attachment_count} Attach</span>
+              <span className="badge bg-secondary ms-2">{attachment_count} Attach</span>
               <span
                 className="avatar rounded-circle text-center pointer sm"
               >
@@ -124,7 +130,7 @@ const CurrentClientProject: React.FC<Props> = ({
           <div className="col-6">
             <div className="d-flex align-items-center">
               <i className="icofont-sand-clock"></i>
-              <span className="ms-2">{sumDateRange()} Days</span>
+              <span className="badge bg-secondary ms-2">{sumDateRange()} Days</span>
             </div>
           </div>
           <div className="col-6">
@@ -133,7 +139,7 @@ const CurrentClientProject: React.FC<Props> = ({
               onClick={onClickAddMember}
             >
               <i className="icofont-group-students "></i>
-              <span className="ms-2">{members_count} Members</span>
+              <span className="badge bg-secondary ms-2">{members_count} Members</span>
               <span
                 className="avatar rounded-circle text-center pointer sm"
               >
@@ -147,7 +153,7 @@ const CurrentClientProject: React.FC<Props> = ({
               onClick={onClickAddComment}
             >
               <i className="icofont-ui-text-chat"></i>
-              <span className="ms-2">{comments_count}</span>
+              <span className="badge bg-secondary ms-2">{comments_count}</span>
               <span
                 className="avatar rounded-circle text-center pointer sm"
               >
@@ -155,7 +161,7 @@ const CurrentClientProject: React.FC<Props> = ({
               </span>
             </div>
           </div>
-          <div className="col-12">
+          <div className="col-6">
             <div className="d-flex align-items-center"
               style={{ cursor: 'pointer' }}
               onClick={onClickViewDescription}
@@ -166,6 +172,22 @@ const CurrentClientProject: React.FC<Props> = ({
                 className="avatar rounded-circle text-center pointer sm"
               >
                 <i className="icofont-eye-alt"></i>
+              </span>
+            </div>
+          </div>
+          <div className="col-6">
+            <div className="d-flex align-items-center">
+              <i className="icofont-tasks"></i>
+              <span className="ms-2" style={{ cursor: 'pointer' }}
+                onClick={onClickViewTasks}
+              >Task</span>
+              <span className="badge bg-secondary ms-2">{tasks_count}</span>
+              <span
+                className="avatar rounded-circle text-center pointer sm"
+              >
+                <i className="icofont-ui-add" style={{ cursor: 'pointer' }}
+                  onClick={onClickAddTask}
+                ></i>
               </span>
             </div>
           </div>

@@ -323,6 +323,7 @@ const Header: React.FC = () => {
       <AddNewUserModal
         show={state.isAddUserModal}
         onClose={() => setState({ isAddUserModal: false })}
+        modalHeader="Add New User"
       />
     </div>
   );

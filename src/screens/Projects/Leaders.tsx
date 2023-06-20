@@ -46,6 +46,7 @@ const Leaders: React.FC<Props> = () => {
         onClose={() => {
           setState({ ...state, isAddUserModal: false });
         }}
+        modalHeader="Add New User"
       />
     </div>
   );
