@@ -12,7 +12,8 @@ import {
 import TaskNestable1 from "../../components/Projects/TaskNestable";
 import { useProjectsQuery } from "framework/project/getAllProjects";
 import { SelectedTask } from "types/task";
-import AddTaskModal from "components/common/AddTaskModal";
+import TaskModal from "components/common/TaskModal";
+import { SelectedProject } from "types/project";
 
 
 
@@ -26,6 +27,7 @@ interface State {
   isAddCommentModal: Boolean;
   modalHeader: any;
   selectedTask: SelectedTask;
+  modelData: any;
 }
 
 const INITIAlIZE_DATA: State = {
@@ -38,18 +40,48 @@ const INITIAlIZE_DATA: State = {
   isAddCommentModal: false,
   modalHeader: "",
   selectedTask: {} as SelectedTask,
+  modelData: {},
 };
 
 
 const Tasks: React.FC = () => {
   const [state, setState] = useState<State>(INITIAlIZE_DATA);
-  const { isAddModal, isEditModal, isDeleteModal, isAddUserModal, isAddAttachmentModal, isViewDescriptionModal, isAddCommentModal, modalHeader } = state;
+  const { modelData, isAddModal, isEditModal, isDeleteModal, isAddUserModal, isAddAttachmentModal, isViewDescriptionModal, isAddCommentModal, modalHeader } = state;
 
   let { data: projectData, error: errorProjects, isLoading: loadingProjects } = useProjectsQuery({});
 
   if (loadingProjects) return <div>Loading...</div>;
   if (errorProjects) return null;
+  let projects: SelectedProject[] = projectData?.projects.data.results || [];
+  let members = projectData?.projects.data.results[0].members || [
+    {
 
+      label: "Select User",
+      value: 0,
+    },
+    {
+      label: "User 1",
+      value: 1,
+    },
+    {
+      label: "User 2",
+      value: 2,
+    },
+    {
+      label: "User 3",
+      value: 3,
+    },
+  ];
+
+  const handleModelData = (key: string, value: any) => {
+    setState({
+      ...state,
+      modelData: {
+        ...state.modelData,
+        [key]: value,
+      },
+    });
+  };
 
   const handleAddModal = () => {
     setState({
@@ -59,63 +91,7 @@ const Tasks: React.FC = () => {
     });
   };
 
-  const handleEditModal = () => {
-    setState({
-      ...state,
-      isEditModal: !isEditModal,
-      modalHeader: "Edit Task",
-    });
-
-  };
-
-  const handleDeleteModal = () => {
-    setState({
-      ...state,
-      isDeleteModal: !isDeleteModal,
-      modalHeader: "Delete Task",
-    });
-  };
-
-  const handleAddUserModal = () => {
-    setState({
-      ...state,
-      isAddUserModal: !isAddUserModal,
-      modalHeader: "Add User",
-    });
-  };
-
-  const handleAddAttachmentModal = () => {
-    setState({
-      ...state,
-      isAddAttachmentModal: !isAddAttachmentModal,
-      modalHeader: "Add Attachment",
-    });
-  };
-
-  const handleViewDescriptionModal = () => {
-    setState({
-      ...state,
-      isViewDescriptionModal: !isViewDescriptionModal,
-      modalHeader: "View Description",
-    });
-  };
-
-  const handleAddCommentModal = () => {
-    setState({
-      ...state,
-      isAddCommentModal: !isAddCommentModal,
-      modalHeader: "Add Comment",
-    });
-  };
-
-  const handleSelectedTask = (task: SelectedTask) => {
-    setState({
-      ...state,
-      selectedTask: task,
-    });
-  };
-
-  const handleCloseModal = () => {
+  const handleModalClose = () => {
     setState({
       ...state,
       isAddModal: false,
@@ -125,7 +101,78 @@ const Tasks: React.FC = () => {
       isAddAttachmentModal: false,
       isViewDescriptionModal: false,
       isAddCommentModal: false,
+      modelData: {},
     });
+  };
+
+  const handleEditModal = (task: SelectedTask) => {
+    setState({
+      ...state,
+      isEditModal: !isEditModal,
+      modalHeader: "Edit Task",
+      selectedTask: task
+    });
+
+  };
+
+  const handleDeleteModal = (task: SelectedTask) => {
+    setState({
+      ...state,
+      isDeleteModal: !isDeleteModal,
+      modalHeader: "Delete Task",
+      selectedTask: task
+    });
+  };
+
+  const handleAddUserModal = (task: SelectedTask) => {
+    setState({
+      ...state,
+      isAddUserModal: !isAddUserModal,
+      modalHeader: "Add User",
+      selectedTask: task
+    });
+  };
+
+  const handleAddAttachmentModal = (task: SelectedTask) => {
+    setState({
+      ...state,
+      isAddAttachmentModal: !isAddAttachmentModal,
+      modalHeader: "Add Attachment",
+      selectedTask: task
+    });
+  };
+
+  const handleViewDescriptionModal = (task: SelectedTask) => {
+    setState({
+      ...state,
+      isViewDescriptionModal: !isViewDescriptionModal,
+      modalHeader: "View Description",
+      selectedTask: task
+    });
+  };
+
+  const handleAddCommentModal = (task: SelectedTask) => {
+    setState({
+      ...state,
+      isAddCommentModal: !isAddCommentModal,
+      modalHeader: "Add Comment",
+      selectedTask: task
+    });
+  };
+
+
+  const createTask = async () => {
+    try {
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  const editTask = async () => {
+    try {
+    } catch (error) {
+      alert(error);
+    }
   };
 
   return (
@@ -171,10 +218,17 @@ const Tasks: React.FC = () => {
           />
         </div>
       </div>
-      <AddTaskModal
-        show={isAddModal}
-        onClose={handleCloseModal}
+      <TaskModal
+        onClose={handleModalClose}
         modalHeader={modalHeader}
+        isAddModal={isAddModal}
+        isEditModal={isEditModal}
+        handleModelData={handleModelData}
+        projects={projects}
+        modelData={modelData}
+        onCreate={createTask}
+        onUpdate={editTask}
+        members={members}
       />
     </div>
   );

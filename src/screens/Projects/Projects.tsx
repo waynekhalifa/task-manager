@@ -10,7 +10,6 @@ import {
   useCreateProject,
 } from "framework/project/createProject";
 import { Project, SelectedProject } from "types/project";
-import { IField } from "types/formFields";
 import { useProjectsQuery } from "framework/project/getAllProjects";
 import { useDeleteProject } from "framework/project/deleteProject";
 import AddNewAttachmentModal from "components/common/AddNewAttachmentModal";
@@ -18,9 +17,10 @@ import DescriptionViewModal from "components/common/DescriptionViewModal";
 import { projectUpdateInput, useUpdateProject } from "framework/project/updateProject";
 import AddCommentModal from "components/common/AddCommentModal";
 import ViewTasksModal from "components/common/ViewTasksModal";
-import ProjectModal from "components/common/AddProjectModal";
-import TaskModal from "components/common/AddTaskModal";
+import ProjectModal from "components/common/ProjectModal";
+import TaskModal from "components/common/TaskModal";
 import DeleteModal from "components/common/DeleteModal";
+import { Task } from "types/task";
 
 interface Props { }
 
@@ -38,15 +38,17 @@ enum ModelKeys {
 interface State {
   isAddModal: boolean;
   isEditModal: boolean;
+  isAddTaskModal: boolean;
+  isEditTaskModal: boolean;
   isDeleteModal: boolean;
   isAddUserModal: boolean;
   isAddAttachmentModal: boolean;
   isViewDescriptionModal: boolean;
   isAddCommentModal: Boolean;
-  isAddTaskModal: boolean;
   isViewTaskModal: boolean;
   modalHeader: any;
-  modelData: Project;
+  modelProjectData: Project;
+  modelTaskData: Task;
   selectedProject: SelectedProject;
 }
 
@@ -59,9 +61,11 @@ const INITIAlIZE_DATA: State = {
   isViewDescriptionModal: false,
   isAddCommentModal: false,
   isAddTaskModal: false,
+  isEditTaskModal: false,
   isViewTaskModal: false,
   modalHeader: "",
-  modelData: {} as Project,
+  modelProjectData: {} as Project,
+  modelTaskData: {} as Task,
   selectedProject: {} as SelectedProject,
 };
 
@@ -69,7 +73,7 @@ const Projects: React.FC<Props> = () => {
 
 
   const [state, setState] = React.useState<State>(INITIAlIZE_DATA);
-  const { isAddModal, isEditModal, isDeleteModal, modalHeader, modelData, selectedProject, isAddUserModal, isAddAttachmentModal, isViewDescriptionModal, isAddCommentModal, isAddTaskModal, isViewTaskModal } =
+  const { isAddModal, isEditModal, isDeleteModal, modalHeader, modelProjectData, modelTaskData, selectedProject, isAddUserModal, isAddAttachmentModal, isViewDescriptionModal, isAddCommentModal, isAddTaskModal, isEditTaskModal, isViewTaskModal } =
     state;
   const { mutateAsync: createMutation } = useCreateProject();
   const { mutateAsync: updateMutation } = useUpdateProject();
@@ -107,6 +111,26 @@ const Projects: React.FC<Props> = () => {
     },
   ]
 
+  let members = projectData?.projects.data.results[0].members || [
+    {
+
+      label: "Select User",
+      value: 0,
+    },
+    {
+      label: "User 1",
+      value: 1,
+    },
+    {
+      label: "User 2",
+      value: 2,
+    },
+    {
+      label: "User 3",
+      value: 3,
+    },
+  ];
+
   const handleModalClose = () => {
     setState({
       ...state,
@@ -118,9 +142,11 @@ const Projects: React.FC<Props> = () => {
       isViewDescriptionModal: false,
       isAddCommentModal: false,
       isAddTaskModal: false,
+      isEditTaskModal: false,
       isViewTaskModal: false,
       modalHeader: "",
-      modelData: {} as Project,
+      modelProjectData: {} as Project,
+      modelTaskData: {} as Task,
     });
   };
 
@@ -161,7 +187,7 @@ const Projects: React.FC<Props> = () => {
     setState({
       ...state,
       isAddAttachmentModal: true,
-      modelData: project,
+      modelProjectData: project,
       modalHeader: "Add Attachment",
     });
   };
@@ -193,6 +219,16 @@ const Projects: React.FC<Props> = () => {
     });
   }
 
+  const handleOpenEditTaskModal = (project: SelectedProject) => {
+    setState({
+      ...state,
+      isEditTaskModal: true,
+      selectedProject: project,
+      modalHeader: "Edit Task",
+    });
+  };
+
+
   const handleOpenViewTaskModal = (project: SelectedProject) => {
     setState({
       ...state,
@@ -202,7 +238,7 @@ const Projects: React.FC<Props> = () => {
     });
   }
 
-  const handleModelData = (key: string, value: any) => {
+  const handleProjectModelData = (key: string, value: any) => {
     if (isEditModal) {
       setState({
         ...state,
@@ -215,8 +251,28 @@ const Projects: React.FC<Props> = () => {
     }
     setState({
       ...state,
-      modelData: {
-        ...modelData,
+      modelProjectData: {
+        ...modelProjectData,
+        [key]: value,
+      },
+    });
+  };
+
+  const handleTaskModelData = (key: string, value: any) => {
+    if (isEditTaskModal) {
+      setState({
+        ...state,
+        modelTaskData: {
+          ...modelTaskData,
+          [key]: value,
+        },
+      });
+      return;
+    }
+    setState({
+      ...state,
+      modelTaskData: {
+        ...modelTaskData,
         [key]: value,
       },
     });
@@ -228,90 +284,26 @@ const Projects: React.FC<Props> = () => {
   };
 
 
-  const formFields: IField[] = [
-    {
-      label: "Project Name",
-      type: "text",
-      key: ModelKeys.NAME,
-      value: isEditModal ? selectedProject.name : modelData?.name,
-      onChange: (e: any) => handleModelData(ModelKeys.NAME, e.target.value),
-      placeholder: "Enter Project Name",
+  const createTask = async () => {
+    try {
+    } catch (error) {
+      alert(error);
+    }
+  };
 
-    },
-    {
-      label: "Department",
-      type: "select",
-      key: ModelKeys.CATEGORY,
-      value: isEditModal ? selectedProject.category : modelData?.category,
-      onChange: (e: any) => handleModelData(ModelKeys.CATEGORY, e.target.value),
-      options: categories.map((category) => ({
-        label: category.name,
-        value: category.id,
-      })),
-      placeholder: "Select Category",
-    },
-    {
-      label: "Description",
-      type: "textarea",
-      key: ModelKeys.DESCRIPTION,
-      value: isEditModal ? selectedProject.description : modelData?.description,
-      onChange: (e: any) =>
-        handleModelData(ModelKeys.DESCRIPTION, e.target.value),
-      placeholder: "Enter Description",
-    },
-    {
-      label: "Start Date",
-      type: "date",
-      key: ModelKeys.START_DATE,
-      value: isEditModal ? selectedProject.start_at : modelData?.start_at,
-      onChange: (e: any) =>
-        handleModelData(ModelKeys.START_DATE, e.target.value),
-      placeholder: "Enter Start Date",
-    },
-    {
-      label: "End Date",
-      type: "date",
-      key: ModelKeys.END_DATE,
-      value: isEditModal ? selectedProject.end_at : modelData?.end_at,
-      onChange: (e: any) =>
-        handleModelData(ModelKeys.END_DATE, e.target.value),
-      placeholder: "Enter End Date",
-    },
-    {
-      label: "Project thumbnail",
-      type: "file",
-      key: ModelKeys.FILES,
-      value: isEditModal ? selectedProject.file : modelData?.file,
-      onChange: (e: any) => {
-        let file: File = e.target.files[0];
-        let reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = (url) => {
-          handleModelData(ModelKeys.FILE, file)
-        };
-      },
-      placeholder: "Enter Thumbnail",
-      hide: isEditModal
-    },
-    {
-      label: "Assign Admin",
-      type: "select",
-      key: ModelKeys.ADMIN,
-      value: isEditModal ? selectedProject.admin : modelData?.admin,
-      onChange: (e: any) => handleModelData(ModelKeys.ADMIN, e.target.value),
-      options: admins.map((admin) => ({
-        label: admin.label,
-        value: admin.value,
-      })),
-    },
-  ]
+  const editTask = async () => {
+    try {
+    } catch (error) {
+      alert(error);
+    }
+  };
 
 
 
   const createProject = async () => {
-    Object.assign(modelData, { admin: 1 });
+    Object.assign(modelProjectData, { admin: 1 });
     try {
-      let createInput = projectInput(modelData);
+      let createInput = projectInput(modelProjectData);
       let res = await createMutation(createInput);
       projects.push(res.session.data);
       handleModalClose();
@@ -358,9 +350,9 @@ const Projects: React.FC<Props> = () => {
   };
 
   const addUser = async () => {
-    Object.assign(modelData, { admin: 1 });
+    Object.assign(modelProjectData, { admin: 1 });
     try {
-      let createInput = projectInput(modelData);
+      let createInput = projectInput(modelProjectData);
       await createMutation(createInput);
       handleModalClose();
     } catch (err) {
@@ -437,7 +429,7 @@ const Projects: React.FC<Props> = () => {
                           comments_count={d.comments_count}
                           members_count={d.members_count}
                           attachment_count={d.projectfile_set.length}
-                          tasks_count={d.tasks_count || 0}
+                          tasks_count={d.tasks_count}
                         />
                       </div>
                     );
@@ -453,9 +445,9 @@ const Projects: React.FC<Props> = () => {
         modalHeader={modalHeader}
         isAddModal={isAddModal}
         isEditModal={isEditModal}
-        handleModelData={handleModelData}
+        handleModelData={handleProjectModelData}
         selectedProject={selectedProject}
-        modelData={modelData}
+        modelData={modelProjectData}
         categories={categories}
         admins={admins}
         onCreate={createProject}
@@ -476,7 +468,7 @@ const Projects: React.FC<Props> = () => {
       <AddNewAttachmentModal
         show={isAddAttachmentModal}
         onClose={handleModalClose}
-        project={modelData}
+        project={modelProjectData}
         modalHeader={modalHeader}
       />
       <DescriptionViewModal
@@ -491,9 +483,16 @@ const Projects: React.FC<Props> = () => {
         modalHeader={modalHeader}
       />
       <TaskModal
-        show={isAddTaskModal}
         onClose={handleModalClose}
         modalHeader={modalHeader}
+        isAddModal={isAddTaskModal}
+        isEditModal={isEditTaskModal}
+        handleModelData={handleTaskModelData}
+        selectedProject={selectedProject}
+        modelData={modelTaskData}
+        onCreate={createTask}
+        onUpdate={editTask}
+        members={members}
       />
       <ViewTasksModal
         show={isViewTaskModal}

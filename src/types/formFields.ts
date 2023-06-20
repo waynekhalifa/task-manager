@@ -39,4 +39,5 @@ export interface IField {
   options?: IOption[];
   multiple?: boolean;
   hide?: boolean;
+  disabled?: boolean;
 }
