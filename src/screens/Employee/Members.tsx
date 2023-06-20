@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Dropdown, Modal } from "react-bootstrap";
 import OurClients from "components/Clients/OurClients";
 import PageHeader from "components/common/PageHeader";
 import { MembersData } from "components/Data/AppData";
 import { useEmployeesQuery } from "framework/employee/getAllEmployees";
+import { useCreateEmployee, employeeInput } from "framework/employee/createEmployee";
 import FormInputs from "components/FormInputs/FormInputs";
 import { IField } from "types/formFields";
 import { EmployeeCreateInput } from "types/employee";
@@ -18,12 +19,13 @@ enum ModelKeys {
   LAST_NAME = "last_name",
   USERNAME = "username",
   EMAIL = "email",
-  PASSWORD = "password1",
+  PASSWORD1 = "password1",
   ONBOARD_AT = "onboard_at",
   EMPLOYEE_ID = "employee_id",
   PHONE = "phone",
   DEPARTMENT = "department",
   FILES = "files",
+  DESCRIPTION = "description",
 }
 
 interface State {
@@ -32,6 +34,7 @@ interface State {
   modelData: EmployeeCreateInput;
   departmentValue: string;
   isDepartmentAdmin: boolean;
+  createdEmployee: any;
 
 }
 
@@ -41,6 +44,7 @@ const INITIAlIZE_DATA: State = {
   modelData: {} as EmployeeCreateInput,
   departmentValue: "",
   isDepartmentAdmin: false,
+  createdEmployee: null,
 };
 
 const Members: React.FC<Props> = () => {
@@ -48,9 +52,25 @@ const Members: React.FC<Props> = () => {
   const { isModal, modelData, isDepartmentAdmin, departmentValue } = state;
   const { data: employeeData, error: employeeError, isLoading: employeeIsLoading } = useEmployeesQuery({});
   const { data: departmentData, error: departmentError, isLoading: departmentIsLoading } = useCategoriesQuery({});
+  const { mutateAsync: createMutation } = useCreateEmployee();
 
-  let departments = departmentData?.categories?.data?.results || [];
+  const handleCreateEmployee = async () => {
+    Object.assign(modelData, { admin: 1 });
+    try {
+      let createInput = employeeInput(modelData);
+      const employeeData = await createMutation(createInput);
+      if (employeeData) {
+        MembersData.push(employeeData);
+        setState({ ...state, createdEmployee: employeeData });
+      }
+      // closeModal();
+    } catch (err) {
+      alert(err);
+    }
+  }
   
+  const departments = useMemo(() => departmentData?.categories?.data?.results || [], [departmentData]);
+
   const handleModelData = (key: string, value: any) => {
     if (key === ModelKeys.DEPARTMENT) {
       const stringValue = departments.find((department: any) => String(department.id) === value)?.name;
@@ -66,12 +86,11 @@ const Members: React.FC<Props> = () => {
     });
   };
   
-  
   useEffect(() => {
     if (departmentValue === 'Accounter') { 
-        console.log('this is working and must check all boxes')
         setState({ ...state, isDepartmentAdmin: true });
       }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [departmentValue]);
   
   if (employeeIsLoading || departmentIsLoading) return <div>Loading...</div>;
@@ -92,8 +111,8 @@ const Members: React.FC<Props> = () => {
       type: "text",
       width: "col-md-6",
       key: ModelKeys.FIRST_NAME,
-      value: modelData?.first_name,
-      onChange: (e: any) => handleModelData(ModelKeys.FIRST_NAME, e.target.value),
+      value: modelData?.last_name,
+      onChange: (e: any) => handleModelData(ModelKeys.LAST_NAME, e.target.value),
       placeholder: "Enter Last Name",
     },
     {
@@ -101,7 +120,7 @@ const Members: React.FC<Props> = () => {
       type: "file",
       width: "col-md-12",
       key: ModelKeys.FILES,
-      value: modelData?.employee?.files,
+      value: modelData?.files,
       onChange: (e: any) => {
         let files: File[] = [];
         for (let i = 0; i < e.target.files.length; i++) {
@@ -121,9 +140,9 @@ const Members: React.FC<Props> = () => {
       label: "Employee ID",
       type: "text",
       width: "col-md-6",
-      key: ModelKeys.USERNAME,
-      value: modelData?.username,
-      onChange: (e: any) => handleModelData(ModelKeys.USERNAME, e.target.value),
+      key: ModelKeys.EMPLOYEE_ID,
+      value: modelData?.employee_id,
+      onChange: (e: any) => handleModelData(ModelKeys.EMPLOYEE_ID, e.target.value),
       placeholder: "ID or User Name",
     },
     {
@@ -131,7 +150,7 @@ const Members: React.FC<Props> = () => {
       type: "date",
       width: "col-md-6",
       key: ModelKeys.ONBOARD_AT,
-      value: modelData?.employee?.onboard_at,
+      value: modelData?.onboard_at,
       onChange: (e: any) =>
         handleModelData(ModelKeys.ONBOARD_AT, e.target.value),
       placeholder: "Enter Start Date",
@@ -149,27 +168,27 @@ const Members: React.FC<Props> = () => {
       label: "Password",
       type: "password",
       width: "col-md-6",
-      key: ModelKeys.USERNAME,
-      value: modelData?.username,
-      onChange: (e: any) => handleModelData(ModelKeys.USERNAME, e.target.value),
+      key: ModelKeys.PASSWORD1,
+      value: modelData?.password1,
+      onChange: (e: any) => handleModelData(ModelKeys.PASSWORD1, e.target.value),
       placeholder: "Password",
     },
     {
       label: "Email",
       type: "text",
       width: "col-md-6",
-      key: ModelKeys.USERNAME,
-      value: modelData?.username,
-      onChange: (e: any) => handleModelData(ModelKeys.USERNAME, e.target.value),
+      key: ModelKeys.EMAIL,
+      value: modelData?.email,
+      onChange: (e: any) => handleModelData(ModelKeys.EMAIL, e.target.value),
       placeholder: "Email",
     },
     {
       label: "Phone Number",
       type: "text",
       width: "col-md-6",
-      key: ModelKeys.USERNAME,
-      value: modelData?.username,
-      onChange: (e: any) => handleModelData(ModelKeys.USERNAME, e.target.value),
+      key: ModelKeys.PHONE,
+      value: modelData?.phone,
+      onChange: (e: any) => handleModelData(ModelKeys.PHONE, e.target.value),
       placeholder: "Phone Number",
     },
     {
@@ -177,7 +196,7 @@ const Members: React.FC<Props> = () => {
       type: "select",
       width: "col-md-12",
       key: ModelKeys.DEPARTMENT,
-      value: modelData?.employee?.department?.name,
+      value: modelData?.department?.name,
       onChange: (e: any) => handleModelData(ModelKeys.DEPARTMENT, e.target.value),
       options: departments.map((department: Category) => ({
         label: department.name,
@@ -185,27 +204,14 @@ const Members: React.FC<Props> = () => {
       })),
       placeholder: "Select Department",
     },
-    // {
-    //   label: "Designation",
-    //   type: "select",
-    //   width: "col-md-6",
-    //   key: ModelKeys.DESIGNATION,
-    //   value: modelData?.employee?.Designation,
-    //   onChange: (e: any) => handleModelData(ModelKeys.DEPARTMENT, e.target.value),
-    //   options: departments.map((department: Category) => ({
-    //     label: department.name,
-    //     value: department.id,
-    //   })),
-    //   placeholder: "Select Department",
-    // },
     {
       label: "Description",
       type: "textarea",
       width: "col-md-12",
-      key: ModelKeys.EMAIL,
-      value: modelData?.email,
+      key: ModelKeys.DESCRIPTION,
+      value: modelData?.description,
       onChange: (e: any) =>
-        handleModelData(ModelKeys.EMAIL, e.target.value),
+        handleModelData(ModelKeys.DESCRIPTION, e.target.value),
       placeholder: "Enter Description",
     },
   ]
@@ -308,7 +314,7 @@ const Members: React.FC<Props> = () => {
         <Modal.Body>
           <div className="modal-body">
             <FormInputs formFields={formFields} formName={"employee"} />
-            <PermissionsTable isDepartmentAdmin={isDepartmentAdmin} />
+            <PermissionsTable isDepartmentAdmin={isDepartmentAdmin} closeModal={closeModal} employeeData={employeeData} />
           </div>
         </Modal.Body>
         <Modal.Footer>
@@ -323,7 +329,8 @@ const Members: React.FC<Props> = () => {
           </button>
           <button type="button" className="btn btn-primary"
             onClick={() => {
-              closeModal()
+              // closeModal()
+              handleCreateEmployee()
             }}
           >
             Add Employee

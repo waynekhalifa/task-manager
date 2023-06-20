@@ -14,7 +14,7 @@ const FormInputs: React.FC<Props> = ({ formFields, formName }) => {
         <div className={`${formName === 'employee' && 'row g-3 mb-3'}`}>
           {formFields.map((formInfo: any, i: number) => {
             return <div key={"cfbdefs" + i} className={`${formInfo.width && formInfo.width}`}>
-              <label htmlFor="exampleFormControlInput77" className="form-label">
+              <label htmlFor="exampleFormControlInput733" className="form-label">
                 {formInfo.label}
               </label>
               {(formInfo.type === "text" || formInfo.type === "date" || formInfo.type === "password") && <input type={formInfo.type} className="form-control" id="exampleFormControlInput77" placeholder={formInfo.placeholder} value={formInfo.value} onChange={formInfo.onChange} />}

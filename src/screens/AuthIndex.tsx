@@ -24,7 +24,6 @@ const AuthIndex: React.FC = () => {
 
       if (sessionObj.refresh) getSession(sessionObj);
     } else {
-      // console.log("no session");
       setState({ ...state, initialized: true });
     }
 

@@ -1,13 +1,17 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { usePermissionsQuery } from "framework/permissions/getAllPermissions";
+import { useUpdatePermissions, permissionsInput } from 'framework/permissions/updatePermissions';
 
 interface Props {
   isDepartmentAdmin: boolean;
+  closeModal: () => void;
+  employeeData: any;
 }
 
 interface Permission {
   id: number;
   model: string;
+  name: string;
   can_read: boolean;
   can_write: boolean;
   can_create: boolean;
@@ -18,19 +22,20 @@ interface CheckedState {
   [key: string]: { [key: string]: boolean };
 }
 
-const PermissionsTable: React.FC<Props> = ({ isDepartmentAdmin }): JSX.Element => {
+const PermissionsTable: React.FC<Props> = ({ isDepartmentAdmin, closeModal, employeeData }): JSX.Element => {
   const { data, error, isLoading } = usePermissionsQuery({});
   const [checkedState, setCheckedState] = useState<CheckedState>({});
-  const permissions: Permission[] = useMemo(() => data?.permissions?.data?.results || [], [data]);
+  const [addedPermissions, setAddedPermissions] = useState<number[]>([]);
+  const [removedPermissions, setRemovedPermissions] = useState<number[]>([]);
+  const { mutateAsync: createMutation } = useUpdatePermissions();
 
+  const permissions: Permission[] = useMemo(() => data?.permissions?.data?.results || [], [data]);
   useEffect(() => {
     const initialCheckedState: CheckedState = {};
-    console.log('from child', isDepartmentAdmin)
     permissions.forEach((permission: Permission) => {
       if (!initialCheckedState[permission.model]) {
         initialCheckedState[permission.model] = {};
       }
-
       initialCheckedState[permission.model] = {
         ...initialCheckedState[permission.model],
         can_read: false,
@@ -43,15 +48,80 @@ const PermissionsTable: React.FC<Props> = ({ isDepartmentAdmin }): JSX.Element =
     setCheckedState(initialCheckedState);
   }, [permissions, isDepartmentAdmin]);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <></>;
-
   const permissionTypes = [
     { name: "Can Read", key: "can_read" },
-    { name: "Can Write", key: "can_write" },
+    { name: "Can Update", key: "can_write" },
     { name: "Can Create", key: "can_create" },
     { name: "Can Delete", key: "can_delete" },
   ];
+
+  useEffect(() => {
+    if (employeeData?.id === undefined) return;
+    handlePermissions(employeeData?.id)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[employeeData])
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <></>;
+  const handlePermissions = async (id: string | number) => {
+    const Data = {
+      user: Number(id),
+      add: addedPermissions,
+      remove: removedPermissions,
+    }
+    try {
+      let createInput = permissionsInput(Data);
+      await createMutation(createInput);
+      closeModal()
+    } catch (err) {
+      alert(err);
+    }
+  }
+
+  const compareKeysToPermissions = (key: string, permission: Permission): string => {
+    if (key === "can_read") {
+      return `Can view ${permission.model}`;
+    } else if (key === "can_write") {
+      return `Can change ${permission.model}`;
+    } else if (key === "can_create") {
+      return `Can add ${permission.model}`;
+    } else if (key === "can_delete") {
+      return `Can delete ${permission.model}`;
+    }
+    return '';
+  };
+
+  const handleCheck = (element: string, key: string, value: boolean): void => {
+    console.log(element, key, value)
+
+    let checkedArray: number[] = [];
+    let uncheckedArray: number[] = [];
+
+    // get all permissions for the element
+    const selectedPermission = permissions.find((permission: Permission) => permission.model === element);
+    if (!selectedPermission) return;
+    const permissionKey: string = compareKeysToPermissions(key, selectedPermission);
+    
+    // filter based on key and permissionKey
+    const selectedPermissionId = permissions.find((permission: Permission) => permission.model === element && permission.name === permissionKey)?.id;
+    if (!selectedPermissionId) return;
+    
+    if (value) {
+      // add to checkedArray
+      checkedArray.push(selectedPermissionId);
+      // remove from uncheckedArray
+      uncheckedArray = uncheckedArray.filter((permissionId: number) => permissionId !== selectedPermissionId);
+      // setState for addedPermissions
+      setAddedPermissions(checkedArray)
+    } else {
+      // add to uncheckedArray
+      uncheckedArray.push(selectedPermissionId);
+      // remove from checkedArray
+      checkedArray = checkedArray.filter((permissionId: number) => permissionId !== selectedPermissionId);
+      // setState for removedPermissions
+      setRemovedPermissions(uncheckedArray)
+    }
+  };
 
   const handleTableHeader = (): JSX.Element => {
     return (
@@ -88,6 +158,8 @@ const PermissionsTable: React.FC<Props> = ({ isDepartmentAdmin }): JSX.Element =
                 },
               };
               setCheckedState(newCheckedState);
+              handleCheck(element, permissionType.key, !checkedState[element]?.[permissionType.key]);
+
             }}
           />
         </td>

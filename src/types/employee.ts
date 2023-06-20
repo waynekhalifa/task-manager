@@ -5,13 +5,13 @@ export interface EmployeeCreateInput {
   email: string;
   password1: string;
   password2: string;
-  employee: {
-    onboard_at: string;
-    employee_id: string | Blob;
-    phone: string;
-    department: any;
-    files?: any;
-  };
+  onboard_at: string;
+  employee_id: string | Blob;
+  phone: string;
+  department: any;
+  files?: any;
+  description: string;
+
 }
 
 export interface EmployeeUpdateInput {
