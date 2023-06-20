@@ -126,7 +126,7 @@ const AddNewAttachmentModal: React.FC<Props> = ({ onClose, show, project, modalH
           [ModelKeys.IS_SUBMITTING]: false,
         },
       }));
-      onClose();
+      onClose(true);
     } catch (err) {
       alert(err);
       setState((prevState) => ({
@@ -151,12 +151,15 @@ const AddNewAttachmentModal: React.FC<Props> = ({ onClose, show, project, modalH
         <button type="button" className="btn btn-secondary" onClick={onClose}>
           Cancel
         </button>
-        <button type="button" className="btn btn-primary" disabled={modelData.files.length === 0}
+        {modelData.files.length === 0 && <button type="button" className="btn btn-primary" onClick={onClose}>
+          Save
+        </button>}
+        {modelData.files.length > 0 && <button type="button" className="btn btn-primary"
           onClick={handleSave}
         >
           Upload
           {modelData.isSubmitting && <Spinner animation="border" size="sm" style={{ marginLeft: 5 }} />}
-        </button>
+        </button>}
       </Modal.Footer>
     </Modal>
   );

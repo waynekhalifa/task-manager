@@ -14,6 +14,7 @@ import { useProjectsQuery } from "framework/project/getAllProjects";
 import { SelectedTask } from "types/task";
 import TaskModal from "components/common/TaskModal";
 import { SelectedProject } from "types/project";
+import { taskInput, useCreateTask } from "framework/task/create-task";
 
 
 
@@ -47,9 +48,10 @@ const INITIAlIZE_DATA: State = {
 const Tasks: React.FC = () => {
   const [state, setState] = useState<State>(INITIAlIZE_DATA);
   const { modelData, isAddModal, isEditModal, isDeleteModal, isAddUserModal, isAddAttachmentModal, isViewDescriptionModal, isAddCommentModal, modalHeader } = state;
+  const { mutateAsync: createTaskMutation } = useCreateTask();
 
   let { data: projectData, error: errorProjects, isLoading: loadingProjects } = useProjectsQuery({});
-
+  let tasks: SelectedTask[] = [] as SelectedTask[];
   if (loadingProjects) return <div>Loading...</div>;
   if (errorProjects) return null;
   let projects: SelectedProject[] = projectData?.projects.data.results || [];
@@ -74,13 +76,23 @@ const Tasks: React.FC = () => {
   ];
 
   const handleModelData = (key: string, value: any) => {
-    setState({
-      ...state,
+    if (isEditModal) {
+      setState({
+        ...state,
+        modelData: {
+          ...modelData,
+          [key]: value,
+        },
+      });
+      return;
+    }
+    setState((prevState) => ({
+      ...prevState,
       modelData: {
-        ...state.modelData,
+        ...prevState.modelData,
         [key]: value,
       },
-    });
+    }));
   };
 
   const handleAddModal = () => {
@@ -163,6 +175,11 @@ const Tasks: React.FC = () => {
 
   const createTask = async () => {
     try {
+      let createInput = taskInput(modelData);
+      let res = await createTaskMutation(createInput);
+      let task = res.session.data;
+      tasks.push(task);
+      handleModalClose();
     } catch (error) {
       alert(error);
     }
@@ -197,7 +214,7 @@ const Tasks: React.FC = () => {
         <div className="col-lg-12 col-md-12 flex-column">
           <div className="row g-3 row-deck">
             <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6">
-              <TaskProgress />
+              <TaskProgress tasks={tasks} />
             </div>
             <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6">
               <RecentActivity />
@@ -206,15 +223,11 @@ const Tasks: React.FC = () => {
               <AllocatedTask />
             </div>
           </div>
-          {/* <TaskNestable
-                        InProgressTaskData={InProgressTaskData}
-                        needReviewData={needReviewData}
-                        CompletedData={CompletedData}
-                         /> */}
           <TaskNestable1
             InProgressTaskData={InProgressTaskData}
             needReviewData={needReviewData}
             CompletedData={CompletedData}
+            tasks={tasks}
           />
         </div>
       </div>

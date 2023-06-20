@@ -9,5 +9,5 @@ export enum Pages {
   CHAT = "chat",
   ATTENDANCE = "attendance",
   CALENDAR = "calendar",
-  CATEGORIES = "categories",
+  CATEGORIES = "departments",
 }

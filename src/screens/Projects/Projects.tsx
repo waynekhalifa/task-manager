@@ -20,7 +20,10 @@ import ViewTasksModal from "components/common/ViewTasksModal";
 import ProjectModal from "components/common/ProjectModal";
 import TaskModal from "components/common/TaskModal";
 import DeleteModal from "components/common/DeleteModal";
-import { Task } from "types/task";
+import { SelectedTask, Task } from "types/task";
+import { taskInput, useCreateTask } from "framework/task/create-task";
+import { useUploadTaskAttachment } from "framework/task/uploadTaskAttachment";
+import { useDeleteTaskAttachment } from "framework/task/deleteTaskAttachment";
 
 interface Props { }
 
@@ -75,12 +78,16 @@ const Projects: React.FC<Props> = () => {
   const [state, setState] = React.useState<State>(INITIAlIZE_DATA);
   const { isAddModal, isEditModal, isDeleteModal, modalHeader, modelProjectData, modelTaskData, selectedProject, isAddUserModal, isAddAttachmentModal, isViewDescriptionModal, isAddCommentModal, isAddTaskModal, isEditTaskModal, isViewTaskModal } =
     state;
-  const { mutateAsync: createMutation } = useCreateProject();
-  const { mutateAsync: updateMutation } = useUpdateProject();
-  const { mutateAsync: deleteMutation } = useDeleteProject();
-
+  const { mutateAsync: createProjectMutation } = useCreateProject();
+  const { mutateAsync: updateProjectMutation } = useUpdateProject();
+  const { mutateAsync: deleteProjectMutation } = useDeleteProject();
+  const { mutateAsync: createTaskMutation } = useCreateTask();
+  const { mutateAsync: updateTaskMutation } = useUpdateProject();
+  const { mutateAsync: deleteTaskMutation } = useDeleteProject();
+  const { mutateAsync: uploadTaskAttachmentMutation } = useUploadTaskAttachment();
+ 
   let { data: projectData, error: errorProjects, isLoading: loadingProjects } = useProjectsQuery({});
-
+  let tasks: SelectedTask[] = [] as SelectedTask[];
 
   let {
     data: categoriesData,
@@ -131,7 +138,9 @@ const Projects: React.FC<Props> = () => {
     },
   ];
 
-  const handleModalClose = () => {
+
+  const handleModalClose = (reload: boolean = false) => {
+    if (reload === true) window.location.reload();
     setState({
       ...state,
       isAddModal: false,
@@ -269,13 +278,13 @@ const Projects: React.FC<Props> = () => {
       });
       return;
     }
-    setState({
-      ...state,
+    setState((prevState) => ({
+      ...prevState,
       modelTaskData: {
-        ...modelTaskData,
+        ...prevState.modelTaskData,
         [key]: value,
       },
-    });
+    }));
   };
 
   const getCategory = (id: number) => {
@@ -285,7 +294,20 @@ const Projects: React.FC<Props> = () => {
 
 
   const createTask = async () => {
+    setState({
+      ...state,
+      modelTaskData: {
+        ...modelTaskData,
+        
+      },
+    });
     try {
+      Object.assign(modelTaskData, { project: selectedProject.id });
+      let createInput = taskInput(modelTaskData);
+      let res = await createTaskMutation(createInput);
+      let task = res.session.data;
+      tasks.push(task);
+      handleModalClose(true);
     } catch (error) {
       alert(error);
     }
@@ -304,7 +326,7 @@ const Projects: React.FC<Props> = () => {
     Object.assign(modelProjectData, { admin: 1 });
     try {
       let createInput = projectInput(modelProjectData);
-      let res = await createMutation(createInput);
+      let res = await createProjectMutation(createInput);
       projects.push(res.session.data);
       handleModalClose();
     } catch (err) {
@@ -316,7 +338,7 @@ const Projects: React.FC<Props> = () => {
     // Object.assign(selectedProject, { admin: 1 });
     try {
       let createInput = projectUpdateInput(selectedProject);
-      let res = await updateMutation(createInput);
+      let res = await updateProjectMutation(createInput);
       let updatedProject = res.session.data;
       projects.map((project) => {
         if (project.id === updatedProject.id) {
@@ -332,7 +354,7 @@ const Projects: React.FC<Props> = () => {
         }
         else return project;
       });
-      handleModalClose();
+      handleModalClose(true);
     } catch (err) {
       alert(err);
     }
@@ -340,7 +362,7 @@ const Projects: React.FC<Props> = () => {
 
   const deleteProject = async () => {
     try {
-      await deleteMutation(selectedProject);
+      await deleteProjectMutation(selectedProject);
       let currenProject = projects.find(project => project.id === selectedProject.id);
       currenProject && projects.splice(projects.indexOf(currenProject), 1);
       handleModalClose();
@@ -353,8 +375,8 @@ const Projects: React.FC<Props> = () => {
     Object.assign(modelProjectData, { admin: 1 });
     try {
       let createInput = projectInput(modelProjectData);
-      await createMutation(createInput);
-      handleModalClose();
+      await createProjectMutation(createInput);
+      handleModalClose(true);
     } catch (err) {
       alert(err);
     }

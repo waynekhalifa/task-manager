@@ -15,6 +15,8 @@ export enum Endpoints {
   EMPLOYEE = "management/employee/", // GET - POST - PUT - PATCH - DELETE
   /** Task Endpoints */
   TASK = "management/task/", // GET - POST - PUT - PATCH - DELETE
+  TASK_ATTACHMENT = '/management/files/task/', // POST 
+  TASK_ATTACHMENT_DELETE = '/management/files/task/', // /{id} DELETE
   /** Project Endpoints */
   PROJECT = "management/project/", // /{id} GET - POST - PUT - PATCH - DELETE
   PROJECT_ATTACHMENT = '/management/files/project/', // POST 

@@ -11,5 +11,14 @@ export const useCreateTask = () => {
 };
 
 export const taskInput = (data: Task): Task => {
-  return {} as Task;
+
+  return {
+    name: data.name,
+    description: data.description,
+    task_priority: data.task_priority,
+    user: data.user,
+    project: data.project,
+    start_at: data.start_at,
+    end_at: data.end_at,
+  } as Task;
 };

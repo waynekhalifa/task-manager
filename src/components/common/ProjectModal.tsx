@@ -7,7 +7,7 @@ import { SelectedProject } from 'types/project';
 
 interface Props {
   onClose: any;
-   modalHeader: string;
+  modalHeader: string;
   isAddModal?: boolean;
   isEditModal?: boolean;
   handleModelData: (key: string, value: any) => void;
@@ -33,7 +33,7 @@ enum ModelKeys {
 
 
 const ProjectModal: React.FC<Props> = ({
-  onClose,  modalHeader, isAddModal,
+  onClose, modalHeader, isAddModal,
   isEditModal,
   handleModelData, selectedProject,
   modelData,
@@ -54,7 +54,7 @@ const ProjectModal: React.FC<Props> = ({
 
     },
     {
-      label: "Department",
+      label: "Stages",
       type: "select",
       key: ModelKeys.CATEGORY,
       value: isEditModal ? selectedProject.category : modelData?.category,

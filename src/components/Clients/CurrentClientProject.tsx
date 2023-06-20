@@ -1,3 +1,4 @@
+import { ProgressBar } from "react-bootstrap";
 
 interface Props {
   teamImage: any;
@@ -180,7 +181,7 @@ const CurrentClientProject: React.FC<Props> = ({
               <i className="icofont-tasks"></i>
               <span className="ms-2" style={{ cursor: 'pointer' }}
                 onClick={onClickViewTasks}
-              >Task</span>
+              >Tasks</span>
               <span className="badge bg-secondary ms-2">{tasks_count}</span>
               <span
                 className="avatar rounded-circle text-center pointer sm"
@@ -199,19 +200,10 @@ const CurrentClientProject: React.FC<Props> = ({
             <i className="icofont-ui-clock"></i> {sumDaysLeftFromToDay()} Days Left
           </span>
         </div>
-        {/* <ProgressBar style={{ height: "8px" }}>
+        <ProgressBar style={{ height: "8px" }}>
           <ProgressBar variant="secondary" now={15} style={{ width: "25%" }} />
-          <ProgressBar
-            variant="secondary"
-            now={30}
-            style={{ width: "25%", marginLeft: 10 }}
-          />
-          <ProgressBar
-            variant="secondary"
-            now={10}
-            style={{ width: "25%", marginLeft: 10 }}
-          />
-        </ProgressBar> */}
+        </ProgressBar>
+        25% Complete
       </div>
     </div >
   );

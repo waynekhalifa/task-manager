@@ -1,16 +1,19 @@
 import Nestable from "react-nestable";
 import NestableCard from "./NestableCard";
+import { SelectedTask } from "types/task";
 
 interface Props {
   InProgressTaskData: any;
   needReviewData: any;
   CompletedData: any;
+  tasks: SelectedTask[];
 }
 
 const TaskNestable: React.FC<Props> = ({
   InProgressTaskData,
   needReviewData,
   CompletedData,
+  tasks,
 }) => {
   return (
     <div className="row taskboard g-3 py-xxl-4">

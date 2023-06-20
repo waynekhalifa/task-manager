@@ -1,10 +1,12 @@
 export interface Task {
-  files: any[];
+  files: File[];
   name: string;
   description: string;
   task_priority: string;
   user: number;
   project: number;
+  start_at?: string;
+  end_at?: string;
 }
 export interface SelectedTask {
   id: number;
@@ -16,4 +18,6 @@ export interface SelectedTask {
   created_at?: string;
   user?: number;
   project?: number;
+  start_at?: string;
+  end_at?: string;
 }

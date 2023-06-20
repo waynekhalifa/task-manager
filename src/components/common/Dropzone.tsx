@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 interface Props {
   onDrop: (acceptedFiles: any) => void;
   files: any[];
-  cloudFiles: any[];
+  cloudFiles?: any[];
   onDelete: (index: number) => void;
   onDeleteCloud: (index: number) => void;
 }

@@ -1,10 +1,11 @@
 import FormInputs from 'components/FormInputs';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Modal } from 'react-bootstrap';
 import { IField } from 'types/formFields';
 import { IOption } from 'types/option';
 import { SelectedProject } from 'types/project';
 import { SelectedTask } from 'types/task';
+import Dropzone from './Dropzone';
 
 interface Props {
   onClose: any;
@@ -24,21 +25,25 @@ interface Props {
 enum ModelKeys {
   NAME = 'name',
   DESCRIPTION = 'description',
-  FILES = 'files',
   IS_SUBMITTING = 'isSubmitting',
   USER = 'user',
   PROJECT = 'project',
   TASK_PEIORITY = 'task_priority',
+  FILES = "files",
+  START_DATE = "start_at",
+  END_DATE = "end_at",
 }
 
 
 
 const TaskModal: React.FC<Props> = ({ onClose, modalHeader, isAddModal,
   isEditModal,
-  handleModelData, selectedProject, SelectedTask, projects,members,
+  handleModelData, selectedProject, SelectedTask, projects, members,
   modelData,
   onCreate,
   onUpdate }) => {
+
+
 
   let projectOptions: IOption[] = (projects && projects.length > 0) ? projects?.map((project: SelectedProject) => {
     return {
@@ -51,6 +56,7 @@ const TaskModal: React.FC<Props> = ({ onClose, modalHeader, isAddModal,
       value: selectedProject?.id || 0,
     }
   ]
+
 
 
   const formFields: IField[] = [
@@ -82,23 +88,6 @@ const TaskModal: React.FC<Props> = ({ onClose, modalHeader, isAddModal,
         handleModelData(ModelKeys.DESCRIPTION, e.target.value),
       placeholder: "Enter Description",
     },
-
-    {
-      label: "Task thumbnail",
-      type: "file",
-      key: ModelKeys.FILES,
-      value: isEditModal ? SelectedTask?.files : modelData?.file,
-      onChange: (e: any) => {
-        let file: File = e.target.files[0];
-        let reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = (url) => {
-          handleModelData(ModelKeys.FILES, file)
-        };
-      },
-      placeholder: "Enter Thumbnail",
-      hide: isEditModal
-    },
     {
       label: "Task Priority",
       type: "select",
@@ -106,20 +95,42 @@ const TaskModal: React.FC<Props> = ({ onClose, modalHeader, isAddModal,
       value: isEditModal ? SelectedTask?.task_priority : modelData?.task_priority,
       options: [
         {
-          label: "Low",
-          value: "low",
+          label: "High",
+          value: "HIGH",
         },
         {
           label: "Medium",
-          value: "medium",
+          value: 'MEDIUM',
         },
         {
-          label: "High",
-          value: "high",
+          label: "Low",
+          value: "LOW",
         },
+        {
+          label: "Critical",
+          value: "CRITICAL",
+        }
       ],
       onChange: (e: any) => handleModelData(ModelKeys.TASK_PEIORITY, e.target.value),
       placeholder: "Select Task Priority",
+    },
+    {
+      label: "Start Date",
+      type: "date",
+      key: ModelKeys.START_DATE,
+      value: isEditModal ? SelectedTask?.start_at : modelData?.start_at,
+      onChange: (e: any) =>
+        handleModelData(ModelKeys.START_DATE, e.target.value),
+      placeholder: "Enter Start Date",
+    },
+    {
+      label: "End Date",
+      type: "date",
+      key: ModelKeys.END_DATE,
+      value: isEditModal ? SelectedTask?.end_at : modelData?.end_at,
+      onChange: (e: any) =>
+        handleModelData(ModelKeys.END_DATE, e.target.value),
+      placeholder: "Enter End Date",
     },
     {
       label: "Assign To",
@@ -134,6 +145,26 @@ const TaskModal: React.FC<Props> = ({ onClose, modalHeader, isAddModal,
 
   ]
 
+  const onDrop = useCallback((acceptedFiles: any) => {
+    let reader = new FileReader();
+    let files: File[] = modelData?.files || [] as File[];
+    reader.readAsDataURL(acceptedFiles[0]);
+    reader.onload = (url) => {
+      files?.push(acceptedFiles[0]);
+      handleModelData(ModelKeys.FILES, files);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+
+  const handleDeleteFile = async (index: number) => {
+    let files: File[] = modelData.files;
+    files.splice(index, 1);
+    handleModelData(ModelKeys.FILES, files);
+  };
+
+
   return (
     <Modal show={isAddModal || isEditModal} onHide={onClose}>
       <Modal.Header closeButton>
@@ -147,12 +178,18 @@ const TaskModal: React.FC<Props> = ({ onClose, modalHeader, isAddModal,
                 <FormInputs
                   formFields={formFields}
                 />
+                <h5 className="mt-4">Attachments</h5>
+                <Dropzone
+                  onDrop={onDrop}
+                  onDelete={handleDeleteFile}
+                  files={modelData?.files}
+                  onDeleteCloud={() => { }}
+                />
               </div>
             </div>
           </div>
+
         </div>
-
-
 
       </Modal.Body>
       <Modal.Footer>

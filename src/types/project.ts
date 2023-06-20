@@ -25,5 +25,6 @@ export interface SelectedProject {
 export interface Attachment {
   id?: number;
   files: File[];
-  project: number;
- }
+  project?: number;
+  task?: number;
+}
