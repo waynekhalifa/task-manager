@@ -98,7 +98,7 @@ const Clients: React.FC<Props> = () => {
                 avatar={data.avatar}
                 post={data.post}
                 name={data.name}
-                CompanyName={data.Companyname}
+                department={data.Companyname}
                 onClickEdit={() => {
                   setState({
                     ...state,

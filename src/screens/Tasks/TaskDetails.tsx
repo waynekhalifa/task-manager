@@ -12,9 +12,9 @@ const TaskDetails: React.FC<Props> = ({ id }) => {
   let { data, error, isLoading } = useSingleTask({ id });
   let user = {
     avatar: "https://via.placeholder.com/150",
-    post: "CEO",
+    post: "Teacher",
     name: "John Doe",
-    Companyname: "Company Name",
+    department: "Academic Department",
 
   };
   if (isLoading) return <div>Loading...</div>;
@@ -35,7 +35,7 @@ const TaskDetails: React.FC<Props> = ({ id }) => {
               avatar={user.avatar}
               post={user.post}
               name={user.name}
-              CompanyName={user.Companyname}
+              department={user.department}
               onClickEdit={() => { }}
               onClickDelete={() => { }}
               details="Vestibulum ante ipsum primis in faucibus orci luctus et ultrices.Vestibulum ante ipsum primis in faucibus orci luctus et ultrices. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices.Vestibulum ante ipsum primis in faucibus orci luctus et ultrices."

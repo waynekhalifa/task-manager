@@ -292,7 +292,7 @@ const Members: React.FC<Props> = () => {
                 avatar={data.avatar}
                 post={data.post}
                 name={data.name}
-                CompanyName={data.Companyname}
+                department={data.Companyname}
                 isMember={true}
               />
             </div>

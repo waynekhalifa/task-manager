@@ -2,7 +2,7 @@ interface Props {
   avatar: any;
   post: any;
   name: any;
-  CompanyName: any;
+  department: any;
   isMember?: any;
   onClickEdit?: any;
   onClickDelete?: any;
@@ -13,7 +13,7 @@ const OurClients: React.FC<Props> = ({
   avatar,
   post,
   name,
-  CompanyName,
+  department,
   isMember,
   onClickEdit,
   onClickDelete,
@@ -70,16 +70,16 @@ const OurClients: React.FC<Props> = ({
           </div>
         </div>
         <div className="teacher-info border-start ps-xl-4 ps-md-3 ps-sm-4 ps-4 w-100">
-          <h6 className="mb-0 mt-2  fw-bold d-block fs-6">
-            {CompanyName}
-          </h6>
-          {isMember
-            ? <span className="light-info-bg py-1 px-2 rounded-1 d-inline-block fw-bold small-11 mb-0 mt-1">
-                {name}
-              </span>
-            : <span className="py-1 fw-bold small-11 mb-0 mt-1 text-muted">
-                {name}
-              </span>}
+          <h6 className="mb-0 mt-2  fw-bold d-block fs-6">{department}</h6>
+          {isMember ? (
+            <span className="light-info-bg py-1 px-2 rounded-1 d-inline-block fw-bold small-11 mb-0 mt-1">
+              {name}
+            </span>
+          ) : (
+            <span className="py-1 fw-bold small-11 mb-0 mt-1 text-muted">
+              {name}
+            </span>
+          )}
           <div className="video-setting-icon mt-3 pt-3 border-top">
             <p>
               Vestibulum ante ipsum primis in faucibus orci luctus et
