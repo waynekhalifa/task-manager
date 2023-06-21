@@ -1,4 +1,5 @@
 import { ProgressBar } from "react-bootstrap";
+import { sumDateRange, sumDaysLeftFromToDay } from "utils/convert";
 
 interface Props {
   teamImage: any;
@@ -44,21 +45,7 @@ const CurrentClientProject: React.FC<Props> = ({
   tasks_count
 }) => {
 
-  const sumDateRange = () => {
-    let date1: any = new Date(startDate);
-    let date2: any = new Date(endDate);
-    const diffTime = Math.abs(date1 - date2);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays;
-  };
 
-  const sumDaysLeftFromToDay = () => {
-    const date1: any = new Date();
-    let date2: any = new Date(startDate);
-    const diffTime = Math.abs(date2 - date1);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays;
-  };
 
 
   return (
@@ -131,7 +118,7 @@ const CurrentClientProject: React.FC<Props> = ({
           <div className="col-6">
             <div className="d-flex align-items-center">
               <i className="icofont-sand-clock"></i>
-              <span className="badge bg-secondary ms-2">{sumDateRange()} Days</span>
+              <span className="badge bg-secondary ms-2">{sumDateRange(startDate,endDate)} Days</span>
             </div>
           </div>
           <div className="col-6">
@@ -197,7 +184,7 @@ const CurrentClientProject: React.FC<Props> = ({
         <div className="d-flex align-items-center justify-content-between mb-2">
           {/* <h4 className="small fw-bold mb-0">Progress</h4> */}
           <span className="small light-danger-bg  p-1 rounded">
-            <i className="icofont-ui-clock"></i> {sumDaysLeftFromToDay()} Days Left
+            <i className="icofont-ui-clock"></i> {sumDaysLeftFromToDay(startDate)} Days Left
           </span>
         </div>
         <ProgressBar style={{ height: "8px" }}>

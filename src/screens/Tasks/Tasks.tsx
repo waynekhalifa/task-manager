@@ -1,20 +1,21 @@
 import React, { useState } from "react";
 import PageHeader from "../../components/common/PageHeader";
-import AllocatedTask from "../../components/Projects/AllocatedTask";
-import RecentActivity from "../../components/Projects/RecentActivity";
-import TaskProgress from "../../components/Projects/TaskProgress";
+import AllocatedTask from "../../components/Tasks/AllocatedTask";
+import RecentActivity from "../../components/Tasks/RecentActivity";
+import TaskProgress from "../../components/Tasks/TaskProgress";
 import "react-nestable/dist/styles/index.css";
 import {
   CompletedData,
   InProgressTaskData,
   needReviewData,
 } from "../../components/Data/AppData";
-import TaskNestable1 from "../../components/Projects/TaskNestable";
+import TaskNestable1 from "../../components/Tasks/TaskNestable";
 import { useProjectsQuery } from "framework/project/getAllProjects";
 import { SelectedTask } from "types/task";
 import TaskModal from "components/common/TaskModal";
 import { SelectedProject } from "types/project";
 import { taskInput, useCreateTask } from "framework/task/create-task";
+import { useTaskQuery } from "framework/task/get-all-tasks";
 
 
 
@@ -51,9 +52,10 @@ const Tasks: React.FC = () => {
   const { mutateAsync: createTaskMutation } = useCreateTask();
 
   let { data: projectData, error: errorProjects, isLoading: loadingProjects } = useProjectsQuery({});
-  let tasks: SelectedTask[] = [] as SelectedTask[];
-  if (loadingProjects) return <div>Loading...</div>;
-  if (errorProjects) return null;
+  let { data: taskData, error: errorTask, isLoading: loadingTasks } = useTaskQuery({});
+  let tasks: SelectedTask[] = taskData?.tasks.data.results || [];
+  if (loadingProjects || errorTask) return <div>Loading...</div>;
+  if (errorProjects || loadingTasks) return null;
   let projects: SelectedProject[] = projectData?.projects.data.results || [];
   let members = projectData?.projects.data.results[0].members || [
     {
