@@ -18,13 +18,17 @@ export const employeeInput = (data: EmployeeCreateInput): FormData => {
   formData.append("email", data.email);
   formData.append("password1", data.password1);
   formData.append("password2", data.password1);
-  formData.append("onboard_at", data.onboard_at);
+  formData.append("onboard_at", data.onboard_at ? data.onboard_at : "");
   formData.append("employee_id", data.employee_id);
-  formData.append("phone", data.phone);
+  formData.append("phone", data.phone ? data.phone : "");
   formData.append("department", data.department);
-  formData.append("description", data.description);
-  for (let i = 0; i < data.files.length; i++) {
-    formData.append("files", data.files[i]);
+  formData.append("description", data.description ? data.description : "");
+  if (data.files && data.files.length > 0) {
+    for (let i = 0; i < data.files.length; i++) {
+      formData.append("files", data.files[i]);
+    }
+  } else {
+    formData.append("files", "");
   }
   return formData;
 };

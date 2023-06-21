@@ -49,7 +49,7 @@ const INITIAlIZE_DATA: State = {
 
 const Members: React.FC<Props> = () => {
   const [state, setState] = useState<State>(INITIAlIZE_DATA);
-  const { isModal, modelData, isDepartmentAdmin, departmentValue } = state;
+  const { isModal, modelData, isDepartmentAdmin, departmentValue, createdEmployee } = state;
   const { data: employeeData, error: employeeError, isLoading: employeeIsLoading } = useEmployeesQuery({});
   const { data: departmentData, error: departmentError, isLoading: departmentIsLoading } = useCategoriesQuery({});
   const { mutateAsync: createMutation } = useCreateEmployee();
@@ -60,8 +60,7 @@ const Members: React.FC<Props> = () => {
       let createInput = employeeInput(modelData);
       const employeeData = await createMutation(createInput);
       if (employeeData) {
-        MembersData.push(employeeData);
-        setState({ ...state, createdEmployee: employeeData });
+        setState({ ...state, createdEmployee: employeeData?.session?.data });
       }
       // closeModal();
     } catch (err) {
@@ -217,7 +216,7 @@ const Members: React.FC<Props> = () => {
   ]
 
   const closeModal = () => {
-    setState({ ...state, isModal: false });
+    setState({ ...state, isModal: false, createdEmployee: null });
   };
 
   const openModal = () => {
@@ -314,7 +313,7 @@ const Members: React.FC<Props> = () => {
         <Modal.Body>
           <div className="modal-body">
             <FormInputs formFields={formFields} formName={"employee"} />
-            <PermissionsTable isDepartmentAdmin={isDepartmentAdmin} closeModal={closeModal} employeeData={employeeData} />
+            <PermissionsTable isDepartmentAdmin={isDepartmentAdmin} closeModal={closeModal} employeeData={createdEmployee} />
           </div>
         </Modal.Body>
         <Modal.Footer>
