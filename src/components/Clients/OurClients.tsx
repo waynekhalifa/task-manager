@@ -32,41 +32,17 @@ const OurClients: React.FC<Props> = ({
             <h6 className="mb-0 fw-bold d-block fs-6 mt-2">
               {post}
             </h6>
-            {isMember
-              ? <div className="about-info d-flex align-items-center mt-3 justify-content-center">
-                  <div className="followers me-2">
-                    <i className="icofont-tasks color-careys-pink fs-4" />
-                    <span className="">04</span>
-                  </div>
-                  <div className="star me-2">
-                    <i className="icofont-star text-warning fs-4" />
-                    <span className="">4.5</span>
-                  </div>
-                  <div className="own-video">
-                    <i className="icofont-data color-light-orange fs-4" />
-                    <span className="">04</span>
-                  </div>
-                </div>
-              : <div
-                  className="btn-group mt-2"
-                  role="group"
-                  aria-label="Basic outlined example"
-                >
-                  <button
-                    type="button"
-                    className="btn btn-outline-secondary"
-                    onClick={onClickEdit}
-                  >
-                    <i className="icofont-edit text-success" />
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-outline-secondary"
-                    onClick={onClickDelete}
-                  >
-                    <i className="icofont-ui-delete text-danger" />
-                  </button>
-                </div>}
+            <div className="d-flex flex-wrap align-items-center justify-content-center mt-3">
+              <button
+                type="button"
+                className="btn btn-outline-secondary"
+                onClick={onClickEdit}
+              >
+                <i className="icofont-edit me-2 fs-6" />
+                Assign Another
+              </button>
+
+            </div>
           </div>
         </div>
         <div className="teacher-info border-start ps-xl-4 ps-md-3 ps-sm-4 ps-4 w-100">
@@ -89,21 +65,18 @@ const OurClients: React.FC<Props> = ({
           </div>
           {isMember
             ? <div className="d-flex flex-wrap align-items-center ct-btn-set">
-                <a href="tasks" className="btn btn-dark btn-sm mt-1 me-2">
-                  <i className="icofont-plus-circle me-2 fs-6  " />Add Task
-                </a>
-                <a href="members-profile" className="btn btn-dark btn-sm mt-1">
-                  <i className="icofont-invisible me-2 fs-6" />Profile
-                </a>
-              </div>
+              <a href="tasks" className="btn btn-dark btn-sm mt-1 me-2">
+                <i className="icofont-plus-circle me-2 fs-6  " />Add Task
+              </a>
+              <a href="members-profile" className="btn btn-dark btn-sm mt-1">
+                <i className="icofont-invisible me-2 fs-6" />Profile
+              </a>
+            </div>
             : <div className="d-flex flex-wrap align-items-center ct-btn-set">
-                <a href="chat-app" className="btn btn-dark btn-sm mt-1 me-1">
-                  <i className="icofont-ui-text-chat me-2 fs-6" />Chat
-                </a>
-                <a href="client-profile" className="btn btn-dark btn-sm mt-1">
-                  <i className="icofont-invisible me-2 fs-6" />Profile
-                </a>
-              </div>}
+              <a href="chat-app" className="btn btn-dark btn-sm mt-1 me-1">
+                <i className="icofont-ui-text-chat me-2 fs-6" />Chat
+              </a>
+            </div>}
         </div>
       </div>
     </div>

@@ -23,14 +23,19 @@ const TaskDetails: React.FC<Props> = ({ id }) => {
   let task: any = data || {} as SelectedTask;
 
   return (
-    <div>
+    <div style={{
+      backgroundColor: "#F5F6FA",
+      minHeight: "100vh",
+      padding: 20,
+
+    }}>
       <h2>Task Details</h2>
       <div className="container-xxl">
         <div className="row g-3 mb-3 mt-3">
-          <div className="col-4">
+          <div className="col-lg-4 col-md-12">
             <NestableCard data={data} />
           </div>
-          <div className="col-8">
+          <div className="col-lg-8 col-md-12">
             <OurClients
               avatar={user.avatar}
               post={user.post}
@@ -38,7 +43,9 @@ const TaskDetails: React.FC<Props> = ({ id }) => {
               department={user.department}
               onClickEdit={() => { }}
               onClickDelete={() => { }}
-              details="Vestibulum ante ipsum primis in faucibus orci luctus et ultrices.Vestibulum ante ipsum primis in faucibus orci luctus et ultrices. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices.Vestibulum ante ipsum primis in faucibus orci luctus et ultrices."
+              details="lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.              
+              "
             />
           </div>
           <div className="col-12">
@@ -46,6 +53,17 @@ const TaskDetails: React.FC<Props> = ({ id }) => {
               <div className="card-body">
                 <h5 className="card-title">Description</h5>
                 <p className="card-text">{task.description}</p>
+              </div>
+            </div>
+          </div>
+          <div className="col-12">
+            <div className="card">
+              <div className="card-body">
+                <div>
+                  <h5 className="card-title">Task Status</h5>
+                  <span className="badge bg-success">{task.task_progress}</span>
+                </div>
+
               </div>
             </div>
           </div>
@@ -85,10 +103,11 @@ const TaskDetails: React.FC<Props> = ({ id }) => {
                       </div>
                     </div>
                   </div>
+
                 </div>
               </div>
             </div>
-          </div>
+            d</div>
         </div>
       </div>
     </div>
