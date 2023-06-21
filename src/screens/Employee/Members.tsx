@@ -60,7 +60,7 @@ const Members: React.FC<Props> = () => {
       let createInput = employeeInput(modelData);
       const employeeData = await createMutation(createInput);
       if (employeeData) {
-        MembersData.push(employeeData);
+        // MembersData.push(employeeData);
         setState({ ...state, createdEmployee: employeeData });
       }
       // closeModal();
