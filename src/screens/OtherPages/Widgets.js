@@ -27,7 +27,7 @@ class Widgets extends React.Component {
             if (i === 0) {
               return (
                 <div
-                  key={"ljsdhl" + i}
+                  key={"key" + i}
                   className="col-xxl-4 col-xl-4 col-lg-4 col-md-12 col-sm-12"
                 >
                   <CurrentClientProject

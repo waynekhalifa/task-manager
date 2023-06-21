@@ -3,7 +3,7 @@ import { Nav, Tab } from "react-bootstrap";
 import CurrentClientProject from "../../components/Clients/CurrentClientProject";
 import AddNewUserModal from "../../components/common/AddNewUserModal";
 import PageHeader from "../../components/common/PageHeader";
-import { useCategoryQuery } from "framework/category/getAllCategory";
+import { useCategoriesQuery } from "framework/category/getAllCategories";
 import { CategoryUpdateInput } from "types/category";
 import {
   projectInput,
@@ -93,7 +93,7 @@ const Projects: React.FC<Props> = () => {
     data: categoriesData,
     error: errorCategories,
     isLoading: isLoadingCategories,
-  } = useCategoryQuery({});
+  } = useCategoriesQuery({});
   if (isLoadingCategories || loadingProjects) return <div>Loading...</div>;
   if (errorCategories || errorProjects) return null;
 
@@ -427,27 +427,30 @@ const Projects: React.FC<Props> = () => {
               <Tab.Pane eventKey="All">
                 <div className="row g-3 gy-5 py-3 row-deck">
                   {projects && projects.length > 0 && projects.map((d: any, i: number) => {
+                    
                     return (
                       <div
-                        key={"ljsdhl" + i}
+                        key={"key" + i}
                         className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6"
                       >
                         <CurrentClientProject
                           teamImage={d.file}
+                          // project{project}
+                          // const {}  = project
                           logo={d.file}
                           logoBg={d.file}
                           title={d.name}
                           category={getCategory(d.category)}
                           startDate={d.start_at}
                           endDate={d.end_at}
-                          onClickEdit={() => handleOpenEditModal(d)}
-                          onClickDelete={() => handleOpenDeleteModal(d)}
-                          onClickAddMember={handleOpenAddUserModal}
-                          onClickAddAttachment={() => handleOpenAddAttachmentModal(d)}
-                          onClickViewDescription={() => handleOpenViewDescriptionModal(d)}
-                          onClickAddComment={() => handleOpenAddCommentModal(d)}
-                          onClickAddTask={() => handleOpenAddTaskModal(d)}
-                          onClickViewTasks={() => handleOpenViewTaskModal(d)}
+                              onClickEdit={() => handleOpenEditModal(d)}
+                              onClickDelete={() => handleOpenDeleteModal(d)}
+                              onClickAddMember={handleOpenAddUserModal}
+                              onClickAddAttachment={() => handleOpenAddAttachmentModal(d)}
+                              onClickViewDescription={() => handleOpenViewDescriptionModal(d)}
+                              onClickAddComment={() => handleOpenAddCommentModal(d)}
+                              onClickAddTask={() => handleOpenAddTaskModal(d)}
+                              onClickViewTasks={() => handleOpenViewTaskModal(d)}
                           comments_count={d.comments_count}
                           members_count={d.members_count}
                           attachment_count={d.projectfile_set.length}

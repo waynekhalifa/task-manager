@@ -21,7 +21,7 @@ const ClientProfile: React.FC<Props> = () => {
               {clentProfileData.map((d: any, i: number) => {
                 return (
                   <div
-                    key={"ljsdhl" + i}
+                    key={"key" + i}
                     className="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12"
                   >
                     {/* <CurrentClientProject

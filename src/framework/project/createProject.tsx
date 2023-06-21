@@ -16,7 +16,6 @@ export const useCreateProject = () => {
 
 export const projectInput = (data: Project): FormData => {
   const formData = new FormData();
-
   formData.append("admin", `${data.admin}`);
   formData.append("name", data.name);
   formData.append("description", data?.description!);

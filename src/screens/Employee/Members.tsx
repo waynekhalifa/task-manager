@@ -1,94 +1,227 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Dropdown, Modal } from "react-bootstrap";
 import OurClients from "components/Clients/OurClients";
 import PageHeader from "components/common/PageHeader";
 import { MembersData } from "components/Data/AppData";
-import { useRegister } from "framework/auth/register";
-import { Employee } from "types/employee";
-import { AuthRegisterInput } from "types/register";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useEmployeesQuery } from "framework/employee/getAllEmployees";
+import { useCreateEmployee, employeeInput } from "framework/employee/createEmployee";
+import FormInputs from "components/FormInputs/FormInputs";
+import { IField } from "types/formFields";
+import { EmployeeCreateInput } from "types/employee";
+import { useCategoriesQuery } from "framework/category/getAllCategories";
+import { Category } from "types/category";
+import PermissionsTable from "./PermissionsTable";
+
+interface Props { }
+
+enum ModelKeys {
+  FIRST_NAME = "first_name",
+  LAST_NAME = "last_name",
+  USERNAME = "username",
+  EMAIL = "email",
+  PASSWORD1 = "password1",
+  ONBOARD_AT = "onboard_at",
+  EMPLOYEE_ID = "employee_id",
+  PHONE = "phone",
+  DEPARTMENT = "department",
+  FILES = "files",
+  DESCRIPTION = "description",
+}
 
 interface State {
   isModal: boolean;
   show: boolean;
+  modelData: EmployeeCreateInput;
+  departmentValue: string;
+  isDepartmentAdmin: boolean;
+  createdEmployee: any;
+
 }
 
 const INITIAlIZE_DATA: State = {
   isModal: false,
   show: false,
+  modelData: {} as EmployeeCreateInput,
+  departmentValue: "",
+  isDepartmentAdmin: false,
+  createdEmployee: null,
 };
 
-const Members: React.FC = () => {
-  const [state, setState] = React.useState(INITIAlIZE_DATA);
-  const { isModal } = state;
-  const {
-    handleSubmit,
-    register,
-    formState: { isSubmitting },
-  } = useForm<any>({
-    // resolver: yupResolver(loginValidation),
-    mode: "onChange",
-    defaultValues: {},
-  });
-  const { mutateAsync: createUser } = useRegister();
+const Members: React.FC<Props> = () => {
+  const [state, setState] = useState<State>(INITIAlIZE_DATA);
+  const { isModal, modelData, isDepartmentAdmin, departmentValue, createdEmployee } = state;
+  const { data: employeeData, error: employeeError, isLoading: employeeIsLoading } = useEmployeesQuery({});
+  const { data: departmentData, error: departmentError, isLoading: departmentIsLoading } = useCategoriesQuery({});
+  const { mutateAsync: createMutation } = useCreateEmployee();
 
-  const onSubmit: SubmitHandler<any> = async (data: any) => {
+  const handleCreateEmployee = async () => {
+    Object.assign(modelData, { admin: 1 });
     try {
-      const employee: Employee = {
-        onboard_at: data.joining_date,
-        employee_id: parseInt(data.employee_id),
-        phone: data.phone,
-        department: parseInt(data.department),
-      };
-
-      const createInput: AuthRegisterInput = {
-        first_name: data.employee_name.split(" ")[0],
-        last_name: data.employee_name.split(" ")[1]
-          ? data.employee_name.split(" ")[1]
-          : data.employee_name.split(" ")[0],
-        username: data.user_name,
-        email: data.email,
-        password1: data.password,
-        password2: data.password,
-        employee,
-      };
-
-      await createUser(createInput);
-
-      setState((prevState) => ({ ...prevState, isModal: false }));
-    } catch (err: Error | any) {
-      //  @TODO should handle error
-
-      console.log(err);
+      let createInput = employeeInput(modelData);
+      const employeeData = await createMutation(createInput);
+      if (employeeData) {
+        setState({ ...state, createdEmployee: employeeData?.session?.data });
+      }
+      // closeModal();
+    } catch (err) {
+      alert(err);
     }
+  }
+  
+  const departments = useMemo(() => departmentData?.categories?.data?.results || [], [departmentData]);
+
+  const handleModelData = (key: string, value: any) => {
+    if (key === ModelKeys.DEPARTMENT) {
+      const stringValue = departments.find((department: any) => String(department.id) === value)?.name;
+      setState({ ...state, departmentValue: stringValue });
+    }
+
+    setState({
+      ...state,
+      modelData: {
+        ...modelData,
+        [key]: value,
+      },
+    });
+  };
+  
+  useEffect(() => {
+    if (departmentValue === 'Accounter') { 
+        setState({ ...state, isDepartmentAdmin: true });
+      }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [departmentValue]);
+  
+  if (employeeIsLoading || departmentIsLoading) return <div>Loading...</div>;
+  if (employeeError || departmentError) return null;
+  
+  const formFields: IField[] = [
+    {
+      label: "First Name",
+      type: "text",
+      width: "col-md-6",
+      key: ModelKeys.FIRST_NAME,
+      value: modelData?.first_name,
+      onChange: (e: any) => handleModelData(ModelKeys.FIRST_NAME, e.target.value),
+      placeholder: "Enter First Name",
+    },
+    {
+      label: "Last Name",
+      type: "text",
+      width: "col-md-6",
+      key: ModelKeys.FIRST_NAME,
+      value: modelData?.last_name,
+      onChange: (e: any) => handleModelData(ModelKeys.LAST_NAME, e.target.value),
+      placeholder: "Enter Last Name",
+    },
+    {
+      label: "Employee Profile Image",
+      type: "file",
+      width: "col-md-12",
+      key: ModelKeys.FILES,
+      value: modelData?.files,
+      onChange: (e: any) => {
+        let files: File[] = [];
+        for (let i = 0; i < e.target.files.length; i++) {
+          let file: File = e.target.files[i];
+          let reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = (url) => {
+            files.push(file);
+          };
+        }
+
+        handleModelData(ModelKeys.FILES, files)
+      },
+      placeholder: "Enter Files",
+    },
+    {
+      label: "Employee ID",
+      type: "text",
+      width: "col-md-6",
+      key: ModelKeys.EMPLOYEE_ID,
+      value: modelData?.employee_id,
+      onChange: (e: any) => handleModelData(ModelKeys.EMPLOYEE_ID, e.target.value),
+      placeholder: "ID or User Name",
+    },
+    {
+      label: "Joining Date",
+      type: "date",
+      width: "col-md-6",
+      key: ModelKeys.ONBOARD_AT,
+      value: modelData?.onboard_at,
+      onChange: (e: any) =>
+        handleModelData(ModelKeys.ONBOARD_AT, e.target.value),
+      placeholder: "Enter Start Date",
+    },
+    {
+      label: "Employee User Name",
+      type: "text",
+      width: "col-md-6",
+      key: ModelKeys.USERNAME,
+      value: modelData?.username,
+      onChange: (e: any) => handleModelData(ModelKeys.USERNAME, e.target.value),
+      placeholder: "User Name",
+    },
+    {
+      label: "Password",
+      type: "password",
+      width: "col-md-6",
+      key: ModelKeys.PASSWORD1,
+      value: modelData?.password1,
+      onChange: (e: any) => handleModelData(ModelKeys.PASSWORD1, e.target.value),
+      placeholder: "Password",
+    },
+    {
+      label: "Email",
+      type: "text",
+      width: "col-md-6",
+      key: ModelKeys.EMAIL,
+      value: modelData?.email,
+      onChange: (e: any) => handleModelData(ModelKeys.EMAIL, e.target.value),
+      placeholder: "Email",
+    },
+    {
+      label: "Phone Number",
+      type: "text",
+      width: "col-md-6",
+      key: ModelKeys.PHONE,
+      value: modelData?.phone,
+      onChange: (e: any) => handleModelData(ModelKeys.PHONE, e.target.value),
+      placeholder: "Phone Number",
+    },
+    {
+      label: "Department",
+      type: "select",
+      width: "col-md-12",
+      key: ModelKeys.DEPARTMENT,
+      value: modelData?.department?.name,
+      onChange: (e: any) => handleModelData(ModelKeys.DEPARTMENT, e.target.value),
+      options: departments.map((department: Category) => ({
+        label: department.name,
+        value: department.id,
+      })),
+      placeholder: "Select Department",
+    },
+    {
+      label: "Description",
+      type: "textarea",
+      width: "col-md-12",
+      key: ModelKeys.DESCRIPTION,
+      value: modelData?.description,
+      onChange: (e: any) =>
+        handleModelData(ModelKeys.DESCRIPTION, e.target.value),
+      placeholder: "Enter Description",
+    },
+  ]
+
+  const closeModal = () => {
+    setState({ ...state, isModal: false, createdEmployee: null });
   };
 
-  // const handleClick = async () => {
-  //   const employee: Employee = {
-  //     onboard_at: formatDate(new Date()),
-  //     employee_id: 0,
-  //     phone: "+201091098410",
-  //     department: 12,
-  //   };
-
-  //   const createInput: AuthRegisterInput = {
-  //     first_name: "wani",
-  //     last_name: "joseph",
-  //     username: "wani@123",
-  //     email: "wani-joseph@outlook.com",
-  //     password1: "Mac_bmug18",
-  //     password2: "Mac_bmug18",
-  //     employee,
-  //   };
-
-  //   try {
-  //     await createUser(createInput);
-
-  //     console.log("success");
-  //   } catch (err: Error | any) {
-  //     console.log(err);
-  //   }
-  // };
+  const openModal = () => {
+    setState({ ...state, isModal: true });
+  };
 
   return (
     <div className="container-xxl">
@@ -100,7 +233,7 @@ const Members: React.FC = () => {
               <button
                 className="btn btn-dark btn-set-task w-sm-100 me-2"
                 onClick={() => {
-                  setState((prevState) => ({ ...prevState, isModal: true }));
+                  openModal();
                 }}
               >
                 <i className="icofont-plus-circle me-2 fs-6"></i>Add Employee
@@ -159,7 +292,7 @@ const Members: React.FC = () => {
                 avatar={data.avatar}
                 post={data.post}
                 name={data.name}
-                Companyname={data.Companyname}
+                CompanyName={data.Companyname}
                 isMember={true}
               />
             </div>
@@ -174,612 +307,39 @@ const Members: React.FC = () => {
           setState((prevState) => ({ ...prevState, isModal: false }));
         }}
       >
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Modal.Header closeButton>
-            <Modal.Title className="fw-bold">Add Employee</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <div className="modal-body">
-              <div className="mb-3">
-                <label
-                  htmlFor="exampleFormControlInput877"
-                  className="form-label"
-                >
-                  Employee Name
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="exampleFormControlInput877"
-                  placeholder="Explain what the Project Name"
-                  {...register("employee_name")}
-                />
-              </div>
-              <div className="mb-3">
-                <label
-                  htmlFor="exampleFormControlInput977"
-                  className="form-label"
-                >
-                  Employee Company
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="exampleFormControlInput977"
-                  placeholder="Explain what the Project Name"
-                  {...register("employee_company")}
-                />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="formFileMultipleoneone" className="form-label">
-                  Employee Profile Image
-                </label>
-                <input
-                  className="form-control"
-                  type="file"
-                  id="formFileMultipleoneone"
-                  {...register("profile_image")}
-                />
-              </div>
-              <div className="deadline-form">
-                {/* <form> */}
-                <div className="row g-3 mb-3">
-                  <div className="col-sm-6">
-                    <label
-                      htmlFor="exampleFormControlInput1778"
-                      className="form-label"
-                    >
-                      Employee ID
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="exampleFormControlInput1778"
-                      placeholder="User Name"
-                      {...register("employee_id")}
-                    />
-                  </div>
-                  <div className="col-sm-6">
-                    <label
-                      htmlFor="exampleFormControlInput2778"
-                      className="form-label"
-                    >
-                      Joining Date
-                    </label>
-                    <input
-                      type="date"
-                      className="form-control"
-                      id="exampleFormControlInput2778"
-                      {...register("joining_date")}
-                    />
-                  </div>
-                </div>
-                <div className="row g-3 mb-3">
-                  <div className="col-lg-6">
-                    <label
-                      htmlFor="exampleFormControlInput177"
-                      className="form-label"
-                    >
-                      Employee User Name
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="exampleFormControlInput177"
-                      placeholder="User Name"
-                      {...register("user_name")}
-                    />
-                  </div>
-                  <div className="col-lg-6">
-                    <label
-                      htmlFor="exampleFormControlInput277"
-                      className="form-label"
-                    >
-                      Password
-                    </label>
-                    <input
-                      type="Password"
-                      className="form-control"
-                      id="exampleFormControlInput277"
-                      placeholder="Password"
-                      {...register("password")}
-                    />
-                  </div>
-                </div>
-                <div className="row g-3 mb-3">
-                  <div className="col-lg-6">
-                    <label
-                      htmlFor="exampleFormControlInput477"
-                      className="form-label"
-                    >
-                      Email ID
-                    </label>
-                    <input
-                      type="email"
-                      className="form-control"
-                      id="exampleFormControlInput477"
-                      placeholder="User Name"
-                      {...register("email")}
-                    />
-                  </div>
-                  <div className="col-lg-6">
-                    <label
-                      htmlFor="exampleFormControlInput777"
-                      className="form-label"
-                    >
-                      Phone
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="exampleFormControlInput777"
-                      placeholder="User Name"
-                      {...register("phone")}
-                    />
-                  </div>
-                </div>
-                <div className="row g-3 mb-3">
-                  <div className="col">
-                    <label className="form-label">Department</label>
-                    <select className="form-select" {...register("department")}>
-                      <option>Web Development</option>
-                      <option value="1">It Management</option>
-                      <option value="2">Marketing</option>
-                    </select>
-                  </div>
-                  <div className="col">
-                    <label className="form-label">Designation</label>
-                    <select
-                      className="form-select"
-                      {...register("designation")}
-                    >
-                      <option>Curriculum Development</option>
-                      <option value="1">Technology Integration</option>
-                      <option value="2">Teacher Training</option>
-                      <option value="3">Assessment System</option>
-                      <option value="4">Student Records</option>
-                      <option value="5">Inclusive Education</option>
-                      <option value="6">Technology Integration</option>
-                      <option value="7">Educational Field Trips</option>
-                      <option value="8">Parental Involvement</option>
-                      <option value="9">Parental Feedback</option>
-                      <option value="10">Other</option>
-                    </select>
-                  </div>
-                </div>
-                {/* </form> */}
-              </div>
-              <div className="mb-3">
-                <label
-                  htmlFor="exampleFormControlTextarea78"
-                  className="form-label"
-                >
-                  Description (optional)
-                </label>
-                <textarea
-                  className="form-control"
-                  id="exampleFormControlTextarea78"
-                  rows={3}
-                  placeholder="Add any extra details about the request"
-                  {...register("description")}
-                ></textarea>
-              </div>
-              <div className="table-responsive">
-                <table className="table table-striped custom-table">
-                  <thead>
-                    <tr>
-                      <th>Project Permission</th>
-                      <th className="text-center">Read</th>
-                      <th className="text-center">Write</th>
-                      <th className="text-center">Create</th>
-                      <th className="text-center">Delete</th>
-                      <th className="text-center">Import</th>
-                      <th className="text-center">Export</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td className="fw-bold">Projects</td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault1"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault2"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault3"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault4"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault5"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault6"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="fw-bold">Tasks</td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault7"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault8"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault9"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault10"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault11"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault12"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="fw-bold">Chat</td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault13"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault14"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault15"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault16"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault17"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault18"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="fw-bold">Estimates</td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault19"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault20"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault21"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault22"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault23"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault24"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="fw-bold">Invoices</td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault25"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault26"
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault27"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault28"
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault29"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault30"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="fw-bold">Timing Sheets</td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault31"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault32"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault33"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault34"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault35"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault36"
-                          checked={true}
-                          onChange={() => {}}
-                        />
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </Modal.Body>
-          <Modal.Footer>
-            <button
-              type="button"
-              className="btn btn-secondary"
-              onClick={() => {
-                setState({ ...state, show: false });
-              }}
-            >
-              Done
-            </button>
-            <button
-              disabled={isSubmitting}
-              className="btn btn-primary"
-              type="submit"
-              // onClick={handleClick}
-            >
-              Sent
-            </button>
-          </Modal.Footer>
-        </form>
+        <Modal.Header closeButton>
+          <Modal.Title className="fw-bold">Add Employee</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="modal-body">
+            <FormInputs formFields={formFields} formName={"employee"} />
+            <PermissionsTable isDepartmentAdmin={isDepartmentAdmin} closeModal={closeModal} employeeData={createdEmployee} />
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => {
+              closeModal()
+            }}
+          >
+            Cancel
+          </button>
+          <button type="button" className="btn btn-primary"
+            onClick={() => {
+              // closeModal()
+              handleCreateEmployee()
+            }}
+          >
+            Add Employee
+          </button>
+        </Modal.Footer>
       </Modal>
     </div>
   );
 };
 
 export default Members;
+
+

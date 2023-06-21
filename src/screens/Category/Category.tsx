@@ -1,6 +1,7 @@
 import { useCreateCategory } from "framework/category/createCategory";
 import { useDeleteCategory } from "framework/category/deleteCategory";
-import { useCategoryQuery } from "framework/category/getAllCategory";
+import { useCategoriesQuery } from "framework/category/getAllCategories";
+// import { useCategoryQuery } from "framework/permissions/getAllPermissions";
 import { useUpdateCategory } from "framework/category/updateCategory";
 import React from "react";
 import { Modal } from "react-bootstrap";
@@ -32,7 +33,7 @@ const Categories: React.FC = () => {
   const [selectedCategory, setSelectedCategory] =
     React.useState<CategoryUpdateInput>({} as CategoryUpdateInput);
 
-  let { data, error, isLoading } = useCategoryQuery({});
+  let { data, error, isLoading } = useCategoriesQuery({});
   if (isLoading) return <div>Loading...</div>;
   if (error) return null;
 

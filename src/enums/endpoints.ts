@@ -23,4 +23,7 @@ export enum Endpoints {
   PROJECT_ATTACHMENT_DELETE = '/management/files/project/', // /{id} DELETE
   /** Category Endpoints */
   CATEGORY = "category/", // /{id} GET - POST - PUT - PATCH - DELETE
+  PERMISSION = "user/utils/permissions/",
+  /** Add New Employee === Register New User */
+  EMPLOYEE_CREATE = "user/auth/register/",
 }

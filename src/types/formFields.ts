@@ -34,6 +34,7 @@ export interface IField {
   type: string;
   key?: string;
   value: any;
+  width?: string;
   onChange: (e: any) => void;
   placeholder?: string;
   options?: IOption[];
