@@ -1,15 +1,12 @@
 import React from "react";
-import Employeesavaibility from "components/Dashboard/Employeesavaibility";
-import HignlighterCard from "components/Dashboard/HignlighterCard";
-import InterviewCard from "components/Dashboard/InterviewCard";
-import TopPerformers from "components/Dashboard/TopPerformers";
-import UpcommingInterviews from "components/Dashboard/UpcommingInterviews";
 import GeneralChartCard from "components/Dashboard/GeneralChartCard";
 import {
   EmployeeInfoChartData,
-  TotalEmployeesChartData,
   TopHiringSourcesChartData,
+  TotalEmployeesChartData,
 } from "components/Data/DashboardData";
+import BigCalendar from "components/Pages/BigCalendar";
+import Employeesavaibility from "components/Dashboard/Employeesavaibility";
 
 interface Props {}
 
@@ -29,7 +26,7 @@ const HrDashboard: React.FC<Props> = () => {
                 extraDivBody={undefined}
               />
             </div>
-            <div className="col-md-6">
+            {/* <div className="col-md-6">
               <Employeesavaibility />
             </div>
             <div className="col-md-6">
@@ -40,7 +37,7 @@ const HrDashboard: React.FC<Props> = () => {
                 identity="totalemployee"
                 extraDivBody={undefined}
               />
-            </div>
+            </div> */}
             <div className="col-md-12">
               <GeneralChartCard
                 Title="Top Hiring Sources"
@@ -55,9 +52,18 @@ const HrDashboard: React.FC<Props> = () => {
         <div className="col-xl-4 col-lg-12 col-md-12">
           <div className="row g-3">
             <div className="col-md-6 col-lg-6 col-xl-12">
-              <HignlighterCard />
+              <Employeesavaibility />
             </div>
-            <div className="col-md-6 col-lg-6 col-xl-12 flex-column">
+            <div className="col-md-6 col-lg-6 col-xl-12">
+              <GeneralChartCard
+                Title="Total Employees"
+                data={TotalEmployeesChartData}
+                TitleRight="423"
+                identity="totalemployee"
+                extraDivBody={undefined}
+              />
+            </div>
+            {/* <div className="col-md-6 col-lg-6 col-xl-12 flex-column">
               <InterviewCard
                 value={246}
                 iconClass="icofont-users-alt-2 fs-5"
@@ -73,11 +79,12 @@ const HrDashboard: React.FC<Props> = () => {
             </div>
             <div className="col-md-12 col-lg-12 col-xl-12">
               <UpcommingInterviews />
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="col-md-12">
-          <TopPerformers />
+          {/* <TopPerformers /> */}
+          <BigCalendar />
         </div>
       </div>
     </div>
