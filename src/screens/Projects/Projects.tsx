@@ -452,6 +452,7 @@ const Projects: React.FC<Props> = () => {
                           members_count={d.members_count}
                           attachment_count={d.projectfile_set.length}
                           tasks_count={d.tasks_count}
+                          sl={d.slug}
                         />
                       </div>
                     );
