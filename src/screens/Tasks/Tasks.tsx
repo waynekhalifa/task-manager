@@ -188,6 +188,7 @@ const Tasks: React.FC = () => {
   };
 
   const editTask = async () => {
+
     try {
     } catch (error) {
       alert(error);
@@ -233,6 +234,7 @@ const Tasks: React.FC = () => {
           />
         </div>
       </div>
+
       <TaskModal
         onClose={handleModalClose}
         modalHeader={modalHeader}

@@ -1,4 +1,4 @@
-.dd-handle{
+.dd-handle {
     @include transition(all .4s ease-in-out);
     @include border-radius(0px);
     padding: 20px;
@@ -7,92 +7,110 @@
     border-color: var(--border-color);
     background-color: var(--card-color);
     box-shadow: rgba(99, 99, 99, 0.1) 0px 2px 8px 0px;
+
     &:hover {
         box-shadow: rgba(99, 99, 99, 0.3) 0px 2px 8px 0px;
-     }
+    }
 }
-.taskboard{
-    .dd-handle{
+
+.taskboard {
+    .dd-handle {
         @include transition(all .4s ease-in-out);
         @include border-radius(0px);
-        padding: 20px; 
+        padding: 20px;
         position: relative;
         color: var(--text-color);
         border-color: var(--border-color);
         background-color: var(--card-color);
         box-shadow: rgba(99, 99, 99, 0.1) 0px 2px 8px 0px;
+
         &:hover {
             box-shadow: rgba(99, 99, 99, 0.3) 0px 2px 8px 0px;
-         }
+        }
     }
-    .dd-item{
+
+    .dd-item {
         border-color: var(--border-color);
         background-color: var(--card-color);
         position: relative;
         margin-bottom: 15px;
-        &:last-child{
+
+        &:last-child {
             margin-bottom: 0px;
         }
-        &:hover{
+
+        &:hover {
             cursor: move;
         }
-        &:before{
+
+        &:before {
             content: "";
             position: absolute;
             width: 100%;
             height: 4px;
             left: 0px;
-            bottom:0px;
+            bottom: 0px;
             z-index: 9;
         }
     }
-    .dd-item, .dd-empty, .dd-placeholder{
+
+    .dd-item,
+    .dd-empty,
+    .dd-placeholder {
         @media only screen and (max-width: 1366px) {
             font-size: 12px;
         }
+
         @media only screen and (max-width: 991px) {
             font-size: 14px;
         }
     }
-    .dd-empty{
+
+    .dd-empty {
         border: 1px dashed var(--secondary-color);
         background-color: var(--secondary-color);
     }
-    .planned_task{
-        .dd-item{
-            &:before{
+
+    .planned_task {
+        .dd-item {
+            &:before {
                 background-color: #cd201f;
             }
         }
     }
-    .progress_task{
-        .dd-item{
-            &:before{
-                background-color:#ffc107;
+
+    .progress_task {
+        .dd-item {
+            &:before {
+                background-color: #ffc107;
             }
         }
     }
-    .review_task{
-        .dd-item{
-            &:before{
-                background-color:#FFAA8A;
+
+    .review_task {
+        .dd-item {
+            &:before {
+                background-color: #FFAA8A;
             }
         }
     }
-    .completed_task{
-        .dd-item{
-            &:before{
+
+    .completed_task {
+        .dd-item {
+            &:before {
                 background-color: #28a745;
             }
         }
     }
-    .small-avt{
+
+    .small-avt {
         width: 25px;
         height: 25px;
         min-width: 25px;
     }
 }
-.client_task{
+
+.client_task {
     .dd-handle:hover {
         color: var(--text-color);
     }

@@ -41,7 +41,6 @@ const OurClients: React.FC<Props> = ({
                 <i className="icofont-edit me-2 fs-6" />
                 Assign Another
               </button>
-
             </div>
           </div>
         </div>
