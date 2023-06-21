@@ -11,13 +11,15 @@ const BigCalendar: React.FC = () => {
   if (errorProjects) return null;
 
   return (
-    <div className="card">
-      <div className="py-3 px-3">
-        {!loadingProjects && (
-          <Calendar events={projectData?.projects.data.results} />
-        )}
-      </div>
-    </div>
+    <>
+      {!loadingProjects && (
+        <div className="card">
+          <div className="py-3 px-3">
+            <Calendar events={projectData?.projects.data.results} />
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
