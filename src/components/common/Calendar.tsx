@@ -3,17 +3,30 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 
 interface Props {
-  events: any;
+  projects: any;
+  tasks: any;
 }
 
-const Calendar: React.FC<Props> = ({ events }) => {
+const Calendar: React.FC<Props> = ({ projects, tasks }) => {
   const calendarData: any[] = [];
 
-  for (let i = 0; i < events.length; i++) {
+  for (let i = 0; i < projects.length; i++) {
     calendarData.push({
-      title: events[i].name,
-      start: new Date(events[i].start_at),
-      end: new Date(events[i].end_at),
+      id: projects[i].id,
+      title: projects[i].name,
+      start: new Date(projects[i].start_at),
+      end: new Date(projects[i].end_at),
+      color: "#c39546",
+    });
+  }
+
+  for (let i = 0; i < tasks.length; i++) {
+    calendarData.push({
+      id: tasks[i].id,
+      title: tasks[i].name,
+      start: new Date(tasks[i].start_at),
+      end: new Date(tasks[i].end_at),
+      color: "#3357d0",
     });
   }
 
