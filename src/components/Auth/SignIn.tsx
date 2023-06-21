@@ -15,14 +15,10 @@ const defaultValues: AuthLoginInput = { username: "", password: "" };
 const SignIn: React.FC = () => {
   const { setSession } = useAuth();
   const { push } = useApp();
-  const {
-    handleSubmit,
-    register,
-    formState: { isSubmitting },
-  } = useForm<any>({
+  const { handleSubmit, register, formState: { isSubmitting } } = useForm<any>({
     resolver: yupResolver(loginValidation),
     mode: "onChange",
-    defaultValues,
+    defaultValues
   });
   const { mutateAsync } = useLogin();
 
@@ -31,12 +27,14 @@ const SignIn: React.FC = () => {
   ) => {
     try {
       const result = await mutateAsync(data);
+      console.log({ result });
 
       setSession(result);
       localStorage.setItem("session", JSON.stringify(result));
+      localStorage.setItem("access_token", result.access);
 
       push(Routes.DASHBOARD + Pages.SUMMARY);
-    } catch (err: Error | any) {
+    } catch (err) {
       //  @TODO should handle error
 
       console.log(err);
