@@ -7,7 +7,6 @@ interface Props {
   closeModal: () => void;
   employeeData: any;
 }
-
 interface Permission {
   id: number;
   model: string;
@@ -71,7 +70,8 @@ const PermissionsTable: React.FC<Props> = ({ isDepartmentAdmin, closeModal, empl
     }
     try {
       let createInput = permissionsInput(Data);
-      await createMutation(createInput);
+      const data = await createMutation(createInput);
+      console.log({data})
       closeModal()
     } catch (err) {
       alert(err);
@@ -92,11 +92,6 @@ const PermissionsTable: React.FC<Props> = ({ isDepartmentAdmin, closeModal, empl
   };
 
   const handleCheck = (element: string, key: string, value: boolean): void => {
-    console.log(element, key, value)
-
-    let checkedArray: number[] = [];
-    let uncheckedArray: number[] = [];
-
     // get all permissions for the element
     const selectedPermission = permissions.find((permission: Permission) => permission.model === element);
     if (!selectedPermission) return;
@@ -105,23 +100,24 @@ const PermissionsTable: React.FC<Props> = ({ isDepartmentAdmin, closeModal, empl
     // filter based on key and permissionKey
     const selectedPermissionId = permissions.find((permission: Permission) => permission.model === element && permission.name === permissionKey)?.id;
     if (!selectedPermissionId) return;
-    
-    if (value) {
-      // add to checkedArray
-      checkedArray.push(selectedPermissionId);
-      // remove from uncheckedArray
-      uncheckedArray = uncheckedArray.filter((permissionId: number) => permissionId !== selectedPermissionId);
-      // setState for addedPermissions
-      setAddedPermissions(checkedArray)
-    } else {
-      // add to uncheckedArray
-      uncheckedArray.push(selectedPermissionId);
-      // remove from checkedArray
-      checkedArray = checkedArray.filter((permissionId: number) => permissionId !== selectedPermissionId);
-      // setState for removedPermissions
-      setRemovedPermissions(uncheckedArray)
+
+    const isToRemove = addedPermissions.includes(selectedPermissionId); // true if permission is in addedPermissions
+    const isToAdd = removedPermissions.includes(selectedPermissionId); // true if permission is in removedPermissions
+
+    if (isToRemove) {
+      // remove from addedPermissions
+      setAddedPermissions(addedPermissions.filter((permissionId: number) => permissionId !== selectedPermissionId));
+      setRemovedPermissions([...removedPermissions, selectedPermissionId])
+    } else if (isToAdd) {
+      // remove from removedPermissions
+      setRemovedPermissions(removedPermissions.filter((permissionId: number) => permissionId !== selectedPermissionId));
+      setAddedPermissions([...addedPermissions, selectedPermissionId])
+    } else if (!isToRemove && !isToAdd && value) { 
+      // add to addedPermissions
+      setAddedPermissions([...addedPermissions, selectedPermissionId])
     }
   };
+  console.log({addedPermissions, removedPermissions})
 
   const handleTableHeader = (): JSX.Element => {
     return (
@@ -169,7 +165,6 @@ const PermissionsTable: React.FC<Props> = ({ isDepartmentAdmin, closeModal, empl
 
   const handleTableRow = (): JSX.Element[] => {
     const mainCategories = [...new Set(permissions.map((permission: any) => permission.model))];
-
     return mainCategories.map((element: string, i) => (
       <tr key={`row-${i}`}>
         <td className="fw-bold">{element}</td>
