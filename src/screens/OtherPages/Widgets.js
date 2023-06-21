@@ -59,7 +59,7 @@ class Widgets extends React.Component {
                     avatar={data.avatar}
                     post={data.post}
                     name={data.name}
-                    Companyname={data.Companyname}
+                    CompanyName={data.Companyname}
                     onClickEdit={() => {
                       this.setState({ isModal: true });
                     }}

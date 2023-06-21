@@ -35,7 +35,7 @@ const TaskDetails: React.FC<Props> = ({ id }) => {
               avatar={user.avatar}
               post={user.post}
               name={user.name}
-              Companyname={user.Companyname}
+              CompanyName={user.Companyname}
               onClickEdit={() => { }}
               onClickDelete={() => { }}
               details="Vestibulum ante ipsum primis in faucibus orci luctus et ultrices.Vestibulum ante ipsum primis in faucibus orci luctus et ultrices. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices.Vestibulum ante ipsum primis in faucibus orci luctus et ultrices."
