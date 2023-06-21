@@ -11,11 +11,19 @@ export enum Endpoints {
   PROMOTE = "user/utils/user/promote/", // GET
   PROMOTE_DETAILS = "user/utils/user/promote/", // + {id}/ PUT - PATCH
   /** Management Endpoints */
-  EMPLOYEE = "management/employee/",
-  TASK = "management/task/",
-  PROJECT = "management/project/",
-  CATEGORY = "category/",
   PERMISSION = "user/utils/permissions/",
   /** Add New Employee === Register New User */
   EMPLOYEE_CREATE = "user/auth/register/",
+  /** Employee Endpoints */
+  EMPLOYEE = "management/employee/", // GET - POST - PUT - PATCH - DELETE
+  /** Task Endpoints */
+  TASK = "management/task/", // GET - POST - PUT - PATCH - DELETE
+  TASK_ATTACHMENT = '/management/files/task/', // POST 
+  TASK_ATTACHMENT_DELETE = '/management/files/task/', // /{id} DELETE
+  /** Project Endpoints */
+  PROJECT = "management/project/", // /{id} GET - POST - PUT - PATCH - DELETE
+  PROJECT_ATTACHMENT = '/management/files/project/', // POST 
+  PROJECT_ATTACHMENT_DELETE = '/management/files/project/', // /{id} DELETE
+  /** Category Endpoints */
+  CATEGORY = "category/", // /{id} GET - POST - PUT - PATCH - DELETE
 }

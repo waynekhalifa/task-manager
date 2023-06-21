@@ -6,13 +6,14 @@ import Avatar8 from "assets/images/xs/avatar8.jpg";
 interface Props {
   onClose: any;
   show: any;
+  modalHeader: string;
 }
 
-const AddNewUserModal: React.FC<Props> = ({ onClose, show }) => {
+const AddNewUserModal: React.FC<Props> = ({ onClose, show, modalHeader }) => {
   return (
     <Modal centered size="lg" show={show} onHide={onClose}>
       <Modal.Header closeButton>
-        <Modal.Title className="fw-bold">Employee Invitation</Modal.Title>
+        <Modal.Title className="fw-bold">{modalHeader}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div className="inviteby_email">

@@ -1,19 +1,29 @@
 import React from "react";
-import { Modal, Nav, Tab } from "react-bootstrap";
+import { Nav, Tab } from "react-bootstrap";
 import CurrentClientProject from "../../components/Clients/CurrentClientProject";
 import AddNewUserModal from "../../components/common/AddNewUserModal";
 import PageHeader from "../../components/common/PageHeader";
-import { ProjectCardData } from "../../components/Data/AppData";
-// import { useCategoryQuery } from "framework/permissions/getAllPermissions";
+import { useCategoriesQuery } from "framework/category/getAllCategories";
 import { CategoryUpdateInput } from "types/category";
 import {
   projectInput,
   useCreateProject,
-} from "framework/project/create-project";
-import { Project } from "types/project";
-import FormInputs from "components/FormInputs/FormInputs";
-import { IField } from "types/formFields";
-import { useCategoriesQuery } from "framework/category/getAllCategories";
+} from "framework/project/createProject";
+import { Project, SelectedProject } from "types/project";
+import { useProjectsQuery } from "framework/project/getAllProjects";
+import { useDeleteProject } from "framework/project/deleteProject";
+import AddNewAttachmentModal from "components/common/AddNewAttachmentModal";
+import DescriptionViewModal from "components/common/DescriptionViewModal";
+import { projectUpdateInput, useUpdateProject } from "framework/project/updateProject";
+import AddCommentModal from "components/common/AddCommentModal";
+import ViewTasksModal from "components/common/ViewTasksModal";
+import ProjectModal from "components/common/ProjectModal";
+import TaskModal from "components/common/TaskModal";
+import DeleteModal from "components/common/DeleteModal";
+import { SelectedTask, Task } from "types/task";
+import { taskInput, useCreateTask } from "framework/task/create-task";
+import { useUploadTaskAttachment } from "framework/task/uploadTaskAttachment";
+import { useDeleteTaskAttachment } from "framework/task/deleteTaskAttachment";
 
 interface Props { }
 
@@ -24,16 +34,25 @@ enum ModelKeys {
   START_DATE = "start_at",
   END_DATE = "end_at",
   ADMIN = "admin",
+  FILE = "file",
   FILES = "files",
 }
 
 interface State {
   isAddModal: boolean;
   isEditModal: boolean;
+  isAddTaskModal: boolean;
+  isEditTaskModal: boolean;
   isDeleteModal: boolean;
   isAddUserModal: boolean;
+  isAddAttachmentModal: boolean;
+  isViewDescriptionModal: boolean;
+  isAddCommentModal: Boolean;
+  isViewTaskModal: boolean;
   modalHeader: any;
-  modelData: Project;
+  modelProjectData: Project;
+  modelTaskData: Task;
+  selectedProject: SelectedProject;
 }
 
 const INITIAlIZE_DATA: State = {
@@ -41,37 +60,102 @@ const INITIAlIZE_DATA: State = {
   isEditModal: false,
   isDeleteModal: false,
   isAddUserModal: false,
+  isAddAttachmentModal: false,
+  isViewDescriptionModal: false,
+  isAddCommentModal: false,
+  isAddTaskModal: false,
+  isEditTaskModal: false,
+  isViewTaskModal: false,
   modalHeader: "",
-  modelData: {} as Project,
+  modelProjectData: {} as Project,
+  modelTaskData: {} as Task,
+  selectedProject: {} as SelectedProject,
 };
 
 const Projects: React.FC<Props> = () => {
-  const { mutateAsync: createMutation } = useCreateProject();
+
 
   const [state, setState] = React.useState<State>(INITIAlIZE_DATA);
-  const { isAddModal, isEditModal, isDeleteModal, modalHeader, modelData, isAddUserModal } =
+  const { isAddModal, isEditModal, isDeleteModal, modalHeader, modelProjectData, modelTaskData, selectedProject, isAddUserModal, isAddAttachmentModal, isViewDescriptionModal, isAddCommentModal, isAddTaskModal, isEditTaskModal, isViewTaskModal } =
     state;
+  const { mutateAsync: createProjectMutation } = useCreateProject();
+  const { mutateAsync: updateProjectMutation } = useUpdateProject();
+  const { mutateAsync: deleteProjectMutation } = useDeleteProject();
+  const { mutateAsync: createTaskMutation } = useCreateTask();
+  const { mutateAsync: updateTaskMutation } = useUpdateProject();
+  const { mutateAsync: deleteTaskMutation } = useDeleteProject();
+  const { mutateAsync: uploadTaskAttachmentMutation } = useUploadTaskAttachment();
+ 
+  let { data: projectData, error: errorProjects, isLoading: loadingProjects } = useProjectsQuery({});
+  let tasks: SelectedTask[] = [] as SelectedTask[];
 
   let {
     data: categoriesData,
     error: errorCategories,
     isLoading: isLoadingCategories,
   } = useCategoriesQuery({});
-  if (isLoadingCategories) return <div>Loading...</div>;
-  if (errorCategories) return null;
+  if (isLoadingCategories || loadingProjects) return <div>Loading...</div>;
+  if (errorCategories || errorProjects) return null;
+
+
+  let projects: SelectedProject[] = projectData?.projects.data.results || [];
 
   let categories: CategoryUpdateInput[] =
     categoriesData?.categories.data.results || [];
 
-  const handleModalClose = () => {
+  const admins = [
+    {
+      label: "Badr",
+      value: 1,
+    },
+    {
+      label: "Jo",
+      value: 1,
+    },
+    {
+      label: "Wani",
+      value: 1,
+    },
+  ]
+
+  let members = projectData?.projects.data.results[0].members || [
+    {
+
+      label: "Select User",
+      value: 0,
+    },
+    {
+      label: "User 1",
+      value: 1,
+    },
+    {
+      label: "User 2",
+      value: 2,
+    },
+    {
+      label: "User 3",
+      value: 3,
+    },
+  ];
+
+
+  const handleModalClose = (reload: boolean = false) => {
+    if (reload === true) window.location.reload();
     setState({
       ...state,
       isAddModal: false,
       isEditModal: false,
       isDeleteModal: false,
       isAddUserModal: false,
+      isAddAttachmentModal: false,
+      isViewDescriptionModal: false,
+      isAddCommentModal: false,
+      isAddTaskModal: false,
+      isEditTaskModal: false,
+      isViewTaskModal: false,
       modalHeader: "",
-      modelData: {} as Project,
+      modelProjectData: {} as Project,
+      modelTaskData: {} as Task,
     });
   };
 
@@ -83,27 +167,21 @@ const Projects: React.FC<Props> = () => {
     });
   };
 
-  const handleOpenEditModal = () => {
+  const handleOpenEditModal = (project: SelectedProject) => {
     setState({
       ...state,
       isEditModal: true,
       modalHeader: "Edit Project",
-      modelData: {
-        name: "Project 1",
-        category: 0,
-        description: "Description 1",
-        admin: 0,
-        start_at: "2021-09-01",
-        end_at: "2021-09-01",
-        files: [],
-      },
+      selectedProject: project,
     });
   };
 
-  const handleOpenDeleteModal = () => {
+  const handleOpenDeleteModal = (project: SelectedProject) => {
     setState({
       ...state,
       isDeleteModal: true,
+      selectedProject: project,
+      modalHeader: "Delete Project",
     });
   };
 
@@ -111,122 +189,145 @@ const Projects: React.FC<Props> = () => {
     setState({
       ...state,
       isAddUserModal: true,
+      modalHeader: "Add User",
+    });
+  };
+  const handleOpenAddAttachmentModal = (project: Project) => {
+    setState({
+      ...state,
+      isAddAttachmentModal: true,
+      modelProjectData: project,
+      modalHeader: "Add Attachment",
+    });
+  };
+
+  const handleOpenViewDescriptionModal = (project: SelectedProject) => {
+    setState({
+      ...state,
+      isViewDescriptionModal: true,
+      selectedProject: project,
+      modalHeader: "View Description",
+    });
+  };
+
+  const handleOpenAddCommentModal = (project: SelectedProject) => {
+    setState({
+      ...state,
+      isAddCommentModal: true,
+      selectedProject: project,
+      modalHeader: "Add Comment",
+    });
+  }
+
+  const handleOpenAddTaskModal = (project: SelectedProject) => {
+    setState({
+      ...state,
+      isAddTaskModal: true,
+      selectedProject: project,
+      modalHeader: "Add Task",
+    });
+  }
+
+  const handleOpenEditTaskModal = (project: SelectedProject) => {
+    setState({
+      ...state,
+      isEditTaskModal: true,
+      selectedProject: project,
+      modalHeader: "Edit Task",
     });
   };
 
 
-  const handleModelData = (key: string, value: any) => {
+  const handleOpenViewTaskModal = (project: SelectedProject) => {
     setState({
       ...state,
-      modelData: {
-        ...modelData,
+      isViewTaskModal: true,
+      selectedProject: project,
+      modalHeader: "View Tasks",
+    });
+  }
+
+  const handleProjectModelData = (key: string, value: any) => {
+    if (isEditModal) {
+      setState({
+        ...state,
+        selectedProject: {
+          ...selectedProject,
+          [key]: value,
+        },
+      });
+      return;
+    }
+    setState({
+      ...state,
+      modelProjectData: {
+        ...modelProjectData,
         [key]: value,
       },
     });
   };
 
-
-  const formFields: IField[] = [
-    {
-      label: "Project Name",
-      type: "text",
-      key: ModelKeys.NAME,
-      value: modelData?.name,
-      onChange: (e: any) => handleModelData(ModelKeys.NAME, e.target.value),
-      placeholder: "Enter Project Name",
-
-    },
-    {
-      label: "Department",
-      type: "select",
-      key: ModelKeys.CATEGORY,
-      value: modelData?.category,
-      onChange: (e: any) => handleModelData(ModelKeys.CATEGORY, e.target.value),
-      options: categories.map((category) => ({
-        label: category.name,
-        value: category.id,
-      })),
-      placeholder: "Select Category",
-    },
-    {
-      label: "Description",
-      type: "textarea",
-      key: ModelKeys.DESCRIPTION,
-      value: modelData?.description,
-      onChange: (e: any) =>
-        handleModelData(ModelKeys.DESCRIPTION, e.target.value),
-      placeholder: "Enter Description",
-    },
-    {
-      label: "Start Date",
-      type: "date",
-      key: ModelKeys.START_DATE,
-      value: modelData?.start_at,
-      onChange: (e: any) =>
-        handleModelData(ModelKeys.START_DATE, e.target.value),
-      placeholder: "Enter Start Date",
-    },
-    {
-      label: "End Date",
-      type: "date",
-      key: ModelKeys.END_DATE,
-      value: modelData?.end_at,
-      onChange: (e: any) =>
-        handleModelData(ModelKeys.END_DATE, e.target.value),
-      placeholder: "Enter End Date",
-    },
-    {
-      label: "Files",
-      type: "file",
-      key: ModelKeys.FILES,
-      value: modelData?.files,
-      onChange: (e: any) => {
-        let files: File[] = [];
-        for (let i = 0; i < e.target.files.length; i++) {
-          let file: File = e.target.files[i];
-          let reader = new FileReader();
-          reader.readAsDataURL(file);
-          reader.onload = (url) => {
-            files.push(file);
-          };
-        }
-
-        handleModelData(ModelKeys.FILES, files)
+  const handleTaskModelData = (key: string, value: any) => {
+    if (isEditTaskModal) {
+      setState({
+        ...state,
+        modelTaskData: {
+          ...modelTaskData,
+          [key]: value,
+        },
+      });
+      return;
+    }
+    setState((prevState) => ({
+      ...prevState,
+      modelTaskData: {
+        ...prevState.modelTaskData,
+        [key]: value,
       },
-      placeholder: "Enter Files",
-    },
-    {
-      label: "Assign Admin",
-      type: "select",
-      key: ModelKeys.ADMIN,
-      value: modelData?.admin,
-      onChange: (e: any) => handleModelData(ModelKeys.ADMIN, e.target.value),
-      options: [
-        {
-          label: "Badr",
-          value: 1,
-        },
-        {
-          label: "Jo",
-          value: 1,
-        },
-        {
-          label: "Wani",
-          value: 1,
-        },
-      ]
-    },
+    }));
+  };
+
+  const getCategory = (id: number) => {
+    let category = categories.find((category) => category.id === id);
+    return category?.name;
+  };
 
 
+  const createTask = async () => {
+    setState({
+      ...state,
+      modelTaskData: {
+        ...modelTaskData,
+        
+      },
+    });
+    try {
+      Object.assign(modelTaskData, { project: selectedProject.id });
+      let createInput = taskInput(modelTaskData);
+      let res = await createTaskMutation(createInput);
+      let task = res.session.data;
+      tasks.push(task);
+      handleModalClose(true);
+    } catch (error) {
+      alert(error);
+    }
+  };
 
-  ]
+  const editTask = async () => {
+    try {
+    } catch (error) {
+      alert(error);
+    }
+  };
+
 
 
   const createProject = async () => {
-    Object.assign(modelData, { admin: 1 });
+    Object.assign(modelProjectData, { admin: 1 });
     try {
-      let createInput = projectInput(modelData);
-      await createMutation(createInput);
+      let createInput = projectInput(modelProjectData);
+      let res = await createProjectMutation(createInput);
+      projects.push(res.session.data);
       handleModalClose();
     } catch (err) {
       alert(err);
@@ -234,21 +335,36 @@ const Projects: React.FC<Props> = () => {
   };
 
   const editProject = async () => {
-    Object.assign(modelData, { admin: 1 });
+    // Object.assign(selectedProject, { admin: 1 });
     try {
-      let createInput = projectInput(modelData);
-      await createMutation(createInput);
-      handleModalClose();
+      let createInput = projectUpdateInput(selectedProject);
+      let res = await updateProjectMutation(createInput);
+      let updatedProject = res.session.data;
+      projects.map((project) => {
+        if (project.id === updatedProject.id) {
+          return {
+            name: updatedProject.name,
+            description: updatedProject.description,
+            start_at: updatedProject.start_at,
+            end_at: updatedProject.end_at,
+            category: updatedProject.category,
+            admin: updatedProject.admin,
+            ...project,
+          };
+        }
+        else return project;
+      });
+      handleModalClose(true);
     } catch (err) {
       alert(err);
     }
   };
 
   const deleteProject = async () => {
-    Object.assign(modelData, { admin: 1 });
     try {
-      let createInput = projectInput(modelData);
-      await createMutation(createInput);
+      await deleteProjectMutation(selectedProject);
+      let currenProject = projects.find(project => project.id === selectedProject.id);
+      currenProject && projects.splice(projects.indexOf(currenProject), 1);
       handleModalClose();
     } catch (err) {
       alert(err);
@@ -256,11 +372,11 @@ const Projects: React.FC<Props> = () => {
   };
 
   const addUser = async () => {
-    Object.assign(modelData, { admin: 1 });
+    Object.assign(modelProjectData, { admin: 1 });
     try {
-      let createInput = projectInput(modelData);
-      await createMutation(createInput);
-      handleModalClose();
+      let createInput = projectInput(modelProjectData);
+      await createProjectMutation(createInput);
+      handleModalClose(true);
     } catch (err) {
       alert(err);
     }
@@ -292,7 +408,7 @@ const Projects: React.FC<Props> = () => {
                     <Nav.Link eventKey="All">All</Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="Started">Started</Nav.Link>
+                    <Nav.Link eventKey="Scheduled">Scheduled</Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
                     <Nav.Link eventKey="Approval">Approval</Nav.Link>
@@ -310,280 +426,100 @@ const Projects: React.FC<Props> = () => {
             <Tab.Content>
               <Tab.Pane eventKey="All">
                 <div className="row g-3 gy-5 py-3 row-deck">
-                  {ProjectCardData.map((d: any, i: number) => {
+                  {projects && projects.length > 0 && projects.map((d: any, i: number) => {
                     return (
                       <div
                         key={"key" + i}
                         className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6"
                       >
                         <CurrentClientProject
-                          teamImage={d.teamImage}
-                          logo={d.logo}
-                          logoBg={d.logoBg}
-                          title={d.title}
-                          sl={d.sl}
-                          onClickEdit={handleOpenEditModal}
-                          onClickDelete={handleOpenDeleteModal}
-                          onClickAdd={handleOpenAddUserModal}
+                          teamImage={d.file}
+                          logo={d.file}
+                          logoBg={d.file}
+                          title={d.name}
+                          category={getCategory(d.category)}
+                          startDate={d.start_at}
+                          endDate={d.end_at}
+                          onClickEdit={() => handleOpenEditModal(d)}
+                          onClickDelete={() => handleOpenDeleteModal(d)}
+                          onClickAddMember={handleOpenAddUserModal}
+                          onClickAddAttachment={() => handleOpenAddAttachmentModal(d)}
+                          onClickViewDescription={() => handleOpenViewDescriptionModal(d)}
+                          onClickAddComment={() => handleOpenAddCommentModal(d)}
+                          onClickAddTask={() => handleOpenAddTaskModal(d)}
+                          onClickViewTasks={() => handleOpenViewTaskModal(d)}
+                          comments_count={d.comments_count}
+                          members_count={d.members_count}
+                          attachment_count={d.projectfile_set.length}
+                          tasks_count={d.tasks_count}
                         />
                       </div>
                     );
                   })}
                 </div>
               </Tab.Pane>
-              <Tab.Pane eventKey="Started">
-                <div className="row g-3 gy-5 py-3 row-deck">
-                  {ProjectCardData.map((d: any, i: number) => {
-                    return (
-                      <div
-                        key={"key" + i}
-                        className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6"
-                      >
-                        <CurrentClientProject
-                          teamImage={d.teamImage}
-                          logo={d.logo}
-                          logoBg={d.logoBg}
-                          title={d.title}
-                          sl={d.sl}
-                          onClickEdit={handleOpenEditModal}
-                          onClickDelete={handleOpenDeleteModal}
-                          onClickAdd={handleOpenAddUserModal}
-                        />
-                      </div>
-                    );
-                  })}
-                </div>
-              </Tab.Pane>
-
             </Tab.Content>
           </div>
         </div>
       </Tab.Container>
-      <Modal show={isAddModal || isEditModal || isAddUserModal} onHide={handleModalClose}>
-        <Modal.Header closeButton>
-          <Modal.Title className="fw-bold">{modalHeader}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="row">
-            <div className="col-lg-12 col-md-12">
-              <div className="card">
-                <div className="card-body">
-                  <FormInputs
-                    formFields={formFields}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-
-          {/* <div className="mb-3">
-            <label htmlFor="exampleFormControlInput77" className="form-label">
-              Project Name
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="exampleFormControlInput77"
-              placeholder="Explain what the Project Name"
-              value={modelData ? modelData.name : ""}
-              onChange={(e: any) => {
-                setState({
-                  ...state,
-                  modelData: { ...modelData, name: e.target.value },
-                });
-              }}
-            />
-          </div>
-          <div className="mb-3">
-            <label className="form-label">Project Category</label>
-            <select
-              className="form-select"
-              value={categories ? categories[0].id : ""}
-              onChange={(e: any) => handleModelData("name", e.target.value)}
-            >
-              {categories.length > 0 &&
-                categories.map((d: any, i: number) => (
-                  <option key={"sdf" + i} value={d.id}>
-                    {d.name}
-                  </option>
-                ))}
-            </select>
-          </div>
-          <div className="mb-3">
-            <label htmlFor="formFileMultipleone" className="form-label">
-              Project Images &amp; Document
-            </label>
-            <input
-              className="form-control"
-              type="file"
-              id="formFileMultipleone"
-              multiple={true}
-              onChange={(e: any) => {
-                setState({
-                  ...state,
-                  editModeldata: {
-                    ...editModeldata,
-                    images: e.target.files,
-                  },
-                });
-              }}
-            // multiple=""
-            />
-          </div>
-          <div className="deadline-form">
-            <form>
-              <div className="row g-3 mb-3">
-                <div className="col">
-                  <label htmlFor="datepickerded" className="form-label">
-                    Project Start Date
-                  </label>
-                  <input
-                    type="date"
-                    className="form-control"
-                    id="datepickerded"
-                    value={editModeldata ? editModeldata.start_at : ""}
-                    onChange={(e: any) => {
-                      setState({
-                        ...state,
-                        editModeldata: {
-                          ...editModeldata,
-                          start_at: e.target.value,
-                        },
-                      });
-                    }}
-                  />
-                </div>
-                <div className="col">
-                  <label htmlFor="datepickerdedone" className="form-label">
-                    Project End Date
-                  </label>
-                  <input
-                    type="date"
-                    className="form-control"
-                    id="datepickerdedone"
-                    value={editModeldata ? editModeldata.end_at : ""}
-                    onChange={(e: any) => {
-                      setState({
-                        ...state,
-                        editModeldata: {
-                          ...editModeldata,
-                          end_at: e.target.value,
-                        },
-                      });
-                    }}
-                  />
-                </div>
-              </div>
-              <div className="row g-3 mb-3">
-                <div className="col-sm-12">
-                  <label htmlFor="formFileMultipleone" className="form-label">
-                    Task Assign Person
-                  </label>
-                  <select
-                    className="form-select"
-                    multiple={true}
-                    value={editModeldata ? editModeldata.assignPerson : ""}
-                    onChange={(e: any) => {
-                      setState({
-                        ...state,
-                        editModeldata: {
-                          ...editModeldata,
-                          admin: parseFloat(e.target.value),
-                        },
-                      });
-                    }}
-                  >
-                    <option>Lucinda Massey</option>
-                    <option value="1">Ryan Nolan</option>
-                    <option value="2">Oliver Black</option>
-                    <option value="3">Adam Walker</option>
-                    <option value="4">Brian Skinner</option>
-                    <option value="5">Dan Short</option>
-                    <option value="5">Jack Glover</option>
-                  </select>
-                </div>
-              </div>
-            </form>
-          </div>
-          <div className="mb-3">
-            <label
-              htmlFor="exampleFormControlTextarea78"
-              className="form-label"
-            >
-              Description (optional)
-            </label>
-            <textarea
-              className="form-control"
-              id="exampleFormControlTextarea78"
-              rows={3}
-              placeholder="Add any extra details about the request"
-              value={editModeldata ? editModeldata.description : ""}
-              onChange={(e: any) => {
-                setState({
-                  ...state,
-                  editModeldata: {
-                    ...editModeldata,
-                    description: e.target.value,
-                  },
-                });
-              }}
-            />
-          </div> */}
-        </Modal.Body>
-        <Modal.Footer>
-          <button
-            type="button"
-            className="btn btn-secondary"
-            onClick={handleModalClose}
-          >
-            Cancel
-          </button>
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={createProject}
-          >
-            Create
-          </button>
-        </Modal.Footer>
-      </Modal>
-      <Modal
+      <ProjectModal
+        onClose={handleModalClose}
+        modalHeader={modalHeader}
+        isAddModal={isAddModal}
+        isEditModal={isEditModal}
+        handleModelData={handleProjectModelData}
+        selectedProject={selectedProject}
+        modelData={modelProjectData}
+        categories={categories}
+        admins={admins}
+        onCreate={createProject}
+        onUpdate={editProject}
+      />
+      <DeleteModal
         show={isDeleteModal}
-        centered
-        onHide={() => {
-          setState({ ...state, isDeleteModal: false });
-        }}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title className="fw-bold">Delete Project</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="justify-content-center flex-column d-flex">
-          <i className="icofont-ui-delete text-danger display-2 text-center mt-2" />
-          <p className="mt-4 fs-5 text-center">
-            You can only delete this item Permanently
-          </p>
-        </Modal.Body>
-        <Modal.Footer>
-          <button
-            type="button"
-            className="btn btn-secondary"
-            onClick={() => {
-              setState({ ...state, isDeleteModal: false });
-            }}
-          >
-            Cancel
-          </button>
-          <button type="button" className="btn btn-danger color-fff">
-            Create
-          </button>
-        </Modal.Footer>
-      </Modal>
+        onClose={handleModalClose}
+        onDelete={deleteProject}
+        message="Are you sure you want to delete this project?"
+        modalHeader={modalHeader}
+      />
       <AddNewUserModal
         show={isAddUserModal}
-        onClose={() => {
-          setState({ ...state, isAddUserModal: false });
-        }}
+        onClose={handleModalClose}
+        modalHeader={modalHeader}
+      />
+      <AddNewAttachmentModal
+        show={isAddAttachmentModal}
+        onClose={handleModalClose}
+        project={modelProjectData}
+        modalHeader={modalHeader}
+      />
+      <DescriptionViewModal
+        show={isViewDescriptionModal}
+        data={selectedProject.description}
+        onClose={handleModalClose}
+        modalHeader={modalHeader}
+      />
+      <AddCommentModal
+        show={isAddCommentModal}
+        onClose={handleModalClose}
+        modalHeader={modalHeader}
+      />
+      <TaskModal
+        onClose={handleModalClose}
+        modalHeader={modalHeader}
+        isAddModal={isAddTaskModal}
+        isEditModal={isEditTaskModal}
+        handleModelData={handleTaskModelData}
+        selectedProject={selectedProject}
+        modelData={modelTaskData}
+        onCreate={createTask}
+        onUpdate={editTask}
+        members={members}
+      />
+      <ViewTasksModal
+        show={isViewTaskModal}
+        onClose={handleModalClose}
+        modalHeader={modalHeader}
       />
     </div>
   );

@@ -12,11 +12,16 @@ export const http = axios.create({
 // Change request data/error here
 http.interceptors.request.use(
   (config) => {
-    // @ts-expect-error
-    config.headers = {
-      ...config.headers,
-      Authorization: `Bearer ${localStorage.getItem("access_token")}`
-    };
+    const token: string | null = localStorage.getItem("access_token");
+
+    if (token) {
+      // @ts-expect-error
+      config.headers = {
+        ...config.headers,
+        Authorization: `Bearer ${token}`,
+      };
+    }
+
     return config;
   },
   (error) => {

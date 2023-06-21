@@ -7,8 +7,8 @@ import useApp from "hooks/useApp";
 import { AuthLoginInput } from "types/login";
 import { useLogin } from "framework/auth/login";
 import { Pages } from "enums/pages";
-import { Routes } from "enums/routes.";
 import { useAuth } from "contexts/AuthContext";
+import { Screens } from "enums/screens";
 
 const defaultValues: AuthLoginInput = { username: "", password: "" };
 
@@ -33,8 +33,9 @@ const SignIn: React.FC = () => {
       localStorage.setItem("session", JSON.stringify(result));
       localStorage.setItem("access_token", result.access);
 
-      push(Routes.DASHBOARD + Pages.SUMMARY);
-    } catch (err) {
+
+      push(Screens.DASHBOARD + Pages.SUMMARY);
+    } catch (err: Error | any) {
       //  @TODO should handle error
 
       console.log(err);

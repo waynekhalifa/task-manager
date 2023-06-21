@@ -2,12 +2,11 @@ import React from "react";
 import DataTable from "react-data-table-component";
 import ClientProfileCard from "../../components/Clients/ClientProfileCard";
 import ClientTaskCard from "../../components/Clients/ClientTaskCard";
-import CurrentClientProject from "../../components/Clients/CurrentClientProject";
 import PageHeader from "../../components/common/PageHeader";
 import { clentProfileData } from "../../components/Data/AppData";
 import { ClientInvoicesData } from "../../components/Data/DashboardData";
 
-interface Props {}
+interface Props { }
 
 const ClientProfile: React.FC<Props> = () => {
   return (
@@ -25,13 +24,13 @@ const ClientProfile: React.FC<Props> = () => {
                     key={"key" + i}
                     className="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12"
                   >
-                    <CurrentClientProject
+                    {/* <CurrentClientProject
                       teamImage={d.teamImage}
                       logo={d.logo}
                       logoBg={d.logoBg}
                       title={d.title}
                       sl={d.sl}
-                    />
+                    /> */}
                   </div>
                 );
               })}

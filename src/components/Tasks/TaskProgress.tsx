@@ -1,10 +1,16 @@
 import { ProgressBar } from "react-bootstrap";
+import { SelectedTask } from "types/task";
 
-const TaskProgress: React.FC = () => {
+
+interface Props {
+  tasks: SelectedTask[];
+}
+
+const TaskProgress: React.FC<Props> = ({ tasks }) => {
   return (
     <div className="card">
       <div className="card-header py-3">
-        <h6 className="mb-0 fw-bold ">Task Progress</h6>
+        <h6 className="mb-0 fw-bold ">To Do</h6>
       </div>
       <div className="card-body mem-list">
         <div className="progress-count mb-4">

@@ -1,21 +1,24 @@
 import { useMutation } from "@tanstack/react-query";
 import { Endpoints } from "enums/endpoints";
-import { TaskCreateInput } from "types/task";
+import { Task } from "types/task";
 import http from "utils/http";
 
 export const useCreateTask = () => {
-  return useMutation<any, Error, TaskCreateInput>(async createInput => {
+  return useMutation<any, Error, Task>(async createInput => {
     const { data } = await http.post(Endpoints.TASK, createInput);
     return { session: { data: data as any } };
   });
 };
 
-export const taskInput = (data: TaskCreateInput): TaskCreateInput => {
+export const taskInput = (data: Task): Task => {
+
   return {
-    project: data.project,
-    files: data.files,
     name: data.name,
     description: data.description,
-    user: data.user
-  };
+    task_priority: data.task_priority,
+    user: data.user,
+    project: data.project,
+    start_at: data.start_at,
+    end_at: data.end_at,
+  } as Task;
 };

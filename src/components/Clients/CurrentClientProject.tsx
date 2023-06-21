@@ -1,14 +1,26 @@
 import { ProgressBar } from "react-bootstrap";
+import { sumDateRange, sumDaysLeftFromToDay } from "utils/convert";
 
 interface Props {
   teamImage: any;
   logo: any;
   logoBg: any;
   title: any;
-  sl: any;
+  startDate: any;
+  endDate: any;
+  category: any;
   onClickEdit?: any;
   onClickDelete?: any;
-  onClickAdd?: any;
+  onClickAddMember?: any;
+  onClickAddAttachment?: any;
+  onClickViewDescription?: any;
+  onClickViewTasks?: any;
+  onClickAddTask?: any;
+  onClickAddComment: any;
+  members_count: number;
+  comments_count: number;
+  attachment_count: number;
+  tasks_count: number;
 }
 
 const CurrentClientProject: React.FC<Props> = ({
@@ -16,20 +28,35 @@ const CurrentClientProject: React.FC<Props> = ({
   logo,
   logoBg,
   title,
-  sl,
+  category,
+  startDate,
+  endDate,
   onClickEdit,
   onClickDelete,
-  onClickAdd,
+  onClickAddMember,
+  onClickAddAttachment,
+  onClickViewDescription,
+  onClickAddComment,
+  onClickViewTasks,
+  onClickAddTask,
+  comments_count,
+  members_count,
+  attachment_count,
+  tasks_count
 }) => {
+
+
+
+
   return (
     <div className="card">
       <div className="card-body">
         <div className="d-flex align-items-center justify-content-between mt-5">
           <div className="lesson_name">
-            <div className={"project-block " + logoBg}>
-              <i className={logo}></i>
+            <div className={"project-block " + title}>
+              <img src={logo} className={title} alt={title} width={50} height={50} />
             </div>
-            <span className="small text-muted project_name fw-bold">{sl}</span>
+            <span className="small text-muted project_name fw-bold">{category}</span>
             <h6 className="mb-0 fw-bold  fs-6  mb-2">{title}</h6>
           </div>
           <div
@@ -53,7 +80,9 @@ const CurrentClientProject: React.FC<Props> = ({
             </button>
           </div>
         </div>
-        <div className="d-flex align-items-center">
+
+        {/* //TODO : Add team member
+         <div className="d-flex align-items-center">
           <div className="avatar-list avatar-list-stacked pt-2">
             {teamImage.map((d: any, i: any) => (
               <img
@@ -70,55 +99,100 @@ const CurrentClientProject: React.FC<Props> = ({
               <i className="icofont-ui-add"></i>
             </span>
           </div>
-        </div>
+        </div> */}
         <div className="row g-2 pt-4">
           <div className="col-6">
-            <div className="d-flex align-items-center">
+            <div className="d-flex align-items-center"
+              style={{ cursor: 'pointer' }}
+              onClick={onClickAddAttachment}
+            >
               <i className="icofont-paper-clip"></i>
-              <span className="ms-2">5 Attach</span>
+              <span className="badge bg-secondary ms-2">{attachment_count} Attach</span>
+              <span
+                className="avatar rounded-circle text-center pointer sm"
+              >
+                <i className="icofont-ui-add"></i>
+              </span>
             </div>
           </div>
           <div className="col-6">
             <div className="d-flex align-items-center">
               <i className="icofont-sand-clock"></i>
-              <span className="ms-2">4 Month</span>
+              <span className="badge bg-secondary ms-2">{sumDateRange(startDate,endDate)} Days</span>
             </div>
           </div>
           <div className="col-6">
-            <div className="d-flex align-items-center">
+            <div className="d-flex align-items-center"
+              style={{ cursor: 'pointer' }}
+              onClick={onClickAddMember}
+            >
               <i className="icofont-group-students "></i>
-              <span className="ms-2">5 Members</span>
+              <span className="badge bg-secondary ms-2">{members_count} Members</span>
+              <span
+                className="avatar rounded-circle text-center pointer sm"
+              >
+                <i className="icofont-ui-add"></i>
+              </span>
+            </div>
+          </div>
+          <div className="col-6">
+            <div className="d-flex align-items-center"
+              style={{ cursor: 'pointer' }}
+              onClick={onClickAddComment}
+            >
+              <i className="icofont-ui-text-chat"></i>
+              <span className="badge bg-secondary ms-2">{comments_count}</span>
+              <span
+                className="avatar rounded-circle text-center pointer sm"
+              >
+                <i className="icofont-ui-add"></i>
+              </span>
+            </div>
+          </div>
+          <div className="col-6">
+            <div className="d-flex align-items-center"
+              style={{ cursor: 'pointer' }}
+              onClick={onClickViewDescription}
+            >
+              <i className="icofont-align-left "></i>
+              <span className="ms-2">Description</span>
+              <span
+                className="avatar rounded-circle text-center pointer sm"
+              >
+                <i className="icofont-eye-alt"></i>
+              </span>
             </div>
           </div>
           <div className="col-6">
             <div className="d-flex align-items-center">
-              <i className="icofont-ui-text-chat"></i>
-              <span className="ms-2">10</span>
+              <i className="icofont-tasks"></i>
+              <span className="ms-2" style={{ cursor: 'pointer' }}
+                onClick={onClickViewTasks}
+              >Tasks</span>
+              <span className="badge bg-secondary ms-2">{tasks_count}</span>
+              <span
+                className="avatar rounded-circle text-center pointer sm"
+              >
+                <i className="icofont-ui-add" style={{ cursor: 'pointer' }}
+                  onClick={onClickAddTask}
+                ></i>
+              </span>
             </div>
           </div>
         </div>
         <div className="dividers-block"></div>
         <div className="d-flex align-items-center justify-content-between mb-2">
-          <h4 className="small fw-bold mb-0">Progress</h4>
+          {/* <h4 className="small fw-bold mb-0">Progress</h4> */}
           <span className="small light-danger-bg  p-1 rounded">
-            <i className="icofont-ui-clock"></i> 35 Days Left
+            <i className="icofont-ui-clock"></i> {sumDaysLeftFromToDay(startDate)} Days Left
           </span>
         </div>
         <ProgressBar style={{ height: "8px" }}>
           <ProgressBar variant="secondary" now={15} style={{ width: "25%" }} />
-          <ProgressBar
-            variant="secondary"
-            now={30}
-            style={{ width: "25%", marginLeft: 10 }}
-          />
-          <ProgressBar
-            variant="secondary"
-            now={10}
-            style={{ width: "25%", marginLeft: 10 }}
-          />
         </ProgressBar>
+        25% Complete
       </div>
-    </div>
+    </div >
   );
 };
 

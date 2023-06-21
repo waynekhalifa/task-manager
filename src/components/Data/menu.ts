@@ -1,6 +1,6 @@
 export const menu: any[] = [
   {
-    name: "Summary",
+    name: "Dashboard",
     routerLink: ["/dashboard/summary"],
     identifier: "dashboard",
     iconClass: "icofont-home fs-5",
@@ -10,7 +10,7 @@ export const menu: any[] = [
     children: [],
   },
   {
-    name: "Projects",
+    name: "Project Management",
     routerLink: ["/dashboard/projects"],
     identifier: "Projects",
     iconClass: "icofont-briefcase",
@@ -20,7 +20,7 @@ export const menu: any[] = [
     children: [],
   },
   {
-    name: "Tasks",
+    name: "Task Management",
     routerLink: ["/dashboard/tasks"],
     identifier: "Tasks",
     iconClass: "icofont-tasks-alt",
@@ -29,16 +29,16 @@ export const menu: any[] = [
     isApp: false,
     children: [],
   },
-  {
-    name: "Enquires",
-    routerLink: ["/dashboard/Enquires"],
-    identifier: "Enquires",
-    iconClass: "icofont-ticket",
-    breadcrumbMessage: "",
-    isCategory: false,
-    isApp: true,
-    children: [],
-  },
+  // {
+  //   name: "Enquires",
+  //   routerLink: ["/dashboard/Enquires"],
+  //   identifier: "Enquires",
+  //   iconClass: "icofont-ticket",
+  //   breadcrumbMessage: "",
+  //   isCategory: false,
+  //   isApp: true,
+  //   children: [],
+  // },
   {
     name: "Employees",
     routerLink: ["/dashboard/employees"],
@@ -80,9 +80,9 @@ export const menu: any[] = [
     children: [],
   },
   {
-    name: "Categories",
-    routerLink: ["/dashboard/categories"],
-    identifier: "Categories",
+    name: "Departments",
+    routerLink: ["/dashboard/departments"],
+    identifier: "Departments",
     iconClass: "icofont-listine-dots",
     breadcrumbMessage: "",
     isCategory: false,

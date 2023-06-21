@@ -11,4 +11,5 @@ export type QueryOptionsType = {
   startIndex?: number;
   limit?: number;
   key?: string;
+  id?: number;
 };

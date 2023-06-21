@@ -1,4 +1,6 @@
 export enum Pages {
+  PASSWORD_RESET = "password-reset",
+  VERIFY_EMAIL = "verify-email",
   SUMMARY = "summary",
   PROJECTS = "projects",
   TASKS = "tasks",
@@ -7,5 +9,5 @@ export enum Pages {
   CHAT = "chat",
   ATTENDANCE = "attendance",
   CALENDAR = "calendar",
-  CATEGORIES = "categories",
+  CATEGORIES = "departments",
 }

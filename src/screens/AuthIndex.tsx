@@ -1,10 +1,15 @@
+import { Suspense, useEffect, useState } from "react";
+import { Route, Routes } from "react-router-dom";
+
 import LeftSide from "components/Auth/LeftSide";
+import Auth from "components/Auth";
 import SignIn from "../components/Auth/SignIn";
-import { useEffect, useState } from "react";
+import useApp from "hooks/useApp";
 import { RefreshTokenInput } from "types/refreshToken";
 import { useRefreshToken } from "framework/auth/refreshToken";
-import useApp from "hooks/useApp";
 import { useAuth } from "contexts/AuthContext";
+import { Screens } from "enums/screens";
+import { Pages } from "enums/pages";
 
 type IState = { initialized: boolean };
 const INITIAL_STATE: IState = { initialized: false };
@@ -42,11 +47,11 @@ const AuthIndex: React.FC = () => {
       );
 
       setState({ ...state, initialized: true });
+
+      push(Screens.DASHBOARD + Pages.SUMMARY);
     } catch (err: Error | any) {
       console.log(err);
       setState({ ...state, initialized: true });
-
-      push("/");
     }
   };
 
@@ -58,7 +63,12 @@ const AuthIndex: React.FC = () => {
         <div className="container-xxl">
           <div className="row g-0">
             <LeftSide />
-            <SignIn />
+            <Suspense fallback={null}>
+              <Routes>
+                <Route path="/" element={<SignIn />} />
+                <Route path=":slug/*" element={<Auth />} />
+              </Routes>
+            </Suspense>
           </div>
         </div>
       </div>

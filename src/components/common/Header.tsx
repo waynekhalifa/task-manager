@@ -11,12 +11,25 @@ import Avatar7 from "assets/images/xs/avatar7.jpg";
 import Avatar8 from "assets/images/xs/avatar8.jpg";
 import ProfileImg from "assets/images/profile_av.png";
 import AddNewUserModal from "./AddNewUserModal";
+import { useAuth } from "contexts/AuthContext";
+import useApp from "hooks/useApp";
 
 type IState = { isAddUserModal: boolean };
 const INITIAL_STATE: IState = { isAddUserModal: false };
 
 const Header: React.FC = () => {
   const [state, setState] = useState<IState>(INITIAL_STATE);
+  const { push } = useApp();
+  const { setSession } = useAuth();
+
+  const handleLogout = () => {
+    setSession(null);
+    localStorage.removeItem("session");
+    localStorage.removeItem("access_token");
+
+    push("/");
+  };
+
   return (
     <div className="header">
       <nav className="navbar py-4">
@@ -30,7 +43,7 @@ const Header: React.FC = () => {
               >
                 <i className="icofont-info-square fs-5"></i>
               </Link>
-              <div className="avatar-list avatar-list-stacked px-3">
+              <div className="avatar-list avatar-list-stacked px-3 pointer">
                 <img className="avatar rounded-circle" src={Avatar2} alt="" />
                 <img className="avatar rounded-circle" src={Avatar1} alt="" />
                 <img className="avatar rounded-circle" src={Avatar3} alt="" />
@@ -242,12 +255,12 @@ const Header: React.FC = () => {
                     >
                       <i className="icofont-ui-user-group fs-6 me-3"></i>members
                     </Link>
-                    <Link
-                      to="sign-in"
-                      className="list-group-item list-group-item-action border-0 "
+                    <span
+                      onClick={handleLogout}
+                      className="list-group-item list-group-item-action border-0 pointer"
                     >
                       <i className="icofont-logout fs-6 me-3"></i>Signout
-                    </Link>
+                    </span>
                     <div>
                       <hr className="dropdown-divider border-dark" />
                     </div>
@@ -310,6 +323,7 @@ const Header: React.FC = () => {
       <AddNewUserModal
         show={state.isAddUserModal}
         onClose={() => setState({ isAddUserModal: false })}
+        modalHeader="Add New User"
       />
     </div>
   );

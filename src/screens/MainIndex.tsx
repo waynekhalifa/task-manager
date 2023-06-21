@@ -3,10 +3,11 @@ import { Navigate, Route, Routes } from "react-router-dom";
 
 import Sidebar from "components/common/Sidebar";
 import Header from "components/common/Header";
-import { useAuth } from "contexts/AuthContext";
 import useApp from "hooks/useApp";
+import { useAuth } from "contexts/AuthContext";
 import { useRefreshToken } from "framework/auth/refreshToken";
 import { RefreshTokenInput } from "types/refreshToken";
+import { Screens } from "enums/screens";
 
 const DashboardIndex = lazy(() => import("./DashboardIndex"));
 
@@ -30,7 +31,7 @@ const MainIndex: React.FC = () => {
     } else {
       setState({ ...state, initialized: true });
 
-      push("/");
+      push(Screens.MAIN);
     }
 
     // eslint-disable-next-line
@@ -52,7 +53,7 @@ const MainIndex: React.FC = () => {
       console.log(err);
       setState({ ...state, initialized: true });
 
-      push("/");
+      push(Screens.MAIN);
     }
   };
 
@@ -69,6 +70,7 @@ const MainIndex: React.FC = () => {
             <Routes>
               <Route path="/" element={<Navigate to="summary" />} />
               <Route path=":slug/*" element={<DashboardIndex />} />
+              <Route path=":slug/:id*" element={<DashboardIndex />} />
             </Routes>
           </Suspense>
         </div>
