@@ -10,7 +10,13 @@ const NestableCard: React.FC<Props> = ({ data }) => {
 
 
   const { push } = useApp();
-
+  const getShortDescription = (description: string) => {
+    if (description.length > 200) {
+      return description.substring(0, 200) + "...";
+    } else {
+      return description;
+    }
+  };
   return (
     <div className="dd-handle mt-2 pointer"
       onClick={() => push(`/dashboard/tasks/${data.id}`)}
@@ -49,7 +55,14 @@ const NestableCard: React.FC<Props> = ({ data }) => {
         </div>
       </div>
       <div className="row g-2 pt-4">
-        <div className="col-6">
+        <div className="col-12">
+          <div className="d-flex align-items-center">
+            {/* description here */}
+            <i className="icofont-info-circle" style={{ marginRight: 5 }}></i>
+            <p className="small-14 mb-0">{getShortDescription(data.description)}</p>
+          </div>
+        </div>
+        <div className="col">
           <div className="d-flex align-items-center"
             style={{ cursor: 'pointer' }}
           // onClick={onClickAddAttachment}
@@ -63,14 +76,14 @@ const NestableCard: React.FC<Props> = ({ data }) => {
             </span>
           </div>
         </div>
-        <div className="col-6">
+        <div className="col">
           <div className="d-flex align-items-center">
             <i className="icofont-sand-clock"></i>
             <span className="badge bg-secondary ms-2">{sumDateRange(data.start_at, data.end_at)} Days</span>
           </div>
         </div>
 
-        <div className="col-6">
+        <div className="col">
           <div className="d-flex align-items-center"
             style={{ cursor: 'pointer' }}
           // onClick={onClickAddComment}
