@@ -8,9 +8,7 @@ import {
 import BigCalendar from "components/Pages/BigCalendar";
 import Employeesavaibility from "components/Dashboard/Employeesavaibility";
 
-interface Props {}
-
-const HrDashboard: React.FC<Props> = () => {
+const HrDashboard: React.FC = () => {
   return (
     <div className="container-xxl">
       {/* <PageHeader headerTitle="Hr Dashboard"  /> */}

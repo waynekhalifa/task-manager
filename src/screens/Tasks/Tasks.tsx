@@ -4,20 +4,13 @@ import AllocatedTask from "../../components/Tasks/AllocatedTask";
 import RecentActivity from "../../components/Tasks/RecentActivity";
 import TaskProgress from "../../components/Tasks/TaskProgress";
 import "react-nestable/dist/styles/index.css";
-import {
-  CompletedData,
-  InProgressTaskData,
-  needReviewData,
-} from "../../components/Data/AppData";
-import TaskNestable1 from "../../components/Tasks/TaskNestable";
 import { useProjectsQuery } from "framework/project/getAllProjects";
 import { SelectedTask } from "types/task";
 import TaskModal from "components/common/TaskModal";
 import { SelectedProject } from "types/project";
 import { taskInput, useCreateTask } from "framework/task/create-task";
 import { useTaskQuery } from "framework/task/get-all-tasks";
-
-
+import Board from "components/Pages/Board";
 
 interface State {
   isAddModal: boolean;
@@ -45,21 +38,37 @@ const INITIAlIZE_DATA: State = {
   modelData: {},
 };
 
-
 const Tasks: React.FC = () => {
   const [state, setState] = useState<State>(INITIAlIZE_DATA);
-  const { modelData, isAddModal, isEditModal, isDeleteModal, isAddUserModal, isAddAttachmentModal, isViewDescriptionModal, isAddCommentModal, modalHeader } = state;
+  const {
+    modelData,
+    isAddModal,
+    isEditModal,
+    isDeleteModal,
+    isAddUserModal,
+    isAddAttachmentModal,
+    isViewDescriptionModal,
+    isAddCommentModal,
+    modalHeader,
+  } = state;
   const { mutateAsync: createTaskMutation } = useCreateTask();
 
-  let { data: projectData, error: errorProjects, isLoading: loadingProjects } = useProjectsQuery({});
-  let { data: taskData, error: errorTask, isLoading: loadingTasks } = useTaskQuery({});
+  let {
+    data: projectData,
+    error: errorProjects,
+    isLoading: loadingProjects,
+  } = useProjectsQuery({});
+  let {
+    data: taskData,
+    error: errorTask,
+    isLoading: loadingTasks,
+  } = useTaskQuery({});
   let tasks: SelectedTask[] = taskData?.tasks.data.results || [];
   if (loadingProjects || errorTask) return <div>Loading...</div>;
   if (errorProjects || loadingTasks) return null;
   let projects: SelectedProject[] = projectData?.projects.data.results || [];
   let members = projectData?.projects.data.results[0].members || [
     {
-
       label: "Select User",
       value: 0,
     },
@@ -124,9 +133,8 @@ const Tasks: React.FC = () => {
       ...state,
       isEditModal: !isEditModal,
       modalHeader: "Edit Task",
-      selectedTask: task
+      selectedTask: task,
     });
-
   };
 
   const handleDeleteModal = (task: SelectedTask) => {
@@ -134,7 +142,7 @@ const Tasks: React.FC = () => {
       ...state,
       isDeleteModal: !isDeleteModal,
       modalHeader: "Delete Task",
-      selectedTask: task
+      selectedTask: task,
     });
   };
 
@@ -143,7 +151,7 @@ const Tasks: React.FC = () => {
       ...state,
       isAddUserModal: !isAddUserModal,
       modalHeader: "Add User",
-      selectedTask: task
+      selectedTask: task,
     });
   };
 
@@ -152,7 +160,7 @@ const Tasks: React.FC = () => {
       ...state,
       isAddAttachmentModal: !isAddAttachmentModal,
       modalHeader: "Add Attachment",
-      selectedTask: task
+      selectedTask: task,
     });
   };
 
@@ -161,7 +169,7 @@ const Tasks: React.FC = () => {
       ...state,
       isViewDescriptionModal: !isViewDescriptionModal,
       modalHeader: "View Description",
-      selectedTask: task
+      selectedTask: task,
     });
   };
 
@@ -170,10 +178,9 @@ const Tasks: React.FC = () => {
       ...state,
       isAddCommentModal: !isAddCommentModal,
       modalHeader: "Add Comment",
-      selectedTask: task
+      selectedTask: task,
     });
   };
-
 
   const createTask = async () => {
     try {
@@ -188,7 +195,6 @@ const Tasks: React.FC = () => {
   };
 
   const editTask = async () => {
-
     try {
     } catch (error) {
       alert(error);
@@ -226,14 +232,16 @@ const Tasks: React.FC = () => {
               <AllocatedTask />
             </div>
           </div>
-          <TaskNestable1
+          {/* <TaskNestable1
             InProgressTaskData={InProgressTaskData}
             needReviewData={needReviewData}
             CompletedData={CompletedData}
             tasks={tasks}
-          />
+          /> */}
         </div>
       </div>
+
+      <Board />
 
       <TaskModal
         onClose={handleModalClose}
@@ -249,7 +257,6 @@ const Tasks: React.FC = () => {
       />
     </div>
   );
-
-}
+};
 
 export default Tasks;
