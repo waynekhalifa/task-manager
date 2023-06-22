@@ -2,9 +2,12 @@ import OurClients from "components/Clients/OurClients";
 import NestableCard from "components/Tasks/NestableCard";
 import Attachment from "components/common/Attachment";
 import Comment from "components/common/Comment";
+import { TaskStatusBadge } from "enums/global";
 import { useSingleTask } from "framework/task/get-single-task";
+import { Dropdown } from "react-bootstrap";
 import EnquiresView from "screens/Tickets/TicketsView";
 import { SelectedTask } from "types/task";
+import { getBtn } from "utils/helper";
 
 interface Props {
   id: number;
@@ -101,9 +104,20 @@ const TaskDetails: React.FC<Props> = ({ id }) => {
               <div className="card-body">
                 <div>
                   <h5 className="card-title">Task Status</h5>
-                  <span className="badge bg-success">{task.task_progress}</span>
-                </div>
+                  <Dropdown className="d-inline-flex m-1">
+                    <Dropdown.Toggle as="a" variant="" id="dropdown-basic" className={getBtn(task.task_progress)}>
+                      {task.task_progress}
+                    </Dropdown.Toggle>
 
+                    <Dropdown.Menu as="ul" className="border-0 shadow bg-primary">
+                      <li><a className="dropdown-item py-2 rounded text-light" href="#!" onClick={(e) => { e.preventDefault(); }}>
+                        {TaskStatusBadge.TODO}</a></li>
+                      <li><a className="dropdown-item py-2 rounded text-light" href="#!" onClick={(e) => { e.preventDefault(); }}>{TaskStatusBadge.ON_PROGRESS}</a></li>
+                      <li><a className="dropdown-item py-2 rounded text-light" href="#!" onClick={(e) => { e.preventDefault(); }}>{TaskStatusBadge.ON_REVIEW}</a></li>
+                      <li><a className="dropdown-item py-2 rounded text-light" href="#!" onClick={(e) => { e.preventDefault(); }}>{TaskStatusBadge.COMPLETED}</a></li>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </div>
               </div>
             </div>
           </div>
