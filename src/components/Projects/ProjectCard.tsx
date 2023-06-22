@@ -78,7 +78,7 @@ const ProjectCard: React.FC<Props> = ({
               onClick={onClickAddAttachment}
             >
               <i className="icofont-paper-clip"></i>
-              <span className="badge bg-secondary ms-2">{project?.attachment_count} Attach</span>
+              <span className="badge bg-secondary ms-2">{project?.projectfile_set?.length} Attach</span>
               <span
                 className="avatar rounded-circle text-center pointer sm"
               >

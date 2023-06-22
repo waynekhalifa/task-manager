@@ -26,6 +26,7 @@ export interface SelectedProject {
   tasks_count?: number;
   members?: any[];
   project_status?: string;
+  projectfile_set?: any[];
 }
 
 

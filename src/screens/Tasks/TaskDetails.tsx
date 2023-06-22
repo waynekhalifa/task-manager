@@ -1,5 +1,6 @@
 import OurClients from "components/Clients/OurClients";
 import NestableCard from "components/Tasks/NestableCard";
+import Attachment from "components/common/Attachment";
 import Comment from "components/common/Comment";
 import { useSingleTask } from "framework/task/get-single-task";
 import EnquiresView from "screens/Tickets/TicketsView";
@@ -103,6 +104,16 @@ const TaskDetails: React.FC<Props> = ({ id }) => {
                   <span className="badge bg-success">{task.task_progress}</span>
                 </div>
 
+              </div>
+            </div>
+          </div>
+          <div className="col-12">
+            <div className="card">
+              <div className="card-body">
+                <h5 className="card-title text-primary"><strong>Attachments</strong></h5>
+                <Attachment
+                  task={task}
+                />
               </div>
             </div>
           </div>
