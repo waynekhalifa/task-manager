@@ -78,7 +78,7 @@ const ProjectCard: React.FC<Props> = ({
               onClick={onClickAddAttachment}
             >
               <i className="icofont-paper-clip"></i>
-              <span className="badge bg-secondary ms-2">{project?.projectfile_set?.length} Attach</span>
+              <span className="badge bg-light text-dark ms-2">{project?.projectfile_set?.length}</span>
               <span
                 className="avatar rounded-circle text-center pointer sm"
               >
@@ -89,7 +89,7 @@ const ProjectCard: React.FC<Props> = ({
           <div className="col-6">
             <div className="d-flex align-items-center">
               <i className="icofont-sand-clock"></i>
-              <span className="badge bg-secondary ms-2">{sumDateRange(project?.start_at!, project?.end_at!)} Days</span>
+              <span className="badge bg-light text-dark ms-2">{sumDateRange(project?.start_at!, project?.end_at!)} Days</span>
             </div>
           </div>
           <div className="col-6">
@@ -98,7 +98,7 @@ const ProjectCard: React.FC<Props> = ({
               onClick={onClickAddMember}
             >
               <i className="icofont-group-students "></i>
-              <span className="badge bg-secondary ms-2">{project?.members_count} Members</span>
+              <span className="badge bg-light text-dark ms-2">{project?.members_count} Members</span>
               <span
                 className="avatar rounded-circle text-center pointer sm"
               >
@@ -112,7 +112,7 @@ const ProjectCard: React.FC<Props> = ({
               onClick={onClickAddComment}
             >
               <i className="icofont-ui-text-chat"></i>
-              <span className="badge bg-secondary ms-2">{project?.comments_count}</span>
+              <span className="badge bg-light text-dark ms-2">{project?.comments_count}</span>
               <span
                 className="avatar rounded-circle text-center pointer sm"
               >
@@ -126,7 +126,7 @@ const ProjectCard: React.FC<Props> = ({
               onClick={onClickViewDescription}
             >
               <i className="icofont-align-left "></i>
-              <span className="ms-2">Description</span>
+              <span className="badge bg-light text-dark ms-2">Description</span>
               <span
                 className="avatar rounded-circle text-center pointer sm"
               >
@@ -140,7 +140,7 @@ const ProjectCard: React.FC<Props> = ({
               <span className="ms-2" style={{ cursor: 'pointer' }}
                 onClick={onClickViewTasks}
               >Tasks</span>
-              <span className="badge bg-secondary ms-2">{project?.tasks_count}</span>
+              <span className="badge bg-light text-dark ms-2">{project?.tasks_count}</span>
               <span
                 className="avatar rounded-circle text-center pointer sm"
               >
