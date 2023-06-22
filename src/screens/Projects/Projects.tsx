@@ -19,7 +19,7 @@ import ViewTasksModal from "components/common/ViewTasksModal";
 import ProjectModal from "components/common/ProjectModal";
 import TaskModal from "components/common/TaskModal";
 import DeleteModal from "components/common/DeleteModal";
-import { SelectedTask, Task } from "types/task";
+import { Task } from "types/task";
 import { taskInput, useCreateTask } from "framework/task/create-task";
 import { useUploadTaskAttachment } from "framework/task/uploadTaskAttachment";
 import ProjectCard from "components/Projects/ProjectCard";
@@ -33,6 +33,7 @@ enum ModelKeys {
   START_DATE = "start_at",
   END_DATE = "end_at",
   ADMIN = "admin",
+  GROUP = "group",
   FILE = "file",
   FILES = "files",
 }
@@ -115,6 +116,20 @@ const Projects: React.FC<Props> = () => {
       value: 1,
     },
   ]
+  const groups = [
+    {
+      label: "Group1",
+      value: 1,
+    },
+    {
+      label: "Group2",
+      value: 1,
+    },
+    {
+      label: "Group2",
+      value: 1,
+    },
+  ]
 
   let members = projectData?.projects.data.results[0].members || [
     {
@@ -135,31 +150,7 @@ const Projects: React.FC<Props> = () => {
       value: 3,
     },
   ];
-  let tasks: SelectedTask[] = [
-    {
-      id: 1,
-      name: "Task 1",
-      description: "Task 1 description",
-      start_at: "2021-09-01",
-      end_at: "2021-09-01",
-      task_progress: "In Progress",
-      task_priority: "HIGH",
-      files: [],
-      user: 1
-    },
-    {
-      id: 2,
-      name: "Task 2",
-      description: "Task 2 description",
-      start_at: "2021-09-01",
-      end_at: "2021-09-01",
-      task_progress: "In Progress",
-      task_priority: "HIGH",
-      files: [],
-      user: 1
-    },
 
-  ];
 
 
   const handleModalClose = (reload: boolean = false) => {
@@ -327,9 +318,7 @@ const Projects: React.FC<Props> = () => {
     try {
       Object.assign(modelTaskData, { project: selectedProject.id });
       let createInput = taskInput(modelTaskData);
-      let res = await createTaskMutation(createInput);
-      let task = res.session.data;
-      tasks.push(task);
+      await createTaskMutation(createInput);
       handleModalClose(true);
     } catch (error) {
       alert(error);
@@ -489,6 +478,7 @@ const Projects: React.FC<Props> = () => {
         admins={admins}
         onCreate={createProject}
         onUpdate={editProject}
+        groups={groups}
       />
       <DeleteModal
         show={isDeleteModal}
@@ -530,12 +520,13 @@ const Projects: React.FC<Props> = () => {
         onCreate={createTask}
         onUpdate={editTask}
         members={members}
+        groups={groups}
       />
       <ViewTasksModal
         show={isViewTaskModal}
         onClose={handleModalClose}
         modalHeader={modalHeader}
-        tasks={tasks}
+        project={selectedProject}
       />
     </div>
   );

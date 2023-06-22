@@ -17,9 +17,10 @@ interface Props {
   projects?: SelectedProject[];
   SelectedTask?: SelectedTask;
   members: any[];
+  groups: any[];
   modelData?: any;
-  onCreate: () => void;
-  onUpdate: () => void;
+  onCreate?: () => void;
+  onUpdate?: () => void;
 }
 
 enum ModelKeys {
@@ -27,6 +28,7 @@ enum ModelKeys {
   DESCRIPTION = 'description',
   IS_SUBMITTING = 'isSubmitting',
   USER = 'user',
+  GROUP = "group",
   PROJECT = 'project',
   TASK_PEIORITY = 'task_priority',
   FILES = "files",
@@ -38,7 +40,7 @@ enum ModelKeys {
 
 const TaskModal: React.FC<Props> = ({ onClose, modalHeader, isAddModal,
   isEditModal,
-  handleModelData, selectedProject, SelectedTask, projects, members,
+  handleModelData, selectedProject, SelectedTask, projects, members, groups,
   modelData,
   onCreate,
   onUpdate }) => {
@@ -131,6 +133,17 @@ const TaskModal: React.FC<Props> = ({ onClose, modalHeader, isAddModal,
       onChange: (e: any) =>
         handleModelData(ModelKeys.END_DATE, e.target.value),
       placeholder: "Enter End Date",
+    },
+    {
+      label: "Assign Group",
+      type: "select",
+      key: ModelKeys.GROUP,
+      value: isEditModal ? SelectedTask?.group : modelData?.group,
+      onChange: (e: any) => handleModelData(ModelKeys.GROUP, e.target.value),
+      options: groups.map((group) => ({
+        label: group.label,
+        value: group.value,
+      })),
     },
     {
       label: "Assign To",

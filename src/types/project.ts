@@ -12,6 +12,7 @@ export interface Project {
 export interface SelectedProject {
   id: number;
   admin?: number;
+  group?: number;
   file?: any;
   files?: File[];
   name?: string;

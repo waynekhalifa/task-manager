@@ -4,11 +4,7 @@ import AllocatedTask from "../../components/Tasks/AllocatedTask";
 import RecentActivity from "../../components/Tasks/RecentActivity";
 import TaskProgress from "../../components/Tasks/TaskProgress";
 import "react-nestable/dist/styles/index.css";
-import {
-  CompletedData,
-  InProgressTaskData,
-  needReviewData,
-} from "../../components/Data/AppData";
+
 import TaskNestable1 from "../../components/Tasks/TaskNestable";
 import { useProjectsQuery } from "framework/project/getAllProjects";
 import { SelectedTask } from "types/task";
@@ -76,7 +72,20 @@ const Tasks: React.FC = () => {
       value: 3,
     },
   ];
-
+  const groups = [
+    {
+      label: "Group1",
+      value: 1,
+    },
+    {
+      label: "Group2",
+      value: 1,
+    },
+    {
+      label: "Group2",
+      value: 1,
+    },
+  ]
   const handleModelData = (key: string, value: any) => {
     if (isEditModal) {
       setState({
@@ -227,9 +236,6 @@ const Tasks: React.FC = () => {
             </div>
           </div>
           <TaskNestable1
-            InProgressTaskData={InProgressTaskData}
-            needReviewData={needReviewData}
-            CompletedData={CompletedData}
             tasks={tasks}
           />
         </div>
@@ -246,6 +252,7 @@ const Tasks: React.FC = () => {
         onCreate={createTask}
         onUpdate={editTask}
         members={members}
+        groups={groups}
       />
     </div>
   );

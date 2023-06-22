@@ -12,4 +12,5 @@ export type QueryOptionsType = {
   limit?: number;
   key?: string;
   id?: number;
+  query?: string;
 };

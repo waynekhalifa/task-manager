@@ -1,4 +1,5 @@
 import CurrentClientProject from "components/Clients/CurrentClientProject";
+import TaskNestable from "components/Tasks/TaskNestable";
 import Attachment from "components/common/Attachment";
 import Comment from "components/common/Comment";
 import DeleteModal from "components/common/DeleteModal";
@@ -10,11 +11,12 @@ import { useCreateProject } from "framework/project/createProject";
 import { useDeleteProject } from "framework/project/deleteProject";
 import { useSingleProject } from "framework/project/getSingleProject";
 import { projectUpdateInput, useUpdateProject } from "framework/project/updateProject";
-import { useCreateTask } from "framework/task/create-task";
+import { taskInput, useCreateTask } from "framework/task/create-task";
+import { useTaskQuery } from "framework/task/get-all-tasks";
 import { useUploadTaskAttachment } from "framework/task/uploadTaskAttachment";
+import useApp from "hooks/useApp";
 import React from "react";
 import { CategoryUpdateInput } from "types/category";
-import { IField } from "types/formFields";
 import { Project, SelectedProject } from "types/project";
 import { SelectedTask, Task } from "types/task";
 
@@ -61,6 +63,7 @@ const INITIAlIZE_DATA: State = {
 };
 
 const ProjectDetails: React.FC<Props> = ({ id }) => {
+  const { push } = useApp();
   const [state, setState] = React.useState<State>(INITIAlIZE_DATA);
   const { isEditModal, isDeleteModal, modalHeader, modelProjectData, modelTaskData, selectedProject, isAddUserModal, isAddTaskModal, isEditTaskModal, isViewTaskModal } =
     state;
@@ -74,31 +77,31 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
   const { mutateAsync: deleteTaskMutation } = useDeleteProject();
   const { mutateAsync: uploadTaskAttachmentMutation } = useUploadTaskAttachment();
 
-  let tasks: SelectedTask[] = [
-    {
-      id: 1,
-      name: "Task 1",
-      description: "Task 1 description",
-      start_at: "2021-09-01",
-      end_at: "2021-09-01",
-      task_progress: "In Progress",
-      task_priority: "HIGH",
-      files: [],
-      user: 1
-    },
-    {
-      id: 2,
-      name: "Task 2",
-      description: "Task 2 description",
-      start_at: "2021-09-01",
-      end_at: "2021-09-01",
-      task_progress: "In Progress",
-      task_priority: "HIGH",
-      files: [],
-      user: 1
-    },
+  // let tasks: SelectedTask[] = [
+  //   {
+  //     id: 1,
+  //     name: "Task 1",
+  //     description: "Task 1 description",
+  //     start_at: "2021-09-01",
+  //     end_at: "2021-09-01",
+  //     task_progress: "In Progress",
+  //     task_priority: "HIGH",
+  //     files: [],
+  //     user: 1
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Task 2",
+  //     description: "Task 2 description",
+  //     start_at: "2021-09-01",
+  //     end_at: "2021-09-01",
+  //     task_progress: "In Progress",
+  //     task_priority: "HIGH",
+  //     files: [],
+  //     user: 1
+  //   },
 
-  ];
+  // ];
 
   let comments = [
     {
@@ -143,12 +146,19 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
     error: errorCategories,
     isLoading: isLoadingCategories,
   } = useCategoriesQuery({});
+  const {
+    data: tasksData,
+    error: errorsTask,
+    isLoading: loadingTasks,
+  } = useTaskQuery({ query: "?project=" + id });
 
-  if (isLoading || isLoadingCategories) return <div>Loading...</div>;
-  if (error || errorCategories) return null;
+
+  if (isLoading || isLoadingCategories || loadingTasks) return <div>Loading...</div>;
+  if (error || errorCategories || errorsTask) return null;
 
   let project: SelectedProject = data || {} as SelectedProject;
   let categories: CategoryUpdateInput[] = categoriesData?.categories?.data?.results || [];
+  let tasks: SelectedTask[] = tasksData?.tasks?.data?.results || [] as SelectedTask[];
 
   const getCategoryNameById = (id: number) => {
     let category = categories.find((category) => category.id === id);
@@ -213,6 +223,25 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
       value: 1,
     },
   ]
+  const groups = [
+    {
+
+      label: "Select Group",
+      value: 0,
+    },
+    {
+      label: "Group1",
+      value: 1,
+    },
+    {
+      label: "Group2",
+      value: 1,
+    },
+    {
+      label: "Group2",
+      value: 1,
+    },
+  ]
 
   let members = project?.members || [
     {
@@ -234,102 +263,6 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
     },
   ];
 
-  const formFields: IField[] = [
-    {
-      label: "Project Name",
-      type: "text",
-      key: ModelKeys.NAME,
-      value: isEditModal ? selectedProject.name : modelProjectData?.name,
-      onChange: (e: any) => handleProjectModelData(ModelKeys.NAME, e.target.value),
-      placeholder: "Enter Project Name",
-      width: "col-md-12",
-      default: project.name
-    },
-    {
-      label: "Stages",
-      type: "select",
-      key: ModelKeys.CATEGORY,
-      value: isEditModal ? selectedProject.category : modelProjectData?.category,
-      onChange: (e: any) => handleProjectModelData(ModelKeys.CATEGORY, e.target.value),
-      options: categories.map((category) => ({
-        label: category.name,
-        value: category.id,
-      })),
-      placeholder: "Select Category",
-      width: "col-md-12",
-      default: {
-        label: getCategoryNameById(project?.category!),
-        value: project.category,
-      }
-    },
-    {
-      label: "Description",
-      type: "textarea",
-      key: ModelKeys.DESCRIPTION,
-      value: isEditModal ? selectedProject.description : modelProjectData?.description,
-      onChange: (e: any) =>
-        handleProjectModelData(ModelKeys.DESCRIPTION, e.target.value),
-      placeholder: "Enter Description",
-      width: "col-md-12",
-      default: project.description
-    },
-    {
-      label: "Start Date",
-      type: "date",
-      key: ModelKeys.START_DATE,
-      value: isEditModal ? selectedProject.start_at : modelProjectData?.start_at,
-      onChange: (e: any) =>
-        handleProjectModelData(ModelKeys.START_DATE, e.target.value),
-      placeholder: "Enter Start Date",
-      width: "col-md-6",
-      default: new Date(project?.end_at!).toISOString().split('T')[0]
-    },
-    {
-      label: "End Date",
-      type: "date",
-      key: ModelKeys.END_DATE,
-      value: isEditModal ? selectedProject.end_at : modelProjectData?.end_at,
-      onChange: (e: any) =>
-        handleProjectModelData(ModelKeys.END_DATE, e.target.value),
-      placeholder: "Enter End Date",
-      width: "col-md-6",
-      default: new Date(project?.end_at!).toISOString().split('T')[0]
-    },
-    // {
-    //   label: "Project thumbnail",
-    //   type: "file",
-    //   key: ModelKeys.FILES,
-    //   value: isEditModal ? selectedProject.file : modelProjectData?.file,
-    //   onChange: (e: any) => {
-    //     let file: File = e.target.files[0];
-    //     let reader = new FileReader();
-    //     reader.readAsDataURL(file);
-    //     reader.onload = (url) => {
-    //       handleProjectModelData(ModelKeys.FILE, file)
-    //     };
-    //   },
-    //   placeholder: "Enter Thumbnail",
-    //   hide: isEditModal,
-    //   width: "col-md-12",
-
-    // },
-    {
-      label: "Assign Admin",
-      type: "select",
-      key: ModelKeys.ADMIN,
-      value: isEditModal ? selectedProject.admin : modelProjectData?.admin,
-      onChange: (e: any) => handleProjectModelData(ModelKeys.ADMIN, e.target.value),
-      options: admins.map((admin) => ({
-        label: admin.label,
-        value: admin.value,
-      })),
-      width: "col-md-12",
-      default: {
-        label: getAdminNameById(project?.admin!),
-        value: project?.admin,
-      },
-    },
-  ]
 
 
   const handleOpenAddTaskModal = (project: SelectedProject) => {
@@ -341,14 +274,7 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
     });
   }
 
-  const handleOpenViewTaskModal = (project: SelectedProject) => {
-    setState({
-      ...state,
-      isViewTaskModal: true,
-      selectedProject: project,
-      modalHeader: "View Tasks",
-    });
-  }
+
 
   const handleProjectModelData = (key: string, value: any) => {
     if (isEditModal) {
@@ -403,28 +329,15 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
     });
   };
 
-  const handleOpenEditTaskModal = (project: SelectedProject) => {
-    setState({
-      ...state,
-      isEditTaskModal: true,
-      selectedProject: project,
-      modalHeader: "Edit Task",
-    });
-  };
 
 
   const handleTaskModelData = (key: string, value: any) => {
-    let users: any[] = [];
-    if (key === ModelKeys.USER) {
-      users = modelTaskData?.user || [];
-      users.push(value);
-    }
     if (isEditTaskModal) {
       setState({
         ...state,
         modelTaskData: {
           ...modelTaskData,
-          [key]: key === ModelKeys.USER ? users : value,
+          [key]: value,
         },
       });
       return;
@@ -434,52 +347,26 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
       ...prevState,
       modelTaskData: {
         ...prevState.modelTaskData,
-        [key]: key === ModelKeys.USER ? users : value,
+        [key]: value,
       },
     }));
   };
 
 
   const createTask = async () => {
-    setState({
-      ...state,
-      modelTaskData: {
-        ...modelTaskData,
-
-      },
-    });
     try {
-      tasks.push(
-        {
-          id: tasks.length + 1,
-          name: modelTaskData.name,
-          description: modelTaskData.description,
-          start_at: modelTaskData.start_at,
-          end_at: modelTaskData.end_at,
-          task_progress: "To Do",
-          task_priority: modelTaskData.task_priority,
-          files: [],
-          user: modelTaskData.user[0]
-        },
-      )
+
+      Object.assign(modelTaskData, { project: selectedProject.id });
+      let createInput = taskInput(modelTaskData);
+      let res = await createTaskMutation(createInput);
+      let task = res.session.data;
+      tasks.push(task);
       handleModalClose();
-      // Object.assign(modelTaskData, { project: selectedProject.id });
-      // let createInput = taskInput(modelTaskData);
-      // let res = await createTaskMutation(createInput);
-      // let task = res.session.data;
-      // tasks.push(task);
-      // handleModalClose();
     } catch (error) {
       alert(error);
     }
   };
 
-  const editTask = async () => {
-    try {
-    } catch (error) {
-      alert(error);
-    }
-  };
 
 
 
@@ -497,6 +384,7 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
   const deleteProject = async () => {
     try {
       await deleteProjectMutation(project);
+      push("/dashboard/projects");
     } catch (err) {
       alert(err);
     }
@@ -528,45 +416,6 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
               onClickEdit={() => handleOpenEditModal(project)}
               onClickDelete={() => handleOpenDeleteModal(project)}
             />
-            {/* tasks */}
-            <div className="dd-handle mt-2">
-              <h5 className="text-primary"><strong>Tasks</strong></h5>
-
-              {tasks.map((task, index: number) => (
-                <div className="d-flex justify-content-between" key={index}>
-                  <p className="badge bg-light ms-2 text-dark">{task.name}</p>
-                  <p className="badge bg-secondary ms-2">{task.task_progress}</p>
-
-                  <div
-                    className="btn-group"
-                    role="group"
-                    aria-label="Basic outlined example"
-                  >
-                    <button
-                      type="button"
-                      className="btn btn-outline-secondary"
-                    // onClick={han}
-                    >
-                      <i className="icofont-edit text-success"></i>
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-outline-secondary"
-                    // onClick={onClickDelete}
-                    >
-                      <i className="icofont-ui-delete text-danger"></i>
-                    </button>
-                  </div>
-
-                </div>
-
-              ))}
-              <div className="d-flex justify-content-end py-2">
-                <button className="btn btn-primary"
-                  onClick={() => handleOpenAddTaskModal(project)}
-                >Add Task</button>
-              </div>
-            </div>
 
 
           </div>
@@ -604,6 +453,16 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
                       <button className="btn btn-outline-secondary" type="button" id="button-addon2">Send</button>
                     </div>
                   </div>
+                  <div className="col-md-12">
+                    <div className="d-flex justify-content-end pt-2">
+                      <button className="btn btn-primary"
+                        onClick={() => handleOpenAddTaskModal(project)}
+                      >Create Task</button>
+                    </div>
+                    <TaskNestable
+                      tasks={tasks}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -619,6 +478,7 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
         modelData={modelProjectData}
         categories={categories}
         admins={admins}
+        groups={groups}
         onUpdate={editProject}
       />
       <DeleteModal
@@ -637,8 +497,8 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
         selectedProject={selectedProject}
         modelData={modelTaskData}
         onCreate={createTask}
-        onUpdate={editTask}
         members={members}
+        groups={groups}
       />
     </div>
   );
