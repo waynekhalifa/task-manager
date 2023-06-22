@@ -15,8 +15,8 @@ interface Props {
   modelData?: any;
   categories: CategoryUpdateInput[];
   admins: any[];
-  onCreate: () => void;
-  onUpdate: () => void;
+  onCreate?: () => void;
+  onUpdate?: () => void;
 }
 
 enum ModelKeys {

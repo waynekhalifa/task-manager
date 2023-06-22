@@ -41,4 +41,5 @@ export interface IField {
   multiple?: boolean;
   hide?: boolean;
   disabled?: boolean;
+  default?: any;
 }

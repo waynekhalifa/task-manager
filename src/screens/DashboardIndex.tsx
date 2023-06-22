@@ -4,6 +4,7 @@ import { Suspense, lazy } from "react";
 import Categories from "./Category/Category";
 import TaskDetails from "./Tasks/TaskDetails";
 import ProjectDetails from "./Projects/ProjectDetails";
+import EmployeeProfile from "./Employee/EmployeeProfile";
 
 const Projects = lazy(() => import("./Projects/Projects"));
 const Tasks = lazy(() => import("./Tasks/Tasks"));
@@ -25,6 +26,8 @@ const DashboardIndex: React.FC = () => {
           return <ProjectDetails id={parseFloat(id)} />;
         case Pages.TASKS:
           return <TaskDetails id={parseFloat(id)} />;
+        case Pages.PROFILE:
+          return <EmployeeProfile id={parseFloat(id)} />;
       }
     }
     else
@@ -44,7 +47,7 @@ const DashboardIndex: React.FC = () => {
         case Pages.CALENDAR:
           return <Calendar />;
         case Pages.CATEGORIES:
-          return <Categories />;
+          return <Categories />;        
         default:
           return <HrDashboard />;
       }

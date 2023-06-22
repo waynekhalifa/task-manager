@@ -1,6 +1,8 @@
 import OurClients from "components/Clients/OurClients";
 import NestableCard from "components/Tasks/NestableCard";
+import Comment from "components/common/Comment";
 import { useSingleTask } from "framework/task/get-single-task";
+import EnquiresView from "screens/Tickets/TicketsView";
 import { SelectedTask } from "types/task";
 
 interface Props {
@@ -22,12 +24,49 @@ const TaskDetails: React.FC<Props> = ({ id }) => {
 
   let task: any = data || {} as SelectedTask;
 
+  let comments = [
+    {
+      id: 1,
+      name: "John Doe",
+      avatar: "https://via.placeholder.com/150",
+      comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.",
+      time: "2 hours ago"
+    },
+    {
+      id: 2,
+      name: "John Doe",
+      avatar: "https://via.placeholder.com/150",
+      comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.",
+      time: "2 hours ago"
+    },
+    {
+      id: 3,
+      name: "John Doe",
+      avatar: "https://via.placeholder.com/150",
+      comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.",
+      time: "2 hours ago"
+    },
+    {
+      id: 4,
+      name: "John Doe",
+      avatar: "https://via.placeholder.com/150",
+      comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.",
+      time: "2 hours ago"
+    },
+    {
+      id: 5,
+      name: "John Doe",
+      avatar: "https://via.placeholder.com/150",
+      comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.",
+      time: "2 hours ago"
+    },
+  ];
+
   return (
     <div style={{
       backgroundColor: "#F5F6FA",
       minHeight: "100vh",
       padding: 20,
-
     }}>
       <h2>Task Details</h2>
       <div className="container-xxl">
@@ -70,44 +109,31 @@ const TaskDetails: React.FC<Props> = ({ id }) => {
           <div className="col-12">
             <div className="card">
               <div className="card-body">
+                <h5 className="card-title text-primary"><strong>Tickets</strong></h5>
+                <EnquiresView />
+              </div>
+            </div>
+          </div>
+          <div className="col-12">
+            <div className="card">
+              <div className="card-body">
                 <h5 className="card-title">Comments</h5>
                 <div className="row g-3">
-                  <div className="col-12">
-                    <div className="d-flex align-items-start">
-                      <img src={user.avatar} className="rounded-circle" alt="Cinque Terre" width={50} height={50} />
-                      <div className="ms-3">
-                        <h6 className="mb-0">{user.name}</h6>
-                        <span className="small text-muted">{user.post}</span>
-                        <p className="small text-muted">Vestibulum ante ipsum primis in faucibus orci luctus et ultrices.Vestibulum ante ipsum primis in faucibus orci luctus et ultrices. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices.Vestibulum ante ipsum primis in faucibus orci luctus et ultrices.</p>
-
-                      </div>
+                  {comments.map((comment, index: number) => (
+                    <div className="col-md-6" key={index}>
+                      <Comment data={comment} />
+                    </div>
+                  ))}
+                  <div className="col-md-12">
+                    <div className="input-group mb-3">
+                      <input type="text" className="form-control" placeholder="Comment" aria-label="Comment" aria-describedby="button-addon2" />
+                      <button className="btn btn-outline-secondary" type="button" id="button-addon2">Send</button>
                     </div>
                   </div>
-                  <div className="col-12">
-                    <div className="d-flex align-items-start">
-                      <img src={user.avatar} className="rounded-circle" alt="Cinque Terre" width={50} height={50} />
-                      <div className="ms-3">
-                        <h6 className="mb-0">{user.name}</h6>
-                        <span className="small text-muted">{user.post}</span>
-                        <p className="small text-muted">Vestibulum ante ipsum primis in faucibus orci luctus et ultrices.Vestibulum ante ipsum primis in faucibus orci luctus et ultrices. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices.Vestibulum ante ipsum primis in faucibus orci luctus et ultrices.</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-12">
-                    <div className="d-flex align-items-start">
-                      <img src={user.avatar} className="rounded-circle" alt="Cinque Terre" width={50} height={50} />
-                      <div className="ms-3">
-                        <h6 className="mb-0">{user.name}</h6>
-                        <span className="small text-muted">{user.post}</span>
-                        <p className="small text-muted">Vestibulum ante ipsum primis in faucibus orci luctus et ultrices.Vestibulum ante ipsum primis in faucibus orci luctus et ultrices. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices.Vestibulum ante ipsum primis in faucibus orci luctus et ultrices.</p>
-                      </div>
-                    </div>
-                  </div>
-
                 </div>
               </div>
             </div>
-            d</div>
+          </div>
         </div>
       </div>
     </div>

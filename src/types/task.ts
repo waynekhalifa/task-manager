@@ -3,7 +3,7 @@ export interface Task {
   name: string;
   description: string;
   task_priority: string;
-  user: number;
+  user: [number];
   project: number;
   start_at?: string;
   end_at?: string;

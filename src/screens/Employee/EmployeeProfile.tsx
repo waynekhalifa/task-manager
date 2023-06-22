@@ -1,7 +1,6 @@
 import React from "react";
 import ClientProfileCard from "components/Clients/ClientProfileCard";
 import PageHeader from "components/common/PageHeader";
-import CurrentClientProject from "components/Clients/CurrentClientProject";
 import {
   clentProfileData,
   employeeInformationDetails
@@ -11,7 +10,9 @@ import CurrentTask from "components/Employees/CurrentTask";
 import ExperienceCard from "components/Employees/ExperienceCard";
 import { Modal } from "react-bootstrap";
 
-interface Props {}
+interface Props {
+  id: number;
+}
 
 interface State {
   ismodal: boolean;
@@ -23,7 +24,9 @@ const INITIALIZE_DATA: State = {
   modalData: ""
 };
 
-const EmployeeProfile: React.FC<Props> = () => {
+const EmployeeProfile: React.FC<Props> = ({
+  id
+}) => {
   const [state, setState] = React.useState(INITIALIZE_DATA);
   const { ismodal, modalData } = state;
 
@@ -99,67 +102,67 @@ const EmployeeProfile: React.FC<Props> = () => {
               <div className="row g-3 mb-3">
                 {modalData
                   ? modalData.information.map((d: any, i: number) => {
-                      if (i < 2) {
-                        return (
-                          <div key={"kjsdfhj" + i} className="col">
-                            <label className="form-label">
-                              {d.title}
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              id="exampleFormControlInput877"
-                              value={d.value}
-                            />
-                          </div>
-                        );
-                      }
-                      return null;
-                    })
+                    if (i < 2) {
+                      return (
+                        <div key={"kjsdfhj" + i} className="col">
+                          <label className="form-label">
+                            {d.title}
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="exampleFormControlInput877"
+                            value={d.value}
+                          />
+                        </div>
+                      );
+                    }
+                    return null;
+                  })
                   : null}
               </div>
               <div className="row g-3 mb-3">
                 {modalData
                   ? modalData.information.map((d: any, i: number) => {
-                      if (i > 1 && i < 4) {
-                        return (
-                          <div key={"kjsdfhj" + i} className="col">
-                            <label className="form-label">
-                              {d.title}
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              id="exampleFormControlInput877"
-                              value={d.value}
-                            />
-                          </div>
-                        );
-                      }
-                      return null;
-                    })
+                    if (i > 1 && i < 4) {
+                      return (
+                        <div key={"kjsdfhj" + i} className="col">
+                          <label className="form-label">
+                            {d.title}
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="exampleFormControlInput877"
+                            value={d.value}
+                          />
+                        </div>
+                      );
+                    }
+                    return null;
+                  })
                   : null}
               </div>
               <div className="row g-3 mb-3">
                 {modalData
                   ? modalData.information.map((d: any, i: number) => {
-                      if (i > 3) {
-                        return (
-                          <div key={"kjsdfhj" + i} className="col">
-                            <label className="form-label">
-                              {d.title}
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              id="exampleFormControlInput877"
-                              value={d.value}
-                            />
-                          </div>
-                        );
-                      }
-                      return null;
-                    })
+                    if (i > 3) {
+                      return (
+                        <div key={"kjsdfhj" + i} className="col">
+                          <label className="form-label">
+                            {d.title}
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="exampleFormControlInput877"
+                            value={d.value}
+                          />
+                        </div>
+                      );
+                    }
+                    return null;
+                  })
                   : null}
               </div>
             </form>

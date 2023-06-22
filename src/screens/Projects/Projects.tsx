@@ -1,6 +1,5 @@
 import React from "react";
 import { Nav, Tab } from "react-bootstrap";
-import CurrentClientProject from "../../components/Clients/CurrentClientProject";
 import AddNewUserModal from "../../components/common/AddNewUserModal";
 import PageHeader from "../../components/common/PageHeader";
 import { useCategoriesQuery } from "framework/category/getAllCategories";
@@ -23,7 +22,7 @@ import DeleteModal from "components/common/DeleteModal";
 import { SelectedTask, Task } from "types/task";
 import { taskInput, useCreateTask } from "framework/task/create-task";
 import { useUploadTaskAttachment } from "framework/task/uploadTaskAttachment";
-import { useDeleteTaskAttachment } from "framework/task/deleteTaskAttachment";
+import ProjectCard from "components/Projects/ProjectCard";
 
 interface Props { }
 
@@ -85,9 +84,8 @@ const Projects: React.FC<Props> = () => {
   const { mutateAsync: updateTaskMutation } = useUpdateProject();
   const { mutateAsync: deleteTaskMutation } = useDeleteProject();
   const { mutateAsync: uploadTaskAttachmentMutation } = useUploadTaskAttachment();
- 
+
   let { data: projectData, error: errorProjects, isLoading: loadingProjects } = useProjectsQuery({});
-  let tasks: SelectedTask[] = [] as SelectedTask[];
 
   let {
     data: categoriesData,
@@ -136,6 +134,31 @@ const Projects: React.FC<Props> = () => {
       label: "User 3",
       value: 3,
     },
+  ];
+  let tasks: SelectedTask[] = [
+    {
+      id: 1,
+      name: "Task 1",
+      description: "Task 1 description",
+      start_at: "2021-09-01",
+      end_at: "2021-09-01",
+      task_progress: "In Progress",
+      task_priority: "HIGH",
+      files: [],
+      user: 1
+    },
+    {
+      id: 2,
+      name: "Task 2",
+      description: "Task 2 description",
+      start_at: "2021-09-01",
+      end_at: "2021-09-01",
+      task_progress: "In Progress",
+      task_priority: "HIGH",
+      files: [],
+      user: 1
+    },
+
   ];
 
 
@@ -298,7 +321,7 @@ const Projects: React.FC<Props> = () => {
       ...state,
       modelTaskData: {
         ...modelTaskData,
-        
+
       },
     });
     try {
@@ -427,34 +450,23 @@ const Projects: React.FC<Props> = () => {
               <Tab.Pane eventKey="All">
                 <div className="row g-3 gy-5 py-3 row-deck">
                   {projects && projects.length > 0 && projects.map((d: any, i: number) => {
-                    
+
                     return (
                       <div
                         key={"key" + i}
                         className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6"
                       >
-                        <CurrentClientProject
-                          teamImage={d.file}
-                          // project{project}
-                          // const {}  = project
-                          logo={d.file}
-                          logoBg={d.file}
-                          title={d.name}
+                        <ProjectCard
+                          project={d}
                           category={getCategory(d.category)}
-                          startDate={d.start_at}
-                          endDate={d.end_at}
-                              onClickEdit={() => handleOpenEditModal(d)}
-                              onClickDelete={() => handleOpenDeleteModal(d)}
-                              onClickAddMember={handleOpenAddUserModal}
-                              onClickAddAttachment={() => handleOpenAddAttachmentModal(d)}
-                              onClickViewDescription={() => handleOpenViewDescriptionModal(d)}
-                              onClickAddComment={() => handleOpenAddCommentModal(d)}
-                              onClickAddTask={() => handleOpenAddTaskModal(d)}
-                              onClickViewTasks={() => handleOpenViewTaskModal(d)}
-                          comments_count={d.comments_count}
-                          members_count={d.members_count}
-                          attachment_count={d.projectfile_set.length}
-                          tasks_count={d.tasks_count}
+                          onClickEdit={() => handleOpenEditModal(d)}
+                          onClickDelete={() => handleOpenDeleteModal(d)}
+                          onClickAddMember={handleOpenAddUserModal}
+                          onClickAddAttachment={() => handleOpenAddAttachmentModal(d)}
+                          onClickViewDescription={() => handleOpenViewDescriptionModal(d)}
+                          onClickAddComment={() => handleOpenAddCommentModal(d)}
+                          onClickAddTask={() => handleOpenAddTaskModal(d)}
+                          onClickViewTasks={() => handleOpenViewTaskModal(d)}
                         />
                       </div>
                     );
@@ -523,6 +535,7 @@ const Projects: React.FC<Props> = () => {
         show={isViewTaskModal}
         onClose={handleModalClose}
         modalHeader={modalHeader}
+        tasks={tasks}
       />
     </div>
   );

@@ -67,7 +67,7 @@ const Members: React.FC<Props> = () => {
       alert(err);
     }
   }
-  
+
   const departments = useMemo(() => departmentData?.categories?.data?.results || [], [departmentData]);
 
   const handleModelData = (key: string, value: any) => {
@@ -84,17 +84,17 @@ const Members: React.FC<Props> = () => {
       },
     });
   };
-  
+
   useEffect(() => {
-    if (departmentValue === 'Accounter') { 
-        setState({ ...state, isDepartmentAdmin: true });
-      }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (departmentValue === 'Accounter') {
+      setState({ ...state, isDepartmentAdmin: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [departmentValue]);
-  
+
   if (employeeIsLoading || departmentIsLoading) return <div>Loading...</div>;
   if (employeeError || departmentError) return null;
-  
+
   const formFields: IField[] = [
     {
       label: "First Name",
@@ -312,7 +312,7 @@ const Members: React.FC<Props> = () => {
         </Modal.Header>
         <Modal.Body>
           <div className="modal-body">
-            <FormInputs formFields={formFields} formName={"employee"} />
+            <FormInputs formFields={formFields} grid={true} />
             <PermissionsTable isDepartmentAdmin={isDepartmentAdmin} closeModal={closeModal} employeeData={createdEmployee} />
           </div>
         </Modal.Body>
