@@ -60,7 +60,7 @@ const Attachment: React.FC<Props> = ({ project, task }) => {
       }));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [project]);
+  }, [project, task]);
 
 
   const handleModelData = (key: string, value: any) => {
