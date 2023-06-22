@@ -9,7 +9,10 @@ import { useCategoriesQuery } from "framework/category/getAllCategories";
 import { useCreateProject } from "framework/project/createProject";
 import { useDeleteProject } from "framework/project/deleteProject";
 import { useSingleProject } from "framework/project/getSingleProject";
-import { projectUpdateInput, useUpdateProject } from "framework/project/updateProject";
+import {
+  projectUpdateInput,
+  useUpdateProject,
+} from "framework/project/updateProject";
 import { useCreateTask } from "framework/task/create-task";
 import { useUploadTaskAttachment } from "framework/task/uploadTaskAttachment";
 import React from "react";
@@ -62,8 +65,18 @@ const INITIAlIZE_DATA: State = {
 
 const ProjectDetails: React.FC<Props> = ({ id }) => {
   const [state, setState] = React.useState<State>(INITIAlIZE_DATA);
-  const { isEditModal, isDeleteModal, modalHeader, modelProjectData, modelTaskData, selectedProject, isAddUserModal, isAddTaskModal, isEditTaskModal, isViewTaskModal } =
-    state;
+  const {
+    isEditModal,
+    isDeleteModal,
+    modalHeader,
+    modelProjectData,
+    modelTaskData,
+    selectedProject,
+    isAddUserModal,
+    isAddTaskModal,
+    isEditTaskModal,
+    isViewTaskModal,
+  } = state;
   let { data, error, isLoading } = useSingleProject({ id });
 
   const { mutateAsync: createProjectMutation } = useCreateProject();
@@ -72,7 +85,8 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
   const { mutateAsync: createTaskMutation } = useCreateTask();
   const { mutateAsync: updateTaskMutation } = useUpdateProject();
   const { mutateAsync: deleteTaskMutation } = useDeleteProject();
-  const { mutateAsync: uploadTaskAttachmentMutation } = useUploadTaskAttachment();
+  const { mutateAsync: uploadTaskAttachmentMutation } =
+    useUploadTaskAttachment();
 
   let tasks: SelectedTask[] = [
     {
@@ -84,7 +98,7 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
       task_progress: "In Progress",
       task_priority: "HIGH",
       files: [],
-      user: 1
+      user: 1,
     },
     {
       id: 2,
@@ -95,9 +109,8 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
       task_progress: "In Progress",
       task_priority: "HIGH",
       files: [],
-      user: 1
+      user: 1,
     },
-
   ];
 
   let comments = [
@@ -105,36 +118,41 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
       id: 1,
       name: "John Doe",
       avatar: "https://via.placeholder.com/150",
-      comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.",
-      time: "2 hours ago"
+      comment:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.",
+      time: "2 hours ago",
     },
     {
       id: 2,
       name: "John Doe",
       avatar: "https://via.placeholder.com/150",
-      comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.",
-      time: "2 hours ago"
+      comment:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.",
+      time: "2 hours ago",
     },
     {
       id: 3,
       name: "John Doe",
       avatar: "https://via.placeholder.com/150",
-      comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.",
-      time: "2 hours ago"
+      comment:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.",
+      time: "2 hours ago",
     },
     {
       id: 4,
       name: "John Doe",
       avatar: "https://via.placeholder.com/150",
-      comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.",
-      time: "2 hours ago"
+      comment:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.",
+      time: "2 hours ago",
     },
     {
       id: 5,
       name: "John Doe",
       avatar: "https://via.placeholder.com/150",
-      comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.",
-      time: "2 hours ago"
+      comment:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.",
+      time: "2 hours ago",
     },
   ];
 
@@ -147,8 +165,9 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
   if (isLoading || isLoadingCategories) return <div>Loading...</div>;
   if (error || errorCategories) return null;
 
-  let project: SelectedProject = data || {} as SelectedProject;
-  let categories: CategoryUpdateInput[] = categoriesData?.categories?.data?.results || [];
+  let project: SelectedProject = data || ({} as SelectedProject);
+  let categories: CategoryUpdateInput[] =
+    categoriesData?.categories?.data?.results || [];
 
   const getCategoryNameById = (id: number) => {
     let category = categories.find((category) => category.id === id);
@@ -160,7 +179,6 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
     return admin;
   };
 
-
   let users = [
     {
       id: 1,
@@ -168,7 +186,6 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
       post: "Teacher",
       name: "John Doe",
       department: "Academic Department",
-
     },
     {
       id: 2,
@@ -176,7 +193,6 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
       post: "Teacher",
       name: "John Doe",
       department: "Academic Department",
-
     },
     {
       id: 3,
@@ -184,7 +200,6 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
       post: "Teacher",
       name: "John Doe",
       department: "Academic Department",
-
     },
     {
       id: 4,
@@ -192,12 +207,8 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
       post: "Teacher",
       name: "John Doe",
       department: "Academic Department",
-
-    }
-
+    },
   ];
-
-
 
   const admins = [
     {
@@ -212,11 +223,10 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
       label: "Wani",
       value: 1,
     },
-  ]
+  ];
 
   let members = project?.members || [
     {
-
       label: "Select User",
       value: 0,
     },
@@ -240,17 +250,21 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
       type: "text",
       key: ModelKeys.NAME,
       value: isEditModal ? selectedProject.name : modelProjectData?.name,
-      onChange: (e: any) => handleProjectModelData(ModelKeys.NAME, e.target.value),
+      onChange: (e: any) =>
+        handleProjectModelData(ModelKeys.NAME, e.target.value),
       placeholder: "Enter Project Name",
       width: "col-md-12",
-      default: project.name
+      default: project.name,
     },
     {
       label: "Stages",
       type: "select",
       key: ModelKeys.CATEGORY,
-      value: isEditModal ? selectedProject.category : modelProjectData?.category,
-      onChange: (e: any) => handleProjectModelData(ModelKeys.CATEGORY, e.target.value),
+      value: isEditModal
+        ? selectedProject.category
+        : modelProjectData?.category,
+      onChange: (e: any) =>
+        handleProjectModelData(ModelKeys.CATEGORY, e.target.value),
       options: categories.map((category) => ({
         label: category.name,
         value: category.id,
@@ -260,29 +274,33 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
       default: {
         label: getCategoryNameById(project?.category!),
         value: project.category,
-      }
+      },
     },
     {
       label: "Description",
       type: "textarea",
       key: ModelKeys.DESCRIPTION,
-      value: isEditModal ? selectedProject.description : modelProjectData?.description,
+      value: isEditModal
+        ? selectedProject.description
+        : modelProjectData?.description,
       onChange: (e: any) =>
         handleProjectModelData(ModelKeys.DESCRIPTION, e.target.value),
       placeholder: "Enter Description",
       width: "col-md-12",
-      default: project.description
+      default: project.description,
     },
     {
       label: "Start Date",
       type: "date",
       key: ModelKeys.START_DATE,
-      value: isEditModal ? selectedProject.start_at : modelProjectData?.start_at,
+      value: isEditModal
+        ? selectedProject.start_at
+        : modelProjectData?.start_at,
       onChange: (e: any) =>
         handleProjectModelData(ModelKeys.START_DATE, e.target.value),
       placeholder: "Enter Start Date",
       width: "col-md-6",
-      default: new Date(project?.end_at!).toISOString().split('T')[0]
+      default: new Date(project?.end_at!).toISOString().split("T")[0],
     },
     {
       label: "End Date",
@@ -293,7 +311,7 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
         handleProjectModelData(ModelKeys.END_DATE, e.target.value),
       placeholder: "Enter End Date",
       width: "col-md-6",
-      default: new Date(project?.end_at!).toISOString().split('T')[0]
+      default: new Date(project?.end_at!).toISOString().split("T")[0],
     },
     // {
     //   label: "Project thumbnail",
@@ -318,7 +336,8 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
       type: "select",
       key: ModelKeys.ADMIN,
       value: isEditModal ? selectedProject.admin : modelProjectData?.admin,
-      onChange: (e: any) => handleProjectModelData(ModelKeys.ADMIN, e.target.value),
+      onChange: (e: any) =>
+        handleProjectModelData(ModelKeys.ADMIN, e.target.value),
       options: admins.map((admin) => ({
         label: admin.label,
         value: admin.value,
@@ -329,8 +348,7 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
         value: project?.admin,
       },
     },
-  ]
-
+  ];
 
   const handleOpenAddTaskModal = (project: SelectedProject) => {
     setState({
@@ -339,7 +357,7 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
       selectedProject: project,
       modalHeader: "Add Task",
     });
-  }
+  };
 
   const handleOpenViewTaskModal = (project: SelectedProject) => {
     setState({
@@ -348,7 +366,7 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
       selectedProject: project,
       modalHeader: "View Tasks",
     });
-  }
+  };
 
   const handleProjectModelData = (key: string, value: any) => {
     if (isEditModal) {
@@ -381,7 +399,7 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
       isEditTaskModal: false,
       isViewTaskModal: false,
       modelTaskData: {} as Task,
-      modelProjectData: {} as Project
+      modelProjectData: {} as Project,
     });
   };
 
@@ -412,7 +430,6 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
     });
   };
 
-
   const handleTaskModelData = (key: string, value: any) => {
     let users: any[] = [];
     if (key === ModelKeys.USER) {
@@ -439,29 +456,25 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
     }));
   };
 
-
   const createTask = async () => {
     setState({
       ...state,
       modelTaskData: {
         ...modelTaskData,
-
       },
     });
     try {
-      tasks.push(
-        {
-          id: tasks.length + 1,
-          name: modelTaskData.name,
-          description: modelTaskData.description,
-          start_at: modelTaskData.start_at,
-          end_at: modelTaskData.end_at,
-          task_progress: "To Do",
-          task_priority: modelTaskData.task_priority,
-          files: [],
-          user: modelTaskData.user[0]
-        },
-      )
+      tasks.push({
+        id: tasks.length + 1,
+        name: modelTaskData.name,
+        description: modelTaskData.description,
+        start_at: modelTaskData.start_at,
+        end_at: modelTaskData.end_at,
+        task_progress: "To Do",
+        task_priority: modelTaskData.task_priority,
+        files: [],
+        user: modelTaskData.user[0],
+      });
       handleModalClose();
       // Object.assign(modelTaskData, { project: selectedProject.id });
       // let createInput = taskInput(modelTaskData);
@@ -480,8 +493,6 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
       alert(error);
     }
   };
-
-
 
   const editProject = async () => {
     // Object.assign(selectedProject, { admin: 1 });
@@ -505,19 +516,19 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
   const addUser = async () => {
     Object.assign(modelProjectData, { admin: 1 });
     try {
-
     } catch (err) {
       alert(err);
     }
   };
 
   return (
-    <div style={{
-      backgroundColor: "#F5F6FA",
-      minHeight: "100vh",
-      padding: 20,
-
-    }}>
+    <div
+      style={{
+        backgroundColor: "#F5F6FA",
+        minHeight: "100vh",
+        padding: 20,
+      }}
+    >
       <h2>Project Details</h2>
       <div className="container-xxl">
         <div className="row g-3 mb-3 mt-3">
@@ -530,12 +541,16 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
             />
             {/* tasks */}
             <div className="dd-handle mt-2">
-              <h5 className="text-primary"><strong>Tasks</strong></h5>
+              <h5 className="text-primary">
+                <strong>Tasks</strong>
+              </h5>
 
               {tasks.map((task, index: number) => (
                 <div className="d-flex justify-content-between" key={index}>
                   <p className="badge bg-light ms-2 text-dark">{task.name}</p>
-                  <p className="badge bg-secondary ms-2">{task.task_progress}</p>
+                  <p className="badge bg-secondary ms-2">
+                    {task.task_progress}
+                  </p>
 
                   <div
                     className="btn-group"
@@ -545,34 +560,35 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
                     <button
                       type="button"
                       className="btn btn-outline-secondary"
-                    // onClick={han}
+                      // onClick={han}
                     >
                       <i className="icofont-edit text-success"></i>
                     </button>
                     <button
                       type="button"
                       className="btn btn-outline-secondary"
-                    // onClick={onClickDelete}
+                      // onClick={onClickDelete}
                     >
                       <i className="icofont-ui-delete text-danger"></i>
                     </button>
                   </div>
-
                 </div>
-
               ))}
               <div className="d-flex justify-content-end py-2">
-                <button className="btn btn-primary"
+                <button
+                  className="btn btn-primary"
                   onClick={() => handleOpenAddTaskModal(project)}
-                >Add Task</button>
+                >
+                  Add Task
+                </button>
               </div>
             </div>
-
-
           </div>
           <div className="col-lg-8 col-md-12">
             <div className="dd-handle mt-2">
-              <h5 className="card-title text-primary"><strong>Members</strong></h5>
+              <h5 className="card-title text-primary">
+                <strong>Members</strong>
+              </h5>
               <Member users={users} />
             </div>
           </div>
@@ -580,10 +596,10 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
           <div className="col-12">
             <div className="card">
               <div className="card-body">
-                <h5 className="card-title text-primary"><strong>Attachments</strong></h5>
-                <Attachment
-                  project={project}
-                />
+                <h5 className="card-title text-primary">
+                  <strong>Attachments</strong>
+                </h5>
+                <Attachment project={project} />
               </div>
             </div>
           </div>
@@ -591,7 +607,9 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
           <div className="col-12">
             <div className="card">
               <div className="card-body">
-                <h5 className="card-title text-primary mb-3"><strong>Comments</strong></h5>
+                <h5 className="card-title text-primary mb-3">
+                  <strong>Comments</strong>
+                </h5>
                 <div className="row g-3">
                   {comments.map((comment, index: number) => (
                     <div className="col-md-6" key={index}>
@@ -600,8 +618,20 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
                   ))}
                   <div className="col-md-12">
                     <div className="input-group mb-3">
-                      <input type="text" className="form-control" placeholder="Comment" aria-label="Comment" aria-describedby="button-addon2" />
-                      <button className="btn btn-outline-secondary" type="button" id="button-addon2">Send</button>
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Comment"
+                        aria-label="Comment"
+                        aria-describedby="button-addon2"
+                      />
+                      <button
+                        className="btn btn-outline-secondary"
+                        type="button"
+                        id="button-addon2"
+                      >
+                        Send
+                      </button>
                     </div>
                   </div>
                 </div>

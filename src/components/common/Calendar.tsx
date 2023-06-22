@@ -2,15 +2,19 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import useApp from "hooks/useApp";
-import { Screens } from "enums/screens";
-import { Pages } from "enums/pages";
+import { useState } from "react";
 
 interface Props {
   projects: any;
   tasks: any;
 }
 
+type IState = { showDetails: boolean; selectedEvent: any };
+const INITIAL_STATE: IState = { showDetails: false, selectedEvent: null };
+
 const Calendar: React.FC<Props> = ({ projects, tasks }) => {
+  const [state, setState] = useState<IState>(INITIAL_STATE);
+  const { showDetails } = state;
   const { push } = useApp();
   const calendarData: any[] = [];
 
@@ -37,20 +41,28 @@ const Calendar: React.FC<Props> = ({ projects, tasks }) => {
   }
 
   const handleClick = (e: any) => {
-    if (e.event._def.extendedProps.type === "project")
-      push(Screens.DASHBOARD + Pages.PROJECTS + "/" + e.event._def.publicId);
-    if (e.event._def.extendedProps.type === "task")
-      push(Screens.DASHBOARD + Pages.TASKS + "/" + e.event._def.publicId);
+    setState({ ...state, showDetails: true, selectedEvent: e.event });
+    // if (e.event._def.extendedProps.type === "project")
+    //   push(Screens.DASHBOARD + Pages.PROJECTS + "/" + e.event._def.publicId);
+    // if (e.event._def.extendedProps.type === "task")
+    //   push(Screens.DASHBOARD + Pages.TASKS + "/" + e.event._def.publicId);
   };
 
   return (
-    <FullCalendar
-      plugins={[dayGridPlugin, interactionPlugin]}
-      editable={true}
-      // eventDrop={this.handleEventDrop}
-      eventClick={handleClick}
-      events={calendarData}
-    />
+    <div className="row">
+      <div className={showDetails ? "col-6" : "col-12"}>
+        <FullCalendar
+          plugins={[dayGridPlugin, interactionPlugin]}
+          editable={true}
+          // eventDrop={this.handleEventDrop}
+          eventClick={handleClick}
+          events={calendarData}
+        />
+      </div>
+      <div className={showDetails ? "col-6" : "col-12"}>
+        <div className={showDetails ? "d-block" : "d-none"}>details</div>
+      </div>
+    </div>
   );
 };
 
