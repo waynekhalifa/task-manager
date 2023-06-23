@@ -18,7 +18,7 @@ export interface SelectedTask {
   task_priority: string;
   created_at?: string;
   user?: number;
-  group?: number;
+  group?: any;
   project?: number;
   start_at?: string;
   end_at?: string;
