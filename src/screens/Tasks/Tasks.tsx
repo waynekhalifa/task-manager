@@ -128,60 +128,26 @@ const Tasks: React.FC = () => {
     });
   };
 
-  const handleEditModal = (task: SelectedTask) => {
-    setState({
-      ...state,
-      isEditModal: !isEditModal,
-      modalHeader: "Edit Task",
-      selectedTask: task
-    });
 
-  };
+  // const handleAddUserModal = (task: SelectedTask) => {
+  //   setState({
+  //     ...state,
+  //     isAddUserModal: !isAddUserModal,
+  //     modalHeader: "Add User",
+  //     selectedTask: task
+  //   });
+  // };
 
-  const handleDeleteModal = (task: SelectedTask) => {
-    setState({
-      ...state,
-      isDeleteModal: !isDeleteModal,
-      modalHeader: "Delete Task",
-      selectedTask: task
-    });
-  };
 
-  const handleAddUserModal = (task: SelectedTask) => {
-    setState({
-      ...state,
-      isAddUserModal: !isAddUserModal,
-      modalHeader: "Add User",
-      selectedTask: task
-    });
-  };
 
-  const handleAddAttachmentModal = (task: SelectedTask) => {
-    setState({
-      ...state,
-      isAddAttachmentModal: !isAddAttachmentModal,
-      modalHeader: "Add Attachment",
-      selectedTask: task
-    });
-  };
-
-  const handleViewDescriptionModal = (task: SelectedTask) => {
-    setState({
-      ...state,
-      isViewDescriptionModal: !isViewDescriptionModal,
-      modalHeader: "View Description",
-      selectedTask: task
-    });
-  };
-
-  const handleAddCommentModal = (task: SelectedTask) => {
-    setState({
-      ...state,
-      isAddCommentModal: !isAddCommentModal,
-      modalHeader: "Add Comment",
-      selectedTask: task
-    });
-  };
+  // const handleAddCommentModal = (task: SelectedTask) => {
+  //   setState({
+  //     ...state,
+  //     isAddCommentModal: !isAddCommentModal,
+  //     modalHeader: "Add Comment",
+  //     selectedTask: task
+  //   });
+  // };
 
 
   const createTask = async () => {
@@ -196,13 +162,6 @@ const Tasks: React.FC = () => {
     }
   };
 
-  const editTask = async () => {
-
-    try {
-    } catch (error) {
-      alert(error);
-    }
-  };
 
   return (
     <div className="container-xxl">
@@ -250,8 +209,7 @@ const Tasks: React.FC = () => {
         projects={projects}
         modelData={modelData}
         onCreate={createTask}
-        onUpdate={editTask}
-        members={members}
+         members={members}
         groups={groups}
       />
     </div>

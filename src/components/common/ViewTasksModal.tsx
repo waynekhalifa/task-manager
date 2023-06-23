@@ -57,17 +57,11 @@ const ViewTasksModal: React.FC<Props> = ({ onClose, show, modalHeader, project }
               <button
                 type="button"
                 className="btn btn-outline-secondary"
-              // onClick={han}
+                onClick={() => push(`/dashboard/tasks/${task.id}`)}
               >
                 <i className="icofont-edit text-success"></i>
               </button>
-              <button
-                type="button"
-                className="btn btn-outline-secondary"
-              // onClick={onClickDelete}
-              >
-                <i className="icofont-ui-delete text-danger"></i>
-              </button>
+
             </div>
 
           </div>

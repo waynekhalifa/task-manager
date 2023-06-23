@@ -7,13 +7,11 @@ import Member from "components/common/Member";
 import ProjectModal from "components/common/ProjectModal";
 import TaskModal from "components/common/TaskModal";
 import { useCategoriesQuery } from "framework/category/getAllCategories";
-import { useCreateProject } from "framework/project/createProject";
 import { useDeleteProject } from "framework/project/deleteProject";
 import { useSingleProject } from "framework/project/getSingleProject";
 import { projectUpdateInput, useUpdateProject } from "framework/project/updateProject";
 import { taskInput, useCreateTask } from "framework/task/create-task";
 import { useTaskQuery } from "framework/task/get-all-tasks";
-import { useUploadTaskAttachment } from "framework/task/uploadTaskAttachment";
 import useApp from "hooks/useApp";
 import React from "react";
 import { CategoryUpdateInput } from "types/category";
@@ -69,39 +67,11 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
     state;
   let { data, error, isLoading } = useSingleProject({ id });
 
-  const { mutateAsync: createProjectMutation } = useCreateProject();
   const { mutateAsync: updateProjectMutation } = useUpdateProject();
   const { mutateAsync: deleteProjectMutation } = useDeleteProject();
   const { mutateAsync: createTaskMutation } = useCreateTask();
-  const { mutateAsync: updateTaskMutation } = useUpdateProject();
-  const { mutateAsync: deleteTaskMutation } = useDeleteProject();
-  const { mutateAsync: uploadTaskAttachmentMutation } = useUploadTaskAttachment();
 
-  // let tasks: SelectedTask[] = [
-  //   {
-  //     id: 1,
-  //     name: "Task 1",
-  //     description: "Task 1 description",
-  //     start_at: "2021-09-01",
-  //     end_at: "2021-09-01",
-  //     task_progress: "In Progress",
-  //     task_priority: "HIGH",
-  //     files: [],
-  //     user: 1
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Task 2",
-  //     description: "Task 2 description",
-  //     start_at: "2021-09-01",
-  //     end_at: "2021-09-01",
-  //     task_progress: "In Progress",
-  //     task_priority: "HIGH",
-  //     files: [],
-  //     user: 1
-  //   },
 
-  // ];
 
   let comments = [
     {

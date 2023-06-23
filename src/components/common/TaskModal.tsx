@@ -1,11 +1,10 @@
 import FormInputs from 'components/FormInputs';
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Modal } from 'react-bootstrap';
 import { IField } from 'types/formFields';
 import { IOption } from 'types/option';
 import { SelectedProject } from 'types/project';
 import { SelectedTask } from 'types/task';
-import Dropzone from './Dropzone';
 
 interface Props {
   onClose: any;
@@ -66,17 +65,18 @@ const TaskModal: React.FC<Props> = ({ onClose, modalHeader, isAddModal,
       label: "Select Project",
       type: "select",
       key: ModelKeys.PROJECT,
-      value: isEditModal ? SelectedTask?.project : projectOptions[0],
+      value: projectOptions[0],
       options: projectOptions,
       onChange: (e: any) => handleModelData(ModelKeys.PROJECT, e.target.value),
       placeholder: "Select Project",
       disabled: selectedProject ? true : false,
+      hide: !selectedProject ? true : false,
     },
     {
       label: "Task Name",
       type: "text",
       key: ModelKeys.NAME,
-      value: isEditModal ? SelectedTask?.name : modelData?.name,
+      value: modelData?.name,
       onChange: (e: any) => handleModelData(ModelKeys.NAME, e.target.value),
       placeholder: "Enter Task Name",
     },
@@ -85,7 +85,7 @@ const TaskModal: React.FC<Props> = ({ onClose, modalHeader, isAddModal,
       label: "Description",
       type: "textarea",
       key: ModelKeys.DESCRIPTION,
-      value: isEditModal ? SelectedTask?.description : modelData?.description,
+      value: modelData?.description,
       onChange: (e: any) =>
         handleModelData(ModelKeys.DESCRIPTION, e.target.value),
       placeholder: "Enter Description",
@@ -94,7 +94,7 @@ const TaskModal: React.FC<Props> = ({ onClose, modalHeader, isAddModal,
       label: "Task Priority",
       type: "select",
       key: ModelKeys.TASK_PEIORITY,
-      value: isEditModal ? SelectedTask?.task_priority : modelData?.task_priority,
+      value: modelData?.task_priority,
       options: [
         {
           label: "High",
@@ -115,12 +115,16 @@ const TaskModal: React.FC<Props> = ({ onClose, modalHeader, isAddModal,
       ],
       onChange: (e: any) => handleModelData(ModelKeys.TASK_PEIORITY, e.target.value),
       placeholder: "Select Task Priority",
+      default: {
+        label: SelectedTask?.task_priority,
+        value: SelectedTask?.task_priority
+      }
     },
     {
       label: "Start Date",
       type: "date",
       key: ModelKeys.START_DATE,
-      value: isEditModal ? SelectedTask?.start_at : modelData?.start_at,
+      value: modelData?.start_at,
       onChange: (e: any) =>
         handleModelData(ModelKeys.START_DATE, e.target.value),
       placeholder: "Enter Start Date",
@@ -129,7 +133,7 @@ const TaskModal: React.FC<Props> = ({ onClose, modalHeader, isAddModal,
       label: "End Date",
       type: "date",
       key: ModelKeys.END_DATE,
-      value: isEditModal ? SelectedTask?.end_at : modelData?.end_at,
+      value: modelData?.end_at,
       onChange: (e: any) =>
         handleModelData(ModelKeys.END_DATE, e.target.value),
       placeholder: "Enter End Date",
@@ -138,19 +142,23 @@ const TaskModal: React.FC<Props> = ({ onClose, modalHeader, isAddModal,
       label: "Assign Group",
       type: "select",
       key: ModelKeys.GROUP,
-      value: isEditModal ? SelectedTask?.group : modelData?.group,
+      value: modelData?.group,
       onChange: (e: any) => handleModelData(ModelKeys.GROUP, e.target.value),
       options: groups.map((group) => ({
         label: group.label,
         value: group.value,
       })),
+      placeholder: "Select Group",
     },
     {
       label: "Assign To",
       type: "select",
       key: ModelKeys.USER,
-      value: isEditModal ? SelectedTask?.user : modelData?.user,
-      options: members,
+      value: modelData?.user,
+      options: members.map((member) => ({
+        label: member.label,
+        value: member.value,
+      })),
       onChange: (e: any) => handleModelData(ModelKeys.USER, e.target.value),
       placeholder: "Select User",
     }
@@ -158,24 +166,9 @@ const TaskModal: React.FC<Props> = ({ onClose, modalHeader, isAddModal,
 
   ]
 
-  const onDrop = useCallback((acceptedFiles: any) => {
-    let reader = new FileReader();
-    let files: File[] = modelData?.files || [] as File[];
-    reader.readAsDataURL(acceptedFiles[0]);
-    reader.onload = (url) => {
-      files?.push(acceptedFiles[0]);
-      handleModelData(ModelKeys.FILES, files);
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
 
-  const handleDeleteFile = async (index: number) => {
-    let files: File[] = modelData.files;
-    files.splice(index, 1);
-    handleModelData(ModelKeys.FILES, files);
-  };
+
 
 
   return (
@@ -190,13 +183,6 @@ const TaskModal: React.FC<Props> = ({ onClose, modalHeader, isAddModal,
               <div className="card-body">
                 <FormInputs
                   formFields={formFields}
-                />
-                <h5 className="mt-4">Attachments</h5>
-                <Dropzone
-                  onDrop={onDrop}
-                  onDelete={handleDeleteFile}
-                  files={modelData?.files}
-                  onDeleteCloud={() => { }}
                 />
               </div>
             </div>

@@ -69,11 +69,11 @@ const NestableCard: React.FC<Props> = ({ data }) => {
           >
             <i className="icofont-paper-clip"></i>
             <span className="badge bg-light text-dark ms-2">{data.files.length || 0}</span>
-            <span
+            {/* <span
               className="avatar rounded-circle text-center pointer sm"
             >
               <i className="icofont-ui-add"></i>
-            </span>
+            </span> */}
           </div>
         </div>
         <div className="col">
@@ -90,11 +90,11 @@ const NestableCard: React.FC<Props> = ({ data }) => {
           >
             <i className="icofont-ui-text-chat"></i>
             <span className="badge bg-light text-dark ms-2">{data.comment_count || 0}</span>
-            <span
+            {/* <span
               className="avatar rounded-circle text-center pointer sm"
             >
               <i className="icofont-ui-add"></i>
-            </span>
+            </span> */}
           </div>
         </div>
 
