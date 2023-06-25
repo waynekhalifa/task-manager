@@ -21,7 +21,6 @@ import TaskModal from "components/common/TaskModal";
 import DeleteModal from "components/common/DeleteModal";
 import { Task } from "types/task";
 import { taskInput, useCreateTask } from "framework/task/create-task";
-import { useUploadTaskAttachment } from "framework/task/uploadTaskAttachment";
 import ProjectCard from "components/Projects/ProjectCard";
 
 interface Props { }
@@ -82,9 +81,7 @@ const Projects: React.FC<Props> = () => {
   const { mutateAsync: updateProjectMutation } = useUpdateProject();
   const { mutateAsync: deleteProjectMutation } = useDeleteProject();
   const { mutateAsync: createTaskMutation } = useCreateTask();
-  const { mutateAsync: updateTaskMutation } = useUpdateProject();
-  const { mutateAsync: deleteTaskMutation } = useDeleteProject();
-  const { mutateAsync: uploadTaskAttachmentMutation } = useUploadTaskAttachment();
+
 
   let { data: projectData, error: errorProjects, isLoading: loadingProjects } = useProjectsQuery({});
 

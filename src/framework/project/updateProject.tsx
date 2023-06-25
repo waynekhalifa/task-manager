@@ -9,7 +9,7 @@ export const useUpdateProject = () => {
       Endpoints.PROJECT + updateInput.id + "/",
       updateInput.data, {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "multipart/form-data,  Application/json",
       },
     }
 
@@ -18,7 +18,19 @@ export const useUpdateProject = () => {
   });
 };
 
-export const projectUpdateInput = (data: SelectedProject): FormData => {
+export const projectUpdateInput = (data: SelectedProject): any => {
+  if (!data.file.size) {
+    return {
+      id: data.id,
+      name: data.name,
+      description: data.description,
+      category: data.category,
+      start_at: data.start_at,
+      end_at: data.end_at,
+      admin: data.admin,
+      group: data?.group,
+    } as SelectedProject;
+  }
   const formData = new FormData();
   formData.append("name", data?.name!);
   formData.append("description", data?.description!);
@@ -27,7 +39,6 @@ export const projectUpdateInput = (data: SelectedProject): FormData => {
   formData.append("end_at", data?.end_at!);
   formData.append("admin", `${data?.admin!}`);
   formData.append("group", `${data.group}`);
-  if (!data.file) return formData;
   formData.append("file", data.file);
 
   return formData;
