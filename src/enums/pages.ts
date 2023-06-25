@@ -10,4 +10,5 @@ export enum Pages {
   ATTENDANCE = "attendance",
   CALENDAR = "calendar",
   CATEGORIES = "departments",
+  PROFILE = "profile",
 }

@@ -5,7 +5,7 @@ import http from "utils/http";
 
 export const useUpdateTask = () => {
   return useMutation<any, Error, SelectedTask>(async updateInput => {
-    const { data } = await http.post(
+    const { data } = await http.patch(
       Endpoints.TASK + updateInput.id + "/",
       updateInput
     );
@@ -14,5 +14,16 @@ export const useUpdateTask = () => {
 };
 
 export const taskInput = (data: SelectedTask): SelectedTask => {
-  return {} as SelectedTask;
+  return {
+    id: data.id,
+    project: data.project,
+    name: data.name,
+    description: data.description,
+    task_priority: data.task_priority,
+    task_progress: data.task_progress,
+    user: data.user,
+    group: data?.group?.id,
+    start_at: data.start_at,
+    end_at: data.end_at,
+  } as SelectedTask;
 };

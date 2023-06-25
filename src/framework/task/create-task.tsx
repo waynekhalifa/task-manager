@@ -17,6 +17,7 @@ export const taskInput = (data: Task): Task => {
     description: data.description,
     task_priority: data.task_priority,
     user: data.user,
+    group: data.group,
     project: data.project,
     start_at: data.start_at,
     end_at: data.end_at,

@@ -1,6 +1,5 @@
 import React from "react";
-import { Nav, Tab } from "react-bootstrap";
-import CurrentClientProject from "../../components/Clients/CurrentClientProject";
+import { Tab } from "react-bootstrap";
 import AddNewUserModal from "../../components/common/AddNewUserModal";
 import PageHeader from "../../components/common/PageHeader";
 import { useCategoriesQuery } from "framework/category/getAllCategories";
@@ -20,10 +19,9 @@ import ViewTasksModal from "components/common/ViewTasksModal";
 import ProjectModal from "components/common/ProjectModal";
 import TaskModal from "components/common/TaskModal";
 import DeleteModal from "components/common/DeleteModal";
-import { SelectedTask, Task } from "types/task";
+import { Task } from "types/task";
 import { taskInput, useCreateTask } from "framework/task/create-task";
-import { useUploadTaskAttachment } from "framework/task/uploadTaskAttachment";
-import { useDeleteTaskAttachment } from "framework/task/deleteTaskAttachment";
+import ProjectCard from "components/Projects/ProjectCard";
 
 interface Props { }
 
@@ -34,6 +32,7 @@ enum ModelKeys {
   START_DATE = "start_at",
   END_DATE = "end_at",
   ADMIN = "admin",
+  GROUP = "group",
   FILE = "file",
   FILES = "files",
 }
@@ -82,12 +81,9 @@ const Projects: React.FC<Props> = () => {
   const { mutateAsync: updateProjectMutation } = useUpdateProject();
   const { mutateAsync: deleteProjectMutation } = useDeleteProject();
   const { mutateAsync: createTaskMutation } = useCreateTask();
-  const { mutateAsync: updateTaskMutation } = useUpdateProject();
-  const { mutateAsync: deleteTaskMutation } = useDeleteProject();
-  const { mutateAsync: uploadTaskAttachmentMutation } = useUploadTaskAttachment();
- 
+
+
   let { data: projectData, error: errorProjects, isLoading: loadingProjects } = useProjectsQuery({});
-  let tasks: SelectedTask[] = [] as SelectedTask[];
 
   let {
     data: categoriesData,
@@ -117,6 +113,20 @@ const Projects: React.FC<Props> = () => {
       value: 1,
     },
   ]
+  const groups = [
+    {
+      label: "Group1",
+      value: 1,
+    },
+    {
+      label: "Group2",
+      value: 1,
+    },
+    {
+      label: "Group2",
+      value: 1,
+    },
+  ]
 
   let members = projectData?.projects.data.results[0].members || [
     {
@@ -137,6 +147,7 @@ const Projects: React.FC<Props> = () => {
       value: 3,
     },
   ];
+
 
 
   const handleModalClose = (reload: boolean = false) => {
@@ -298,15 +309,13 @@ const Projects: React.FC<Props> = () => {
       ...state,
       modelTaskData: {
         ...modelTaskData,
-        
+
       },
     });
     try {
       Object.assign(modelTaskData, { project: selectedProject.id });
       let createInput = taskInput(modelTaskData);
-      let res = await createTaskMutation(createInput);
-      let task = res.session.data;
-      tasks.push(task);
+      await createTaskMutation(createInput);
       handleModalClose(true);
     } catch (error) {
       alert(error);
@@ -338,7 +347,10 @@ const Projects: React.FC<Props> = () => {
     // Object.assign(selectedProject, { admin: 1 });
     try {
       let createInput = projectUpdateInput(selectedProject);
-      let res = await updateProjectMutation(createInput);
+      let res = await updateProjectMutation({
+        id: selectedProject.id,
+        data: createInput,
+      });
       let updatedProject = res.session.data;
       projects.map((project) => {
         if (project.id === updatedProject.id) {
@@ -400,7 +412,7 @@ const Projects: React.FC<Props> = () => {
                   <i className="icofont-plus-circle me-2 fs-6" />
                   Create Project
                 </button>
-                <Nav
+                {/* <Nav
                   variant="pills"
                   className="nav nav-tabs tab-body-header rounded ms-3 prtab-set w-sm-100"
                 >
@@ -416,7 +428,7 @@ const Projects: React.FC<Props> = () => {
                   <Nav.Item>
                     <Nav.Link eventKey="Completed">Completed</Nav.Link>
                   </Nav.Item>
-                </Nav>
+                </Nav> */}
               </div>
             );
           }}
@@ -427,34 +439,23 @@ const Projects: React.FC<Props> = () => {
               <Tab.Pane eventKey="All">
                 <div className="row g-3 gy-5 py-3 row-deck">
                   {projects && projects.length > 0 && projects.map((d: any, i: number) => {
-                    
+
                     return (
                       <div
                         key={"key" + i}
                         className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6"
                       >
-                        <CurrentClientProject
-                          teamImage={d.file}
-                          // project{project}
-                          // const {}  = project
-                          logo={d.file}
-                          logoBg={d.file}
-                          title={d.name}
+                        <ProjectCard
+                          project={d}
                           category={getCategory(d.category)}
-                          startDate={d.start_at}
-                          endDate={d.end_at}
-                              onClickEdit={() => handleOpenEditModal(d)}
-                              onClickDelete={() => handleOpenDeleteModal(d)}
-                              onClickAddMember={handleOpenAddUserModal}
-                              onClickAddAttachment={() => handleOpenAddAttachmentModal(d)}
-                              onClickViewDescription={() => handleOpenViewDescriptionModal(d)}
-                              onClickAddComment={() => handleOpenAddCommentModal(d)}
-                              onClickAddTask={() => handleOpenAddTaskModal(d)}
-                              onClickViewTasks={() => handleOpenViewTaskModal(d)}
-                          comments_count={d.comments_count}
-                          members_count={d.members_count}
-                          attachment_count={d.projectfile_set.length}
-                          tasks_count={d.tasks_count}
+                          onClickEdit={() => handleOpenEditModal(d)}
+                          onClickDelete={() => handleOpenDeleteModal(d)}
+                          onClickAddMember={handleOpenAddUserModal}
+                          onClickAddAttachment={() => handleOpenAddAttachmentModal(d)}
+                          onClickViewDescription={() => handleOpenViewDescriptionModal(d)}
+                          onClickAddComment={() => handleOpenAddCommentModal(d)}
+                          onClickAddTask={() => handleOpenAddTaskModal(d)}
+                          onClickViewTasks={() => handleOpenViewTaskModal(d)}
                         />
                       </div>
                     );
@@ -477,6 +478,7 @@ const Projects: React.FC<Props> = () => {
         admins={admins}
         onCreate={createProject}
         onUpdate={editProject}
+        groups={groups}
       />
       <DeleteModal
         show={isDeleteModal}
@@ -518,11 +520,13 @@ const Projects: React.FC<Props> = () => {
         onCreate={createTask}
         onUpdate={editTask}
         members={members}
+        groups={groups}
       />
       <ViewTasksModal
         show={isViewTaskModal}
         onClose={handleModalClose}
         modalHeader={modalHeader}
+        project={selectedProject}
       />
     </div>
   );

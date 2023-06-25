@@ -75,6 +75,9 @@ const OurClients: React.FC<Props> = ({
               <a href="chat-app" className="btn btn-dark btn-sm mt-1 me-1">
                 <i className="icofont-ui-text-chat me-2 fs-6" />Chat
               </a>
+              <a href="/dashboard/profile/1" className="btn btn-dark btn-sm mt-1">
+                <i className="icofont-invisible me-2 fs-6" />Profile
+              </a>
             </div>}
         </div>
       </div>

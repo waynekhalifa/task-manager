@@ -15,8 +15,9 @@ interface Props {
   modelData?: any;
   categories: CategoryUpdateInput[];
   admins: any[];
-  onCreate: () => void;
-  onUpdate: () => void;
+  groups: any[];
+  onCreate?: () => void;
+  onUpdate?: () => void;
 }
 
 enum ModelKeys {
@@ -26,6 +27,7 @@ enum ModelKeys {
   START_DATE = "start_at",
   END_DATE = "end_at",
   ADMIN = "admin",
+  GROUP = "group",
   FILE = "file",
   FILES = "files",
 }
@@ -39,6 +41,7 @@ const ProjectModal: React.FC<Props> = ({
   modelData,
   categories,
   admins,
+  groups,
   onCreate,
   onUpdate
 }) => {
@@ -106,7 +109,17 @@ const ProjectModal: React.FC<Props> = ({
         };
       },
       placeholder: "Enter Thumbnail",
-      hide: isEditModal
+    },
+    {
+      label: "Assign Group",
+      type: "select",
+      key: ModelKeys.GROUP,
+      value: isEditModal ? selectedProject.group : modelData?.group,
+      onChange: (e: any) => handleModelData(ModelKeys.GROUP, e.target.value),
+      options: groups.map((group) => ({
+        label: group.label,
+        value: group.value,
+      })),
     },
     {
       label: "Assign Admin",

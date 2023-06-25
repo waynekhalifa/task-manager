@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import PageHeader from "../../components/common/PageHeader";
-import AllocatedTask from "../../components/Tasks/AllocatedTask";
-import RecentActivity from "../../components/Tasks/RecentActivity";
-import TaskProgress from "../../components/Tasks/TaskProgress";
 import "react-nestable/dist/styles/index.css";
+
+import TaskNestable1 from "../../components/Tasks/TaskNestable";
 import { useProjectsQuery } from "framework/project/getAllProjects";
 import { SelectedTask } from "types/task";
 import TaskModal from "components/common/TaskModal";
@@ -74,18 +73,31 @@ const Tasks: React.FC = () => {
     },
     {
       label: "User 1",
-      value: 1,
-    },
-    {
-      label: "User 2",
       value: 2,
     },
     {
+      label: "User 2",
+      value: 3,
+    },
+    {
       label: "User 3",
+      value: 4,
+    },
+  ];
+  const groups = [
+    {
+      label: "Group1",
+      value: 1,
+    },
+    {
+      label: "Group2",
+      value: 2,
+    },
+    {
+      label: "Group2",
       value: 3,
     },
   ];
-
   const handleModelData = (key: string, value: any) => {
     if (isEditModal) {
       setState({
@@ -128,59 +140,23 @@ const Tasks: React.FC = () => {
     });
   };
 
-  const handleEditModal = (task: SelectedTask) => {
-    setState({
-      ...state,
-      isEditModal: !isEditModal,
-      modalHeader: "Edit Task",
-      selectedTask: task,
-    });
-  };
+  // const handleAddUserModal = (task: SelectedTask) => {
+  //   setState({
+  //     ...state,
+  //     isAddUserModal: !isAddUserModal,
+  //     modalHeader: "Add User",
+  //     selectedTask: task
+  //   });
+  // };
 
-  const handleDeleteModal = (task: SelectedTask) => {
-    setState({
-      ...state,
-      isDeleteModal: !isDeleteModal,
-      modalHeader: "Delete Task",
-      selectedTask: task,
-    });
-  };
-
-  const handleAddUserModal = (task: SelectedTask) => {
-    setState({
-      ...state,
-      isAddUserModal: !isAddUserModal,
-      modalHeader: "Add User",
-      selectedTask: task,
-    });
-  };
-
-  const handleAddAttachmentModal = (task: SelectedTask) => {
-    setState({
-      ...state,
-      isAddAttachmentModal: !isAddAttachmentModal,
-      modalHeader: "Add Attachment",
-      selectedTask: task,
-    });
-  };
-
-  const handleViewDescriptionModal = (task: SelectedTask) => {
-    setState({
-      ...state,
-      isViewDescriptionModal: !isViewDescriptionModal,
-      modalHeader: "View Description",
-      selectedTask: task,
-    });
-  };
-
-  const handleAddCommentModal = (task: SelectedTask) => {
-    setState({
-      ...state,
-      isAddCommentModal: !isAddCommentModal,
-      modalHeader: "Add Comment",
-      selectedTask: task,
-    });
-  };
+  // const handleAddCommentModal = (task: SelectedTask) => {
+  //   setState({
+  //     ...state,
+  //     isAddCommentModal: !isAddCommentModal,
+  //     modalHeader: "Add Comment",
+  //     selectedTask: task
+  //   });
+  // };
 
   const createTask = async () => {
     try {
@@ -189,13 +165,6 @@ const Tasks: React.FC = () => {
       let task = res.session.data;
       tasks.push(task);
       handleModalClose();
-    } catch (error) {
-      alert(error);
-    }
-  };
-
-  const editTask = async () => {
-    try {
     } catch (error) {
       alert(error);
     }
@@ -221,7 +190,7 @@ const Tasks: React.FC = () => {
       />
       <div className="row clearfix g-3">
         <div className="col-lg-12 col-md-12 flex-column">
-          <div className="row g-3 row-deck">
+          {/* <div className="row g-3 row-deck">
             <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6">
               <TaskProgress tasks={tasks} />
             </div>
@@ -231,13 +200,8 @@ const Tasks: React.FC = () => {
             <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-12">
               <AllocatedTask />
             </div>
-          </div>
-          {/* <TaskNestable1
-            InProgressTaskData={InProgressTaskData}
-            needReviewData={needReviewData}
-            CompletedData={CompletedData}
-            tasks={tasks}
-          /> */}
+          </div> */}
+          <TaskNestable1 tasks={tasks} />
         </div>
       </div>
 
@@ -252,8 +216,8 @@ const Tasks: React.FC = () => {
         projects={projects}
         modelData={modelData}
         onCreate={createTask}
-        onUpdate={editTask}
         members={members}
+        groups={groups}
       />
     </div>
   );
