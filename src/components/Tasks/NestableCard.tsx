@@ -48,7 +48,7 @@ const NestableCard: React.FC<Props> = ({ data }) => {
                 data.task_priority === "CRITICAL" ? "bg-danger" :
                   data.task_priority === "LOW" ? "bg-info"
                     : "bg-success"
-              } text-end mt-2`}
+              } text-end m-2`}
           >
             {data.task_priority}
           </span>
@@ -68,18 +68,18 @@ const NestableCard: React.FC<Props> = ({ data }) => {
           // onClick={onClickAddAttachment}
           >
             <i className="icofont-paper-clip"></i>
-            <span className="badge bg-secondary ms-2">{data.files.length || 0} Attach</span>
-            <span
+            <span className="badge bg-light text-dark ms-2">{data.files.length || 0}</span>
+            {/* <span
               className="avatar rounded-circle text-center pointer sm"
             >
               <i className="icofont-ui-add"></i>
-            </span>
+            </span> */}
           </div>
         </div>
         <div className="col">
           <div className="d-flex align-items-center">
             <i className="icofont-sand-clock"></i>
-            <span className="badge bg-secondary ms-2">{sumDateRange(data.start_at, data.end_at)} Days</span>
+            <span className="badge bg-light text-dark ms-2">{sumDateRange(data.start_at, data.end_at)} Days</span>
           </div>
         </div>
 
@@ -89,12 +89,12 @@ const NestableCard: React.FC<Props> = ({ data }) => {
           // onClick={onClickAddComment}
           >
             <i className="icofont-ui-text-chat"></i>
-            <span className="badge bg-secondary ms-2">{data.comment_count || 0}</span>
-            <span
+            <span className="badge bg-light text-dark ms-2">{data.comment_count || 0}</span>
+            {/* <span
               className="avatar rounded-circle text-center pointer sm"
             >
               <i className="icofont-ui-add"></i>
-            </span>
+            </span> */}
           </div>
         </div>
 

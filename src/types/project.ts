@@ -12,6 +12,7 @@ export interface Project {
 export interface SelectedProject {
   id: number;
   admin?: number;
+  group?: number;
   file?: any;
   files?: File[];
   name?: string;
@@ -25,6 +26,7 @@ export interface SelectedProject {
   tasks_count?: number;
   members?: any[];
   project_status?: string;
+  projectfile_set?: any[];
 }
 
 

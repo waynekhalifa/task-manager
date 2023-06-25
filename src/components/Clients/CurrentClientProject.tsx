@@ -62,7 +62,7 @@ const CurrentClientProject: React.FC<Props> = ({
             // onClick={onClickAddAttachment}
             >
               <i className="icofont-paper-clip"></i>
-              <span className="badge bg-secondary ms-2">{project.attachment_count || 0} Attach</span>
+              <span className="badge bg-light text-dark ms-2">{project.attachment_count || 0}</span>
               {/* <span
                 className="avatar rounded-circle text-center pointer sm"
               >
@@ -73,16 +73,16 @@ const CurrentClientProject: React.FC<Props> = ({
           <div className="col">
             <div className="d-flex align-items-center">
               <i className="icofont-sand-clock"></i>
-              <span className="badge bg-secondary ms-2">{sumDateRange(project?.start_at!, project?.end_at!) || 0} Days</span>
+              <span className="badge bg-light text-dark ms-2">{sumDateRange(project?.start_at!, project?.end_at!) || 0} Days</span>
             </div>
           </div>
-          <div className="col-6">
+          <div className="col">
             <div className="d-flex align-items-center"
               style={{ cursor: 'pointer' }}
             // onClick={onClickAddMember}
             >
               <i className="icofont-group-students "></i>
-              <span className="badge bg-secondary ms-2">{project?.members_count! || 0} Members</span>
+              <span className="badge bg-light text-dark ms-2">{project?.members_count! || 0} Members</span>
               {/* <span
                 className="avatar rounded-circle text-center pointer sm"
               >
@@ -96,7 +96,7 @@ const CurrentClientProject: React.FC<Props> = ({
             // onClick={onClickAddComment}
             >
               <i className="icofont-ui-text-chat"></i>
-              <span className="badge bg-secondary ms-2">{project?.comments_count! || 0}</span>
+              <span className="badge bg-light text-dark ms-2">{project?.comments_count! || 0}</span>
               {/* <span
                 className="avatar rounded-circle text-center pointer sm"
               >
@@ -122,7 +122,7 @@ const CurrentClientProject: React.FC<Props> = ({
             <div className="d-flex align-items-center">
               <i className="icofont-tasks"></i>
 
-              <span className="badge bg-secondary ms-2">{project?.tasks_count! || 0} Tasks</span>
+              <span className="badge bg-light text-dark ms-2">{project?.tasks_count! || 0} Tasks</span>
               {/* <span
                 className="avatar rounded-circle text-center pointer sm"
               >

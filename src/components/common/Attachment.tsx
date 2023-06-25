@@ -3,9 +3,12 @@ import React, { useCallback, useEffect } from "react";
 import Dropzone from "./Dropzone";
 import { projectAttachmentInput, useUploadProjectAttachment } from "framework/project/uploadProjectAttachment";
 import { useDeleteProjectAttachment } from "framework/project/deleteProjectAttachment";
+import { taskAttachmentInput, useUploadTaskAttachment } from "framework/task/uploadTaskAttachment";
+import { useDeleteTaskAttachment } from "framework/task/deleteTaskAttachment";
 
 interface Props {
-  project: any;
+  project?: any;
+  task?: any;
 }
 
 enum ModelKeys {
@@ -30,15 +33,17 @@ const INITIAlIZE_DATA: State = {
   },
 };
 
-const Attachment: React.FC<Props> = ({ project }) => {
+const Attachment: React.FC<Props> = ({ project, task }) => {
   const [state, setState] = React.useState<State>(INITIAlIZE_DATA);
   const { modelData } = state;
 
-  const { mutateAsync: uploadMutation } = useUploadProjectAttachment();
-  const { mutateAsync: deleteMutation } = useDeleteProjectAttachment();
+  const { mutateAsync: uploadProjectFilesMutation } = useUploadProjectAttachment();
+  const { mutateAsync: deleteProjectFilesMutation } = useDeleteProjectAttachment();
+  const { mutateAsync: uploadTaskFilesMutation } = useUploadTaskAttachment();
+  const { mutateAsync: deleteTaskFilesMutation } = useDeleteTaskAttachment();
 
   useEffect(() => {
-    if (project.projectfile_set && project.projectfile_set.length > 0) {
+    if (project && project.projectfile_set && project.projectfile_set.length > 0) {
       setState((prevState) => ({
         modelData: {
           ...prevState.modelData,
@@ -46,8 +51,16 @@ const Attachment: React.FC<Props> = ({ project }) => {
         },
       }));
     }
+    if (task && task.files && task.files.length > 0) {
+      setState((prevState) => ({
+        modelData: {
+          ...prevState.modelData,
+          [ModelKeys.ClOUD_FILES]: task.files,
+        },
+      }));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [project]);
+  }, [project, task]);
 
 
   const handleModelData = (key: string, value: any) => {
@@ -77,14 +90,27 @@ const Attachment: React.FC<Props> = ({ project }) => {
     let files: any[] = modelData.cloudFiles;
     let file: any = modelData.cloudFiles[index];
     try {
-      await deleteMutation({ id: file.id });
-      files.splice(index, 1);
-      setState((prevState) => ({
-        modelData: {
-          ...prevState.modelData,
-          [ModelKeys.ClOUD_FILES]: files,
-        },
-      }));
+      if (project) {
+        await deleteProjectFilesMutation({ id: file.id });
+        files.splice(index, 1);
+        setState((prevState) => ({
+          modelData: {
+            ...prevState.modelData,
+            [ModelKeys.ClOUD_FILES]: files,
+          },
+        }));
+      }
+      if (task) {
+        await deleteTaskFilesMutation({ id: file.id });
+        files.splice(index, 1);
+        setState((prevState) => ({
+          modelData: {
+            ...prevState.modelData,
+            [ModelKeys.ClOUD_FILES]: files,
+          },
+        }));
+      }
+
     } catch (err) {
       alert(err);
     }
@@ -111,12 +137,24 @@ const Attachment: React.FC<Props> = ({ project }) => {
     }));
 
     try {
-      let inputData = projectAttachmentInput({
-        files: modelData.files,
-        project: project.id,
-      })
-      await uploadMutation(inputData);
-      window.location.reload();
+
+      if (project) {
+        let inputData = projectAttachmentInput({
+          files: modelData.files,
+          project: project.id,
+        })
+        await uploadProjectFilesMutation(inputData);
+        window.location.reload();
+      }
+      if (task) {
+        let inputData = taskAttachmentInput({
+          files: modelData.files,
+          task: task.id,
+        })
+        await uploadTaskFilesMutation(inputData);
+        window.location.reload();
+      }
+
     } catch (err) {
       alert(err);
       setState((prevState) => ({

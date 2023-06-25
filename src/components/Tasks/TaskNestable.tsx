@@ -3,23 +3,17 @@ import NestableCard from "./NestableCard";
 import { SelectedTask } from "types/task";
 
 interface Props {
-  InProgressTaskData: any;
-  needReviewData: any;
-  CompletedData: any;
   tasks: SelectedTask[];
 }
 
 enum TaskProgress {
   ToDo = "To Do",
   InProgress = "ON PROGRESS",
-  NeedReview = "Need Review",
-  Completed = "Completed",
+  NeedReview = "REVIEW",
+  Completed = "COMPLETE",
 }
 
 const TaskNestable: React.FC<Props> = ({
-  InProgressTaskData,
-  needReviewData,
-  CompletedData,
   tasks,
 }) => {
 
