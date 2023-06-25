@@ -350,7 +350,10 @@ const Projects: React.FC<Props> = () => {
     // Object.assign(selectedProject, { admin: 1 });
     try {
       let createInput = projectUpdateInput(selectedProject);
-      let res = await updateProjectMutation(createInput);
+      let res = await updateProjectMutation({
+        id: selectedProject.id,
+        data: createInput,
+      });
       let updatedProject = res.session.data;
       projects.map((project) => {
         if (project.id === updatedProject.id) {

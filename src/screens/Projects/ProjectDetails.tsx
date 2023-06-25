@@ -344,7 +344,10 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
     // Object.assign(selectedProject, { admin: 1 });
     try {
       let createInput = projectUpdateInput(selectedProject);
-      await updateProjectMutation(createInput);
+      await updateProjectMutation({
+        id: selectedProject.id,
+        data: createInput,
+      });
       handleModalClose(true);
     } catch (err) {
       alert(err);

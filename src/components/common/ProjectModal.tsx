@@ -109,7 +109,6 @@ const ProjectModal: React.FC<Props> = ({
         };
       },
       placeholder: "Enter Thumbnail",
-      hide: isEditModal
     },
     {
       label: "Assign Group",
