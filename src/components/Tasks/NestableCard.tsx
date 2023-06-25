@@ -48,7 +48,7 @@ const NestableCard: React.FC<Props> = ({ data }) => {
                 data.task_priority === "CRITICAL" ? "bg-danger" :
                   data.task_priority === "LOW" ? "bg-info"
                     : "bg-success"
-              } text-end mt-2`}
+              } text-end m-2`}
           >
             {data.task_priority}
           </span>
