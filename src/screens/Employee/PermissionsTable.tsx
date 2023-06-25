@@ -58,10 +58,20 @@ const PermissionsTable: React.FC<Props> = ({
   }, [permissions, isDepartmentAdmin]);
 
   const permissionTypes = [
-    { name: "Can Read", key: "can_read" },
-    { name: "Can Update", key: "can_write" },
-    { name: "Can Create", key: "can_create" },
-    { name: "Can Delete", key: "can_delete" },
+    { name: "Read", key: "can_read" },
+    { name: "Update", key: "can_write" },
+    { name: "Create", key: "can_create" },
+    { name: "Delete", key: "can_delete" },
+    { name: "Approve", key: "can_approve" },
+    {
+      name: "Can Assign", key: "can_assign"
+    },
+    {
+      name: "Update Status", key: "can_updateStatus"
+    },
+    {
+      name: "Change Priority", key: "can_changePriority"
+    }
   ];
 
   useEffect(() => {
@@ -215,7 +225,7 @@ const PermissionsTable: React.FC<Props> = ({
     <div className="table-responsive">
       <table className="table table-striped custom-table mt-3">
         {handleTableHeader()}
-        <tbody>{handleTableRow()}</tbody>
+
       </table>
     </div>
   );

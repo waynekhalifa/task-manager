@@ -9,9 +9,9 @@ export interface EmployeeCreateInput {
   employee_id: string | Blob;
   phone: string;
   department: any;
-  files?: any;
   description: string;
-
+  manager?: string;
+  user_permissions?: [number];
 }
 
 export interface EmployeeUpdateInput {

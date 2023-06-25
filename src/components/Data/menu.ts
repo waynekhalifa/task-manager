@@ -50,6 +50,16 @@ export const menu: any[] = [
     children: [],
   },
   {
+    name: "Managers",
+    routerLink: ["/dashboard/managers"],
+    identifier: "Managers",
+    iconClass: "icofont-users-alt-5",
+    breadcrumbMessage: "",
+    isCategory: false,
+    isApp: true,
+    children: [],
+  },
+  {
     name: "Chat",
     routerLink: ["/dashboard/chat"],
     identifier: "Employees",

@@ -128,7 +128,7 @@ const Projects: React.FC<Props> = () => {
     },
   ]
 
-  let members = projectData?.projects.data.results[0].members || [
+  let members = projectData?.projects.data.results[0]?.members || [
     {
 
       label: "Select User",

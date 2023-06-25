@@ -6,6 +6,7 @@ export enum Pages {
   TASKS = "tasks",
   Enquires = "Enquires",
   EMPLOYEES = "employees",
+  MANAGERS = "managers",
   CHAT = "chat",
   ATTENDANCE = "attendance",
   CALENDAR = "calendar",

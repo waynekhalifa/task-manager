@@ -5,11 +5,12 @@ import Categories from "./Category/Category";
 import TaskDetails from "./Tasks/TaskDetails";
 import ProjectDetails from "./Projects/ProjectDetails";
 import EmployeeProfile from "./Employee/EmployeeProfile";
+import Managers from "./Manager/Managers";
 
 const Projects = lazy(() => import("./Projects/Projects"));
 const Tasks = lazy(() => import("./Tasks/Tasks"));
 const Tickets = lazy(() => import("./Tickets/TicketsView"));
-const Employees = lazy(() => import("./Employee/Members"));
+const Employees = lazy(() => import("./Employee/Employees"));
 const Attendance = lazy(() => import("./Employee/Attendance"));
 const HrDashboard = lazy(() => import("./Dashboard/HrDashboard"));
 const ChatApp = lazy(() => import("./App/ChatApp"));
@@ -40,6 +41,8 @@ const DashboardIndex: React.FC = () => {
           return <Tickets />;
         case Pages.EMPLOYEES:
           return <Employees />;
+        case Pages.MANAGERS:
+          return <Managers />;
         case Pages.CHAT:
           return <ChatApp />;
         case Pages.ATTENDANCE:
@@ -47,7 +50,7 @@ const DashboardIndex: React.FC = () => {
         case Pages.CALENDAR:
           return <Calendar />;
         case Pages.CATEGORIES:
-          return <Categories />;        
+          return <Categories />;
         default:
           return <HrDashboard />;
       }

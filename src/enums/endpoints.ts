@@ -26,4 +26,6 @@ export enum Endpoints {
   PERMISSION = "user/utils/permissions/",
   /** Add New Employee === Register New User */
   EMPLOYEE_CREATE = "user/auth/register/",
+  /** Add New Manager === Register New User */
+  MANAGER_CREATE = "user/utils/managers/",
 }

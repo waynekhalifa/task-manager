@@ -3,14 +3,14 @@ import { Endpoints } from "enums/endpoints";
 import { EmployeeCreateInput } from "types/employee";
 import http from "utils/http";
 
-export const useCreateEmployee = () => {
+export const useCreateManager = () => {
   return useMutation<any, Error, EmployeeCreateInput>(async createInput => {
-    const { data } = await http.post(Endpoints.EMPLOYEE_CREATE, createInput);
+    const { data } = await http.post(Endpoints.MANAGER_CREATE, createInput);
     return { session: { data: data as any } };
   });
 };
 
-export const employeeInput = (data: EmployeeCreateInput): EmployeeCreateInput => {
+export const managerInput = (data: EmployeeCreateInput): EmployeeCreateInput => {
   return {
     first_name: data.first_name!,
     last_name: data.last_name!,
@@ -23,7 +23,6 @@ export const employeeInput = (data: EmployeeCreateInput): EmployeeCreateInput =>
     phone: data.phone!,
     department: data.department!,
     description: data.description!,
-    manager: data.manager!,
     user_permissions: data.user_permissions!
 
   }
