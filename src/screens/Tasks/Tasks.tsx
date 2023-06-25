@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 import PageHeader from "../../components/common/PageHeader";
-import AllocatedTask from "../../components/Tasks/AllocatedTask";
-import RecentActivity from "../../components/Tasks/RecentActivity";
-import TaskProgress from "../../components/Tasks/TaskProgress";
 import "react-nestable/dist/styles/index.css";
 
 import TaskNestable1 from "../../components/Tasks/TaskNestable";
@@ -183,7 +180,7 @@ const Tasks: React.FC = () => {
       />
       <div className="row clearfix g-3">
         <div className="col-lg-12 col-md-12 flex-column">
-          <div className="row g-3 row-deck">
+          {/* <div className="row g-3 row-deck">
             <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6">
               <TaskProgress tasks={tasks} />
             </div>
@@ -193,7 +190,7 @@ const Tasks: React.FC = () => {
             <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-12">
               <AllocatedTask />
             </div>
-          </div>
+          </div> */}
           <TaskNestable1
             tasks={tasks}
           />

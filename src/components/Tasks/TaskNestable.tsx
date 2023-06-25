@@ -9,8 +9,8 @@ interface Props {
 enum TaskProgress {
   ToDo = "To Do",
   InProgress = "ON PROGRESS",
-  NeedReview = "Need Review",
-  Completed = "Completed",
+  NeedReview = "REVIEW",
+  Completed = "COMPLETE",
 }
 
 const TaskNestable: React.FC<Props> = ({
