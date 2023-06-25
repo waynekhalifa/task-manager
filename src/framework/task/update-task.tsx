@@ -22,7 +22,7 @@ export const taskInput = (data: SelectedTask): SelectedTask => {
     task_priority: data.task_priority,
     task_progress: data.task_progress,
     user: data.user,
-    group: data.group.id,
+    group: data?.group?.id,
     start_at: data.start_at,
     end_at: data.end_at,
   } as SelectedTask;
