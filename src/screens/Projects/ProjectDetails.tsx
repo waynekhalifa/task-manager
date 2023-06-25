@@ -205,11 +205,11 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
     },
     {
       label: "Group2",
-      value: 1,
+      value: 2,
     },
     {
       label: "Group2",
-      value: 1,
+      value: 3,
     },
   ]
 
@@ -221,15 +221,15 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
     },
     {
       label: "User 1",
-      value: 1,
-    },
-    {
-      label: "User 2",
       value: 2,
     },
     {
-      label: "User 3",
+      label: "User 2",
       value: 3,
+    },
+    {
+      label: "User 3",
+      value: 4,
     },
   ];
 
