@@ -3,7 +3,6 @@ import OurClients from "components/Clients/OurClients";
 import PageHeader from "components/common/PageHeader";
 import { MembersData } from "components/Data/AppData";
 import { useEmployeesQuery } from "framework/employee/getAllEmployees";
-import { useCreateEmployee, employeeInput } from "framework/employee/createEmployee";
 
 import { EmployeeCreateInput } from "types/employee";
 import { useCategoriesQuery } from "framework/category/getAllCategories";
@@ -82,7 +81,6 @@ const Managers: React.FC<Props> = () => {
   };
 
   const handleCreateEmployee = async () => {
-    Object.assign(modelData, { admin: 1 });
     try {
       let createInput = managerInput(modelData);
       await createMutation(createInput);

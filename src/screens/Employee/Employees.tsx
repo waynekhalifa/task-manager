@@ -82,8 +82,7 @@ const Employees: React.FC<Props> = () => {
   };
 
   const handleCreateEmployee = async () => {
-    Object.assign(modelData, { admin: 1 });
-    try {
+     try {
       let createInput = employeeInput(modelData);
       await createMutation(createInput);
 
