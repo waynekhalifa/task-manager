@@ -61,15 +61,15 @@ const Tasks: React.FC = () => {
     },
     {
       label: "User 1",
-      value: 1,
-    },
-    {
-      label: "User 2",
       value: 2,
     },
     {
-      label: "User 3",
+      label: "User 2",
       value: 3,
+    },
+    {
+      label: "User 3",
+      value: 4,
     },
   ];
   const groups = [
@@ -79,11 +79,11 @@ const Tasks: React.FC = () => {
     },
     {
       label: "Group2",
-      value: 1,
+      value: 2,
     },
     {
       label: "Group2",
-      value: 1,
+      value: 3,
     },
   ]
   const handleModelData = (key: string, value: any) => {
@@ -209,7 +209,7 @@ const Tasks: React.FC = () => {
         projects={projects}
         modelData={modelData}
         onCreate={createTask}
-         members={members}
+        members={members}
         groups={groups}
       />
     </div>
