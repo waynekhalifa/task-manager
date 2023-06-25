@@ -1,5 +1,5 @@
 import React from "react";
-import { Nav, Tab } from "react-bootstrap";
+import { Tab } from "react-bootstrap";
 import AddNewUserModal from "../../components/common/AddNewUserModal";
 import PageHeader from "../../components/common/PageHeader";
 import { useCategoriesQuery } from "framework/category/getAllCategories";
@@ -412,7 +412,7 @@ const Projects: React.FC<Props> = () => {
                   <i className="icofont-plus-circle me-2 fs-6" />
                   Create Project
                 </button>
-                <Nav
+                {/* <Nav
                   variant="pills"
                   className="nav nav-tabs tab-body-header rounded ms-3 prtab-set w-sm-100"
                 >
@@ -428,7 +428,7 @@ const Projects: React.FC<Props> = () => {
                   <Nav.Item>
                     <Nav.Link eventKey="Completed">Completed</Nav.Link>
                   </Nav.Item>
-                </Nav>
+                </Nav> */}
               </div>
             );
           }}
