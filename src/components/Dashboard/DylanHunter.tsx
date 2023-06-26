@@ -1,14 +1,12 @@
-import TaskViewImg from "/assets/images/task-view.svg";
-
 const DylanHunter: React.FC = () => {
   return (
     <div className="card">
       <div className="card-body">
         <div className="row align-items-center">
           <div className="col-12 col-md-5 col-lg-6 order-md-2 ">
-            <div className="text-center p-4">
+            {/* <div className="text-center p-4">
               <img src={TaskViewImg} alt="..." className="img-fluid" />
-            </div>
+            </div> */}
           </div>
           <div className="col-12 col-md-7 col-lg-6 order-md-1 px-4">
             <h3 className="fw-bold ">Dylan Hunter</h3>
