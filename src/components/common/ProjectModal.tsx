@@ -3,6 +3,7 @@ import React from 'react';
 import { Modal } from 'react-bootstrap';
 import { CategoryUpdateInput } from 'types/category';
 import { IField } from 'types/formFields';
+import { IOption } from 'types/option';
 import { SelectedProject } from 'types/project';
 
 interface Props {
@@ -13,7 +14,7 @@ interface Props {
   handleModelData: (key: string, value: any) => void;
   selectedProject: SelectedProject;
   modelData?: any;
-  categories: CategoryUpdateInput[];
+  categories: IOption[];
   admins: any[];
   groups: any[];
   onCreate?: () => void;
@@ -62,10 +63,7 @@ const ProjectModal: React.FC<Props> = ({
       key: ModelKeys.CATEGORY,
       value: isEditModal ? selectedProject.category : modelData?.category,
       onChange: (e: any) => handleModelData(ModelKeys.CATEGORY, e.target.value),
-      options: categories.map((category) => ({
-        label: category.name,
-        value: category.id,
-      })),
+      options: categories,
       placeholder: "Select Category",
     },
     {

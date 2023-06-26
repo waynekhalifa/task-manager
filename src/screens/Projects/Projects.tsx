@@ -100,6 +100,19 @@ const Projects: React.FC<Props> = () => {
   let categories: CategoryUpdateInput[] =
     categoriesData?.categories.data.results || [];
 
+  let categoryOptions = categories.map((category) => {
+    return {
+      label: category.name,
+      value: category.id,
+    };
+  }
+  );
+  categoryOptions.unshift({
+    label: "Select Department",
+    value: 0,
+  });
+
+
   const admins = [
     {
       label: "Select Admin",
@@ -311,13 +324,19 @@ const Projects: React.FC<Props> = () => {
 
 
   const createTask = async () => {
-    setState({
-      ...state,
-      modelTaskData: {
-        ...modelTaskData,
+    if (!modelTaskData.name) {
+      alert("Please enter title");
+      return;
+    }
 
-      },
-    });
+    if (!modelTaskData.group) {
+      alert("Please select group");
+      return;
+    }
+    if (!modelTaskData.user) {
+      alert("Please select member");
+      return;
+    }
     try {
       Object.assign(modelTaskData, { project: selectedProject.id });
       let createInput = taskInput(modelTaskData);
@@ -338,6 +357,14 @@ const Projects: React.FC<Props> = () => {
 
 
   const createProject = async () => {
+    if (!modelProjectData.name) {
+      alert("Please enter title");
+      return;
+    }
+    if (!modelProjectData.category || modelProjectData.category === 0) {
+      alert("Please select department");
+      return;
+    }
     Object.assign(modelProjectData, { admin: 1 });
     try {
       let createInput = projectInput(modelProjectData);
@@ -480,7 +507,7 @@ const Projects: React.FC<Props> = () => {
         handleModelData={handleProjectModelData}
         selectedProject={selectedProject}
         modelData={modelProjectData}
-        categories={categories}
+        categories={categoryOptions}
         admins={admins}
         onCreate={createProject}
         onUpdate={editProject}

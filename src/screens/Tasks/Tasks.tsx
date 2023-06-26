@@ -137,6 +137,23 @@ const Tasks: React.FC = () => {
 
 
   const createTask = async () => {
+    if (!modelData.name) {
+      alert("Please enter name");
+      return;
+    }
+    if (!modelData.project) {
+      alert("Please select project");
+      return;
+    }
+    if (!modelData.group) {
+      alert("Please select group");
+      return;
+    }
+    if (!modelData.member) {
+      alert("Please select member");
+      return;
+    }
+
     try {
       let createInput = taskInput(modelData);
       let res = await createTaskMutation(createInput);

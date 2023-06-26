@@ -113,6 +113,14 @@ const Employees: React.FC<Props> = () => {
   };
 
   const handleCreateEmployee = async () => {
+    if (modelData?.department === 0) {
+      alert("Please select department");
+      return;
+    }
+    if (modelData?.manager === 0) {
+      alert("Please select manager");
+      return;
+    }
     try {
       let createInput = employeeInput(modelData);
       await createMutation(createInput);

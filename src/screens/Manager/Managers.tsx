@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import OurClients from "components/Clients/OurClients";
 import PageHeader from "components/common/PageHeader";
-import { useEmployeesQuery } from "framework/employee/getAllEmployees";
 
 import { EmployeeCreateInput, Manager } from "types/employee";
 import { useCategoriesQuery } from "framework/category/getAllCategories";
@@ -9,6 +8,7 @@ import EmployeeModal from "components/common/EmployeeModal";
 import { managerInput, useCreateManager } from "framework/Manager/createManager";
 import { useManagerQuery } from "framework/Manager/getAllManagers";
 import { getCategory } from "utils/helper";
+import { CategoryUpdateInput } from "types/category";
 
 interface Props { }
 
@@ -30,13 +30,12 @@ const Managers: React.FC<Props> = () => {
   const { isModal, modelData } = state;
   const { mutateAsync: createMutation } = useCreateManager();
 
-  const { data: employeeData, error: employeeError, isLoading: employeeIsLoading } = useEmployeesQuery({});
   const { data: managerData, error: managerError, isLoading: managerIsLoading } = useManagerQuery({});
 
   const { data: departmentData, error: departmentError, isLoading: departmentIsLoading } = useCategoriesQuery({});
 
-  if (employeeIsLoading || departmentIsLoading || managerIsLoading) return <div>Loading...</div>;
-  if (employeeError || departmentError || managerError) return null;
+  if (departmentIsLoading || managerIsLoading) return <div>Loading...</div>;
+  if (departmentError || managerError) return null;
 
   let managers: Manager[] = managerData?.managers?.data?.results || [];
 
@@ -53,7 +52,19 @@ const Managers: React.FC<Props> = () => {
   });
 
 
-  const departments = departmentData?.categories?.data?.results || [];
+  const departments: CategoryUpdateInput[] = departmentData?.categories?.data?.results || [];
+  const departmentOptions = departments.map((department) => {
+    return {
+      label: department.name,
+      value: department.id,
+    };
+  }
+  );
+  departmentOptions.push({
+    label: "Select Department",
+    value: 0,
+  });
+
 
   const handleModelData = (key: string, value: any) => {
     setState({
@@ -80,6 +91,10 @@ const Managers: React.FC<Props> = () => {
   };
 
   const handleCreateEmployee = async () => {
+    if (modelData?.department === 0) {
+      alert("Please select department");
+      return;
+    }
     try {
       let createInput = managerInput(modelData);
       await createMutation(createInput);
@@ -172,7 +187,7 @@ const Managers: React.FC<Props> = () => {
         onClose={closeModal}
         handleModelData={handleModelData}
         modelData={modelData}
-        departments={departments}
+        departments={departmentOptions.reverse()}
         managers={managerOptions.reverse()}
         onCreate={handleCreateEmployee}
         header="Add Manager"

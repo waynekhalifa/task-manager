@@ -135,10 +135,11 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
     return category;
   };
 
-  const getAdminNameById = (id: number) => {
-    let admin = users.find((user) => user.id === id);
-    return admin;
-  };
+  const categoriesOptions = categories.map((category) => {
+    return { label: category.name, value: category.id };
+  }
+  );
+  categoriesOptions.unshift({ label: "Select Department", value: 0 });
 
 
   let users = [
@@ -324,6 +325,20 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
 
 
   const createTask = async () => {
+    if (!modelTaskData.name) {
+      alert("Please enter title");
+      return;
+    }
+
+    if (!modelTaskData.group) {
+      alert("Please select group");
+      return;
+    }
+    if (!modelTaskData.user) {
+      alert("Please select member");
+      return;
+    }
+
     try {
 
       Object.assign(modelTaskData, { project: selectedProject.id });
@@ -449,7 +464,7 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
         handleModelData={handleProjectModelData}
         selectedProject={selectedProject}
         modelData={modelProjectData}
-        categories={categories}
+        categories={categoriesOptions}
         admins={admins}
         groups={groups}
         onUpdate={editProject}

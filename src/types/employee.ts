@@ -10,7 +10,7 @@ export interface EmployeeCreateInput {
   phone: string;
   department: any;
   description: string;
-  manager?: string;
+  manager?: number;
   user_permissions?: [number];
 }
 
@@ -38,11 +38,11 @@ export interface Manager {
   department: number;
   description: string;
   user: number;
-  employee:Employee;
+  employee: Employee;
 }
 
 
-export interface User { 
+export interface User {
   id: number;
   username: string;
   email: string;
