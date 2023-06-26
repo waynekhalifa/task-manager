@@ -41,13 +41,13 @@ const Leaders: React.FC<Props> = () => {
           </div>
         </div>
       </div>
-      <AddNewUserModal
+      {/* <AddNewUserModal
         show={state.isAddUserModal}
         onClose={() => {
           setState({ ...state, isAddUserModal: false });
         }}
         modalHeader="Add New User"
-      />
+      /> */}
     </div>
   );
 };

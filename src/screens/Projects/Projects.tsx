@@ -23,6 +23,10 @@ import { Task } from "types/task";
 import { taskInput, useCreateTask } from "framework/task/create-task";
 import ProjectCard from "components/Projects/ProjectCard";
 import { getCategory } from "utils/helper";
+import { useEmployeesQuery } from "framework/employee/getAllEmployees";
+import { Employee } from "types/employee";
+import { useGroupQuery } from "framework/Group/getAllGroups";
+import { Group } from "types/group";
 
 interface Props { }
 
@@ -85,18 +89,15 @@ const Projects: React.FC<Props> = () => {
 
 
   let { data: projectData, error: errorProjects, isLoading: loadingProjects } = useProjectsQuery({});
+  const { data: employeeData, error: employeeError, isLoading: employeeIsLoading } = useEmployeesQuery({});
+  let { data: categoriesData, error: errorCategories, isLoading: isLoadingCategories } = useCategoriesQuery({});
+  const { data: groupData, error: groupError, isLoading: groupIsLoading } = useGroupQuery({});
 
-  let {
-    data: categoriesData,
-    error: errorCategories,
-    isLoading: isLoadingCategories,
-  } = useCategoriesQuery({});
-  if (isLoadingCategories || loadingProjects) return <div>Loading...</div>;
-  if (errorCategories || errorProjects) return null;
+  if (isLoadingCategories || loadingProjects || employeeIsLoading || groupIsLoading) return <div>Loading...</div>;
+  if (errorCategories || errorProjects || employeeError || groupError) return null;
 
 
   let projects: SelectedProject[] = projectData?.projects.data.results || [];
-
   let categories: CategoryUpdateInput[] =
     categoriesData?.categories.data.results || [];
 
@@ -112,65 +113,27 @@ const Projects: React.FC<Props> = () => {
     value: 0,
   });
 
+  let employees: Employee[] = employeeData?.employees?.data?.results || [];
+  let employeeOptions = employees.map((employee) => {
+    return {
+      label: employee?.user?.first_name + " " + employee?.user?.last_name,
+      value: employee.id,
+    };
+  }
+  );
 
-  const admins = [
-    {
-      label: "Select Admin",
-      value: 0,
-    },
-    {
-      label: "Badr",
-      value: 1,
-    },
-    {
-      label: "Jo",
-      value: 1,
-    },
-    {
-      label: "Wani",
-      value: 1,
-    },
-  ]
-  const groups = [
-    {
-
-      label: "Select Group",
-      value: 0,
-    },
-    {
-      label: "Group1",
-      value: 1,
-    },
-    {
-      label: "Group2",
-      value: 1,
-    },
-    {
-      label: "Group2",
-      value: 1,
-    },
-  ]
-
-  let members = projectData?.projects.data.results[0]?.members || [
-    {
-
-      label: "Select Member",
-      value: 0,
-    },
-    {
-      label: "User 1",
-      value: 1,
-    },
-    {
-      label: "User 2",
-      value: 2,
-    },
-    {
-      label: "User 3",
-      value: 3,
-    },
-  ];
-
+  let groups: Group[] = groupData?.groups?.data?.results || [];
+  let groupOptions = groups.map((group) => {
+    return {
+      label: group.name,
+      value: group.id,
+    };
+  }
+  );
+  groupOptions.unshift({
+    label: "Select Group",
+    value: 0,
+  });
 
 
   const handleModalClose = (reload: boolean = false) => {
@@ -223,7 +186,7 @@ const Projects: React.FC<Props> = () => {
     setState({
       ...state,
       isAddUserModal: true,
-      modalHeader: "Add User",
+      modalHeader: "Assign Member",
     });
   };
   const handleOpenAddAttachmentModal = (project: Project) => {
@@ -262,7 +225,7 @@ const Projects: React.FC<Props> = () => {
     });
   }
 
-  
+
 
   const handleOpenViewTaskModal = (project: SelectedProject) => {
     setState({
@@ -313,7 +276,14 @@ const Projects: React.FC<Props> = () => {
     }));
   };
 
+  const assignMember = (employee: Employee) => {
+    try {
 
+      handleModalClose(true);
+    } catch (err) {
+      alert(err);
+    }
+  };
 
   const createTask = async () => {
     if (!modelTaskData.name) {
@@ -401,16 +371,6 @@ const Projects: React.FC<Props> = () => {
     }
   };
 
-  const addUser = async () => {
-    Object.assign(modelProjectData, { admin: 1 });
-    try {
-      let createInput = projectInput(modelProjectData);
-      await createProjectMutation(createInput);
-      handleModalClose(true);
-    } catch (err) {
-      alert(err);
-    }
-  };
 
 
 
@@ -493,10 +453,10 @@ const Projects: React.FC<Props> = () => {
         selectedProject={selectedProject}
         modelData={modelProjectData}
         categories={categoryOptions}
-        admins={admins}
+        admins={employeeOptions}
         onCreate={createProject}
         onUpdate={editProject}
-        groups={groups}
+        groups={groupOptions}
       />
       <DeleteModal
         show={isDeleteModal}
@@ -509,6 +469,10 @@ const Projects: React.FC<Props> = () => {
         show={isAddUserModal}
         onClose={handleModalClose}
         modalHeader={modalHeader}
+        employees={employees}
+        // groups={groups}
+        departments={categories}
+        onSelect={assignMember}
       />
       <AddNewAttachmentModal
         show={isAddAttachmentModal}
@@ -536,8 +500,8 @@ const Projects: React.FC<Props> = () => {
         selectedProject={selectedProject}
         modelData={modelTaskData}
         onCreate={createTask}
-        members={members}
-        groups={groups}
+        members={employeeOptions}
+        groups={groupOptions}
       />
       <ViewTasksModal
         show={isViewTaskModal}

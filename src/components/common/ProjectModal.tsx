@@ -1,10 +1,10 @@
 import FormInputs from 'components/FormInputs';
 import React from 'react';
 import { Modal } from 'react-bootstrap';
-import { CategoryUpdateInput } from 'types/category';
 import { IField } from 'types/formFields';
 import { IOption } from 'types/option';
 import { SelectedProject } from 'types/project';
+import { checkIfExist } from 'utils/helper';
 
 interface Props {
   onClose: any;
@@ -16,7 +16,7 @@ interface Props {
   modelData?: any;
   categories: IOption[];
   admins: any[];
-  groups: any[];
+  groups?: any[];
   onCreate?: () => void;
   onUpdate?: () => void;
 }
@@ -108,27 +108,33 @@ const ProjectModal: React.FC<Props> = ({
       },
       placeholder: "Enter Thumbnail",
     },
+    // {
+    //   label: "Assign Group",
+    //   type: "select",
+    //   key: ModelKeys.GROUP,
+    //   value: isEditModal ? selectedProject.group : modelData?.group,
+    //   onChange: (e: any) => handleModelData(ModelKeys.GROUP, e.target.value),
+    //   options: groups,
+    // },
     {
-      label: "Assign Group",
-      type: "select",
-      key: ModelKeys.GROUP,
-      value: isEditModal ? selectedProject.group : modelData?.group,
-      onChange: (e: any) => handleModelData(ModelKeys.GROUP, e.target.value),
-      options: groups.map((group) => ({
-        label: group.label,
-        value: group.value,
-      })),
-    },
-    {
-      label: "Assign Admin",
-      type: "select",
+      label: "Assign Members",
+      type: "multiselect",
       key: ModelKeys.ADMIN,
-      value: isEditModal ? selectedProject.admin : modelData?.admin,
-      onChange: (e: any) => handleModelData(ModelKeys.ADMIN, e.target.value),
-      options: admins.map((admin) => ({
-        label: admin.label,
-        value: admin.value,
-      })),
+      value: modelData?.admin || [],
+      options: admins,
+      onChange: (e: any) => {
+        let selectedUsers: string[] = modelData?.admin || [];
+        if (checkIfExist(selectedUsers, e.target.value)) {
+          selectedUsers = selectedUsers.filter((user) => user !== e.target.value);
+          handleModelData(ModelKeys.ADMIN, selectedUsers);
+        }
+        else {
+          selectedUsers.push(e.target.value);
+          handleModelData(ModelKeys.ADMIN, selectedUsers);
+        }
+      },
+      placeholder: "Select Member",
+      hide: isEditModal
     },
   ]
 

@@ -136,10 +136,7 @@ const TaskModal: React.FC<Props> = ({ onClose, modalHeader, isAddModal,
       key: ModelKeys.GROUP,
       value: modelData?.group,
       onChange: (e: any) => handleModelData(ModelKeys.GROUP, e.target.value),
-      options: groups.map((group) => ({
-        label: group.label,
-        value: group.value,
-      })),
+      options: groups,
       placeholder: "Select Group",
     },
     {
@@ -147,10 +144,7 @@ const TaskModal: React.FC<Props> = ({ onClose, modalHeader, isAddModal,
       type: "select",
       key: ModelKeys.USER,
       value: modelData?.user,
-      options: members.map((member) => ({
-        label: member.label,
-        value: member.value,
-      })),
+      options: members,
       onChange: (e: any) => handleModelData(ModelKeys.USER, e.target.value),
       placeholder: "Select User",
     }

@@ -10,7 +10,6 @@ import Avatar6 from "assets/images/xs/avatar6.jpg";
 import Avatar7 from "assets/images/xs/avatar7.jpg";
 import Avatar8 from "assets/images/xs/avatar8.jpg";
 import ProfileImg from "assets/images/profile_av.png";
-import AddNewUserModal from "./AddNewUserModal";
 import { useAuth } from "contexts/AuthContext";
 import useApp from "hooks/useApp";
 
@@ -320,11 +319,11 @@ const Header: React.FC = () => {
           </div>
         </div>
       </nav>
-      <AddNewUserModal
+      {/* <AddNewUserModal
         show={state.isAddUserModal}
         onClose={() => setState({ isAddUserModal: false })}
         modalHeader="Add New User"
-      />
+      /> */}
     </div>
   );
 };

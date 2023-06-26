@@ -6,7 +6,9 @@ import DeleteModal from "components/common/DeleteModal";
 import Member from "components/common/Member";
 import ProjectModal from "components/common/ProjectModal";
 import TaskModal from "components/common/TaskModal";
+import { useGroupQuery } from "framework/Group/getAllGroups";
 import { useCategoriesQuery } from "framework/category/getAllCategories";
+import { useEmployeesQuery } from "framework/employee/getAllEmployees";
 import { useDeleteProject } from "framework/project/deleteProject";
 import { useSingleProject } from "framework/project/getSingleProject";
 import { projectUpdateInput, useUpdateProject } from "framework/project/updateProject";
@@ -15,6 +17,8 @@ import { useTaskQuery } from "framework/task/get-all-tasks";
 import useApp from "hooks/useApp";
 import React from "react";
 import { CategoryUpdateInput } from "types/category";
+import { Employee } from "types/employee";
+import { Group } from "types/group";
 import { Project, SelectedProject } from "types/project";
 import { SelectedTask, Task } from "types/task";
 
@@ -121,15 +125,37 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
     error: errorsTask,
     isLoading: loadingTasks,
   } = useTaskQuery({ query: "?project=" + id });
+  const { data: employeeData, error: employeeError, isLoading: employeeIsLoading } = useEmployeesQuery({});
+  const { data: groupData, error: groupError, isLoading: groupIsLoading } = useGroupQuery({});
 
 
-  if (isLoading || isLoadingCategories || loadingTasks) return <div>Loading...</div>;
-  if (error || errorCategories || errorsTask) return null;
+  if (isLoading || isLoadingCategories || loadingTasks || employeeIsLoading || groupIsLoading) return <div>Loading...</div>;
+  if (error || errorCategories || errorsTask || employeeError || groupError) return null;
 
   let project: SelectedProject = data || {} as SelectedProject;
   let categories: CategoryUpdateInput[] = categoriesData?.categories?.data?.results || [];
   let tasks: SelectedTask[] = tasksData?.tasks?.data?.results || [] as SelectedTask[];
+  let employees: Employee[] = employeeData?.employees?.data?.results || [];
+  let employeeOptions = employees.map((employee) => {
+    return {
+      label: employee?.user?.first_name + " " + employee?.user?.last_name,
+      value: employee.id,
+    };
+  }
+  );
 
+  let groups: Group[] = groupData?.groups?.data?.results || [];
+  let groupOptions = groups.map((group) => {
+    return {
+      label: group.name,
+      value: group.id,
+    };
+  }
+  );
+  groupOptions.unshift({
+    label: "Select Group",
+    value: 0,
+  });
   const getCategoryNameById = (id: number) => {
     let category = categories.find((category) => category.id === id);
     return category;
@@ -141,98 +167,6 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
   );
   categoriesOptions.unshift({ label: "Select Department", value: 0 });
 
-
-  let users = [
-    {
-      id: 1,
-      avatar: "https://via.placeholder.com/150",
-      post: "Teacher",
-      name: "John Doe",
-      department: "Academic Department",
-
-    },
-    {
-      id: 2,
-      avatar: "https://via.placeholder.com/150",
-      post: "Teacher",
-      name: "John Doe",
-      department: "Academic Department",
-
-    },
-    {
-      id: 3,
-      avatar: "https://via.placeholder.com/150",
-      post: "Teacher",
-      name: "John Doe",
-      department: "Academic Department",
-
-    },
-    {
-      id: 4,
-      avatar: "https://via.placeholder.com/150",
-      post: "Teacher",
-      name: "John Doe",
-      department: "Academic Department",
-
-    }
-
-  ];
-
-
-
-  const admins = [
-    {
-      label: "Badr",
-      value: 1,
-    },
-    {
-      label: "Jo",
-      value: 1,
-    },
-    {
-      label: "Wani",
-      value: 1,
-    },
-  ]
-  const groups = [
-    {
-
-      label: "Select Group",
-      value: 0,
-    },
-    {
-      label: "Group1",
-      value: 1,
-    },
-    {
-      label: "Group2",
-      value: 2,
-    },
-    {
-      label: "Group2",
-      value: 3,
-    },
-  ]
-
-  let members = project?.members || [
-    {
-
-      label: "Select Member",
-      value: 0,
-    },
-    {
-      label: "User 1",
-      value: 2,
-    },
-    {
-      label: "User 2",
-      value: 3,
-    },
-    {
-      label: "User 3",
-      value: 4,
-    },
-  ];
 
 
 
@@ -409,8 +343,11 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
           </div>
           <div className="col-lg-8 col-md-12">
             <div className="dd-handle mt-2">
-              <h5 className="card-title text-primary"><strong>Members</strong></h5>
-              <Member users={users} />
+              <Member
+                employees={employees}
+                departments={categories}
+
+              />
             </div>
           </div>
 
@@ -465,8 +402,8 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
         selectedProject={selectedProject}
         modelData={modelProjectData}
         categories={categoriesOptions}
-        admins={admins}
-        groups={groups}
+        admins={employeeOptions}
+        // groups={groupOptions}
         onUpdate={editProject}
       />
       <DeleteModal
@@ -485,8 +422,8 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
         selectedProject={selectedProject}
         modelData={modelTaskData}
         onCreate={createTask}
-        members={members}
-        groups={groups}
+        members={employeeOptions}
+        groups={groupOptions}
       />
     </div>
   );
