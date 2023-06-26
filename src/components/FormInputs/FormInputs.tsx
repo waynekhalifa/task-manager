@@ -1,5 +1,6 @@
 /* eslint-disable no-lone-blocks */
 import React from 'react';
+import { Col, Form } from 'react-bootstrap';
 import { IField } from 'types/formFields';
 
 interface Props {
@@ -27,6 +28,22 @@ const FormInputs: React.FC<Props> = ({ formFields, grid }) => {
               </select>}
               {formInfo.type === "textarea" && <textarea className="form-control" id="exampleFormControlTextarea1" rows={3} placeholder={formInfo.placeholder} value={formInfo.value} onChange={formInfo.onChange} defaultValue={formInfo.default} hidden={formInfo.hide} />}
               {formInfo.type === "file" && <input className="form-control" type="file" id="formFile" onChange={formInfo.onChange} defaultValue={formInfo.default} hidden={formInfo.hide} />}
+
+              {formInfo.type === "multiselect" && <>
+                <Form.Group as={Col} controlId="my_multiselect_field" hidden={formInfo.hide}
+                  disabled={formInfo.disabled}
+                >
+                  <Form.Control as="select" multiple value={formInfo.value} onChange={formInfo.onChange}>
+                    {formInfo.options?.map((option: any, i: number) => {
+                      return <option key={"key" + i} value={option.value} >
+                        {option.label}
+                      </option>;
+                    })}
+                  </Form.Control>
+                </Form.Group>
+              </>
+              }
+
             </div>
           })}
         </div>

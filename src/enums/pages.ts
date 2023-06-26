@@ -12,4 +12,5 @@ export enum Pages {
   CALENDAR = "calendar",
   CATEGORIES = "departments",
   PROFILE = "profile",
+  GROUPS="groups",
 }

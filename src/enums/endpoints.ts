@@ -29,4 +29,7 @@ export enum Endpoints {
 
   /**  Manager === Register New User */
   MANAGER = "user/utils/managers/",
+
+  /**  Group */
+  GROUP = "user/utils/groups/",
  }

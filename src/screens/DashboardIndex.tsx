@@ -7,6 +7,7 @@ import ProjectDetails from "./Projects/ProjectDetails";
 import EmployeeProfile from "./Employee/EmployeeProfile";
 import Managers from "./Manager/Managers";
 import { useAuth } from "contexts/AuthContext";
+import Groups from "./Groups/Groups";
 
 const Projects = lazy(() => import("./Projects/Projects"));
 const Tasks = lazy(() => import("./Tasks/Tasks"));
@@ -55,6 +56,8 @@ const DashboardIndex: React.FC = () => {
           return <Employees />;
         case Pages.MANAGERS:
           return <Managers />;
+        case Pages.GROUPS:
+          return <Groups />;
         case Pages.CHAT:
           return <ChatApp />;
         case Pages.ATTENDANCE:
