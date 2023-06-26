@@ -8,33 +8,46 @@ import { Group } from "types/group";
 import { useEmployeesQuery } from "framework/employee/getAllEmployees";
 import { groupInput, useCreateGroup } from "framework/Group/createGroup";
 import { useGroupQuery } from "framework/Group/getAllGroups";
+import DeleteModal from "components/common/DeleteModal";
+import AddNewUserModal from "components/common/AddNewUserModal";
+import { useCategoriesQuery } from "framework/category/getAllCategories";
+import { CategoryUpdateInput } from "types/category";
 
 interface Props { }
 
 
 interface State {
-  isModal: boolean;
+  isAddModal: boolean;
+  isEditModal: boolean;
+  isDeleteModal: boolean;
+  isAssignModal: boolean;
   modelData: Group;
+  modalHeader: string;
 
 }
 
 const INITIAlIZE_DATA: State = {
-  isModal: false,
+  isAddModal: false,
+  isEditModal: false,
+  isDeleteModal: false,
+  isAssignModal: false,
   modelData: {} as Group,
+  modalHeader: "",
 
 };
 
 const Groups: React.FC<Props> = () => {
   const [state, setState] = useState<State>(INITIAlIZE_DATA);
-  const { isModal, modelData } = state;
+  const { isAddModal, isEditModal, isDeleteModal, isAssignModal, modelData, modalHeader } = state;
   const { mutateAsync: createMutation } = useCreateGroup();
 
   const { data: groupData, error: groupError, isLoading: groupIsLoading } = useGroupQuery({});
   const { data: employeeData, error: employeeError, isLoading: employeeIsLoading } = useEmployeesQuery({});
+  let { data: categoriesData, error: errorCategories, isLoading: isLoadingCategories } = useCategoriesQuery({});
 
 
-  if (groupIsLoading || employeeIsLoading) return <div>Loading...</div>;
-  if (groupError || employeeError) return null;
+  if (groupIsLoading || employeeIsLoading || isLoadingCategories) return <div>Loading...</div>;
+  if (groupError || employeeError || errorCategories) return null;
 
   let employees: Employee[] = employeeData?.employees?.data?.results || [];
   let groups: Group[] = groupData?.groups?.data?.results || [];
@@ -46,6 +59,8 @@ const Groups: React.FC<Props> = () => {
     };
   }
   );
+
+  let categories: CategoryUpdateInput[] = categoriesData?.categories?.data?.results || [];
 
 
 
@@ -66,14 +81,41 @@ const Groups: React.FC<Props> = () => {
     if (reload) {
       window.location.reload();
     }
-    setState({ ...state, isModal: false, modelData: {} as Group });
+    setState({
+      ...state, isAddModal: false,
+      isEditModal: false,
+      isDeleteModal: false,
+      isAssignModal: false,
+      modelData: {} as Group,
+      modalHeader: "",
+    });
   };
 
-  const openModal = () => {
-    setState({ ...state, isModal: true });
+  const handleOpenAddModal = () => {
+    setState({ ...state, isAddModal: true, modalHeader: "Add Group" });
+
   };
 
-  const handleCreateGroup = async () => {
+  const handleOpenEditModal = (group: Group) => {
+    setState({ ...state, isEditModal: true, modelData: group, modalHeader: "Edit Group" });
+  };
+
+  const handleOpenDeleteModal = (group: Group) => {
+    setState({ ...state, isDeleteModal: true, modelData: group, modalHeader: "Delete Group" });
+  };
+  const handleAssignMemberModal = (group: Group) => {
+    setState({ ...state, isAssignModal: true, modelData: group, modalHeader: "Assign Member" });
+  };
+
+
+  const assignMember = async () => {
+    try {
+
+    } catch (err) {
+      alert(err);
+    }
+  }
+  const createGroup = async () => {
     if (!modelData?.users || modelData?.users?.length === 0) {
       alert("Please select department");
       return;
@@ -81,6 +123,24 @@ const Groups: React.FC<Props> = () => {
     try {
       let createInput = groupInput(modelData);
       await createMutation(createInput);
+      closeModal(true);
+    } catch (err) {
+      alert(err);
+    }
+  }
+
+  const updateGroup = async () => {
+    try {
+      // await updateMutation(modelData.id, modelData);
+      closeModal(true);
+    } catch (err) {
+      alert(err);
+    }
+  }
+
+  const deleteGroup = async () => {
+    try {
+      // await deleteMutation(modelData.id);
       closeModal(true);
     } catch (err) {
       alert(err);
@@ -97,7 +157,7 @@ const Groups: React.FC<Props> = () => {
               <button
                 className="btn btn-dark btn-set-task w-sm-100 me-2"
                 onClick={() => {
-                  openModal();
+                  handleOpenAddModal();
                 }}
               >
                 <i className="icofont-plus-circle me-2 fs-6"></i>Add Group
@@ -112,34 +172,84 @@ const Groups: React.FC<Props> = () => {
           < div className="col" key={group.id}>
             <div className="card border-0 shadow">
               <div className="card-body">
-                <div className="row align-items-center">
-                  <div className="col-auto">
-                    <i className="icofont-users fs-4"></i>
+                <div className="d-flex align-items-center justify-content-between">
+                  <div className="row align-items-center">
+                    <div className="col-auto">
+                      <i className="icofont-users fs-4"></i>
+                    </div>
+                    <div className="col ps-0">
+                      <h5 className="card-title mb-1">{group?.name}</h5>
+                      <p className="card-text mb-2">{group?.description}</p>
+                      <div className="d-flex align-items-center"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => handleAssignMemberModal(group)}
+                      >
+                        <i className="icofont-group-students "></i>
+                        <span className="badge bg-light text-dark ms-2">{group?.users?.length} Members</span>
+                        <span
+                          className="avatar rounded-circle text-center pointer sm"
+                        >
+                          <i className="icofont-ui-add"></i>
+                        </span>
+                      </div>
+                    </div>
+
                   </div>
-                  <div className="col ps-0">
-                    <h5 className="card-title mb-1">{group?.name}</h5>
-                    <p className="card-text mb-2">{group?.description}</p>
-                    <p className="card-text mb-2">{group?.users?.length} Members</p>
+                  <div
+                    className="btn-group"
+                    role="group"
+                    aria-label="Basic outlined example"
+                  >
+                    <button
+                      type="button"
+                      className="btn btn-outline-secondary"
+                      onClick={() => handleOpenEditModal(group)}
+                    >
+                      <i className="icofont-edit text-success"></i>
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-outline-secondary"
+                      onClick={() => handleOpenDeleteModal(group)}
+                    >
+                      <i className="icofont-ui-delete text-danger"></i>
+                    </button>
                   </div>
                 </div>
+
               </div>
             </div>
           </div>
         ))}
       </div>
       <GroupModal
-        show={isModal}
+        show={isAddModal || isEditModal}
         onClose={closeModal}
         handleModelData={handleModelData}
         modelData={modelData}
         users={usersOptions}
-        onCreate={handleCreateGroup}
-        header="Add Group"
+        onCreate={createGroup}
+        onUpdate={updateGroup}
+        isEdit={isEditModal}
+        header={modalHeader}
+      />
+      <DeleteModal
+        show={isDeleteModal}
+        onClose={closeModal}
+        onDelete={deleteGroup}
+        message="Are you sure you want to delete this project?"
+        modalHeader={modalHeader}
+      />
+      <AddNewUserModal
+        show={isAssignModal}
+        onClose={closeModal}
+        modalHeader={modalHeader}
+        employees={employees}
+        departments={categories}
+        onSelect={assignMember}
       />
     </div>
   );
 };
 
 export default Groups;
-
-

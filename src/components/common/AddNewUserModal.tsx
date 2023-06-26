@@ -45,7 +45,7 @@ const AddNewUserModal: React.FC<Props> = ({ onClose, show, modalHeader, groups, 
             <input
               type="text"
               className="form-control"
-              placeholder="Search Employee or Group"
+              placeholder="Search Employee"
               onChange={handleSearch}
             />
           </div>
@@ -59,7 +59,7 @@ const AddNewUserModal: React.FC<Props> = ({ onClose, show, modalHeader, groups, 
             }}>
               {searchResult.map((employee) => (
                 <li className="list-group-item py-3 text-center text-md-start dd-handle m-1 pointer" key={employee.id}
-                onClick={() => onSelect(employee)}
+                  onClick={() => onSelect(employee)}
                 >
                   <div className="d-flex align-items-center flex-column flex-sm-column flex-md-row">
                     <div className="no-thumbnail mb-2 mb-md-0">

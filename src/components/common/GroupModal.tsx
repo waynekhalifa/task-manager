@@ -13,7 +13,9 @@ interface Props {
   modelData: any;
   show: boolean;
   users: IOption[];
-  onCreate: () => void;
+  onCreate?: () => void;
+  onUpdate?: () => void;
+  isEdit?: boolean;
   header: string;
 }
 
@@ -30,9 +32,11 @@ const GroupModal: React.FC<Props> = ({
   onClose,
   onCreate,
   modelData,
+  onUpdate,
   show,
   users,
   header,
+  isEdit,
 }) => {
   const { data, error, isLoading } = usePermissionsQuery({});
   if (isLoading) return <div>Loading...</div>;
@@ -46,7 +50,7 @@ const GroupModal: React.FC<Props> = ({
       label: "Name",
       type: "text",
       key: ModelKeys.NAME,
-      value: modelData?.first_name,
+      value: modelData?.name,
       onChange: (e: any) => handleModelData(ModelKeys.NAME, e.target.value),
       placeholder: "Enter Group Name",
     },
@@ -190,9 +194,9 @@ const GroupModal: React.FC<Props> = ({
           Cancel
         </button>
         <button type="button" className="btn btn-primary"
-          onClick={onCreate}
+          onClick={isEdit? onUpdate : onCreate}
         >
-          Create
+          {isEdit ? "Update" : "Create"}
         </button>
       </Modal.Footer>
     </Modal>
