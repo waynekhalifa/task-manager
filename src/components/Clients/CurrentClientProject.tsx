@@ -2,6 +2,7 @@ import useApp from "hooks/useApp";
 import { ProgressBar } from "react-bootstrap";
 import { SelectedProject } from "types/project";
 import { sumDateRange, sumDaysLeftFromToDay } from "utils/convert";
+import { getShortString } from "utils/helper";
 
 interface Props {
   project: SelectedProject;
@@ -29,8 +30,8 @@ const CurrentClientProject: React.FC<Props> = ({
             <div className={"project-block " + project.name}>
               <img src={project?.file! || "https://via.placeholder.com/150"} className={project.name} alt={project.name} width={50} height={50} />
             </div>
-            <span className="small text-muted project_name fw-bold">{category}</span>
-            <h6 className="mb-0 fw-bold  fs-6  mb-2">{project.name}</h6>
+            <span className="small text-muted project_name fw-bold">{getShortString(category!, 20)}</span>
+            <h6 className="mb-0 fw-bold  fs-6  mb-2">{getShortString(project?.name!, 30)}</h6>
           </div>
           <div
             className="btn-group"
