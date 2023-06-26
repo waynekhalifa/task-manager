@@ -9,6 +9,7 @@ import TaskModal from "components/common/TaskModal";
 import { SelectedProject } from "types/project";
 import { taskInput, useCreateTask } from "framework/task/create-task";
 import { useTaskQuery } from "framework/task/get-all-tasks";
+import { IOption } from "types/option";
 
 
 
@@ -77,6 +78,18 @@ const Tasks: React.FC = () => {
       value: 3,
     },
   ]
+  let projectsOptions: IOption[] = projects.map((project) => {
+    return {
+      label: project.name!,
+      value: project.id,
+    };
+  }
+  );
+  projectsOptions.unshift({
+    label: "Select Project",
+    value: 0,
+  });
+
   const handleModelData = (key: string, value: any) => {
     if (isEditModal) {
       setState({
@@ -149,7 +162,7 @@ const Tasks: React.FC = () => {
       alert("Please select group");
       return;
     }
-    if (!modelData.member) {
+    if (!modelData.user) {
       alert("Please select member");
       return;
     }
@@ -209,7 +222,7 @@ const Tasks: React.FC = () => {
         isAddModal={isAddModal}
         isEditModal={isEditModal}
         handleModelData={handleModelData}
-        projects={projects}
+        projects={projectsOptions}
         modelData={modelData}
         onCreate={createTask}
         members={members}

@@ -13,7 +13,7 @@ interface Props {
   isEditModal?: boolean;
   handleModelData: (key: string, value: any) => void;
   selectedProject?: SelectedProject;
-  projects?: SelectedProject[];
+  projects?: IOption[];
   SelectedTask?: SelectedTask;
   members: any[];
   groups: any[];
@@ -46,17 +46,6 @@ const TaskModal: React.FC<Props> = ({ onClose, modalHeader, isAddModal,
 
 
 
-  let projectOptions: IOption[] = (projects && projects.length > 0) ? projects?.map((project: SelectedProject) => {
-    return {
-      label: project.name || "",
-      value: project.id || 0,
-    };
-  }) : [
-    {
-      label: selectedProject?.name || "",
-      value: selectedProject?.id || 0,
-    }
-  ]
 
 
 
@@ -65,11 +54,15 @@ const TaskModal: React.FC<Props> = ({ onClose, modalHeader, isAddModal,
       label: "Select Project",
       type: "select",
       key: ModelKeys.PROJECT,
-      value: projectOptions[0],
-      options: projectOptions,
+      value: modelData?.project,
+      options: selectedProject ? [{
+        label: selectedProject.name!,
+        value: selectedProject.id
+      }] : projects,
       onChange: (e: any) => handleModelData(ModelKeys.PROJECT, e.target.value),
       placeholder: "Select Project",
       disabled: selectedProject ? true : false,
+      hide: selectedProject ? true : false,
     },
     {
       label: "Task Name",
