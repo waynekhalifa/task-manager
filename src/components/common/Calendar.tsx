@@ -1,18 +1,22 @@
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import useApp from "hooks/useApp";
-import { Screens } from "enums/screens";
-import { Pages } from "enums/pages";
+import { useState } from "react";
+import EventDetails from "./EventDetails";
 
 interface Props {
   tasks: any;
 }
 
+type IState = { showDetails: boolean; selectedEvent: any };
+const INITIAL_STATE: IState = { showDetails: false, selectedEvent: null };
+
 const Calendar: React.FC<Props> = ({ tasks }) => {
-  console.log({ tasks });
-  const { push } = useApp();
+  const [state, setState] = useState<IState>(INITIAL_STATE);
+  const { showDetails, selectedEvent } = state;
   const calendarData: any[] = [];
+
+  console.log({ tasks });
 
   for (let i = 0; i < tasks.length; i++) {
     calendarData.push({
@@ -25,21 +29,29 @@ const Calendar: React.FC<Props> = ({ tasks }) => {
     });
   }
 
-  const handleClick = (e: any) => {
-    if (e.event._def.extendedProps.type === "project")
-      push(Screens.DASHBOARD + Pages.PROJECTS + "/" + e.event._def.publicId);
-    if (e.event._def.extendedProps.type === "task")
-      push(Screens.DASHBOARD + Pages.TASKS + "/" + e.event._def.publicId);
-  };
+  const handleClick = (e: any) =>
+    setState({ ...state, showDetails: true, selectedEvent: e.event });
 
   return (
-    <FullCalendar
-      plugins={[dayGridPlugin, interactionPlugin]}
-      editable={true}
-      // eventDrop={this.handleEventDrop}
-      eventClick={handleClick}
-      events={calendarData}
-    />
+    <div className="row">
+      <div className={showDetails ? "col-7" : "col-12"}>
+        <FullCalendar
+          plugins={[dayGridPlugin, interactionPlugin]}
+          editable={true}
+          // eventDrop={this.handleEventDrop}
+          eventClick={handleClick}
+          datesSet={() =>
+            setState({ ...state, showDetails: false, selectedEvent: null })
+          }
+          events={calendarData}
+        />
+      </div>
+      <div className={showDetails ? "col-5" : "col-12"}>
+        <div className={showDetails ? "d-block" : "d-none"}>
+          {selectedEvent && <EventDetails id={selectedEvent._def.publicId} />}
+        </div>
+      </div>
+    </div>
   );
 };
 
