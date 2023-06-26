@@ -1,4 +1,5 @@
 import { TaskStatusBadge } from "enums/global";
+import { CategoryUpdateInput } from "types/category";
 
 export const getBadge = (status: string) => {
   switch (status) {
@@ -27,4 +28,24 @@ export const getBtn = (status: string) => {
     default:
       return "btn  btn-info text-white";
   }
+}
+
+export const getShortString = (str: string, length: number) => {
+  if (!str) return "";
+  if (str.length > length) {
+    return str.substring(0, length) + "...";
+  } else {
+    return str;
+  }
+};
+
+export const getCategory = (categories: CategoryUpdateInput[], id: number) => {
+  let category = categories.find((category) => category.id === id);
+  return category?.name;
+};
+
+
+export const checkImage = (url: string) => {
+  if (!url) return false;
+  return (url.match(/\.(jpeg|jpg|gif|png)$/) != null);
 }

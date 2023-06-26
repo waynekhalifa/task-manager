@@ -21,8 +21,32 @@ export interface EmployeeUpdateInput {
 }
 
 export interface Employee {
+  id: number;
   onboard_at: string;
   employee_id: number;
   phone: string;
   department: number;
+  manager?: number;
+  description: string;
+  user_permissions: [number];
+  designation: string;
+  user: User;
+}
+export interface Manager {
+  id: number;
+  created_at: string;
+  department: number;
+  description: string;
+  user: number;
+  employee:Employee;
+}
+
+
+export interface User { 
+  id: number;
+  username: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  avatar: string;
 }

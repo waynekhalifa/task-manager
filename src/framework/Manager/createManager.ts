@@ -5,7 +5,7 @@ import http from "utils/http";
 
 export const useCreateManager = () => {
   return useMutation<any, Error, EmployeeCreateInput>(async createInput => {
-    const { data } = await http.post(Endpoints.MANAGER_CREATE, createInput);
+    const { data } = await http.post(Endpoints.MANAGER, createInput);
     return { session: { data: data as any } };
   });
 };

@@ -46,6 +46,7 @@ const TaskDetails: React.FC<Props> = ({ id,
   const { mutateAsync: updateTaskMutation } = useUpdateTask();
   const { mutateAsync: deleteTaskMutation } = useDeleteTask();
   let user = {
+    id:1,
     avatar: "https://via.placeholder.com/150",
     post: "Teacher",
     name: "John Doe",
@@ -265,6 +266,7 @@ const TaskDetails: React.FC<Props> = ({ id,
           </div>
           <div className="col-lg-8 col-md-12">
             <OurClients
+              id={user.id}
               avatar={user.avatar}
               post={user.post}
               name={user.name}

@@ -1,14 +1,16 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import OurClients from "components/Clients/OurClients";
 import PageHeader from "components/common/PageHeader";
-import { MembersData } from "components/Data/AppData";
 import { useEmployeesQuery } from "framework/employee/getAllEmployees";
 import { useCreateEmployee, employeeInput } from "framework/employee/createEmployee";
 
-import { EmployeeCreateInput } from "types/employee";
+import { Employee, EmployeeCreateInput, Manager } from "types/employee";
 import { useCategoriesQuery } from "framework/category/getAllCategories";
 
 import EmployeeModal from "components/common/EmployeeModal";
+import { useManagerQuery } from "framework/Manager/getAllManagers";
+import { getCategory } from "utils/helper";
+import { CategoryUpdateInput } from "types/category";
 
 interface Props { }
 
@@ -16,44 +18,74 @@ interface Props { }
 interface State {
   isModal: boolean;
   modelData: EmployeeCreateInput;
-
-
 }
 
 const INITIAlIZE_DATA: State = {
   isModal: false,
   modelData: {} as EmployeeCreateInput,
-
 };
 
 const Employees: React.FC<Props> = () => {
   const [state, setState] = useState<State>(INITIAlIZE_DATA);
   const { isModal, modelData } = state;
   const { data: employeeData, error: employeeError, isLoading: employeeIsLoading } = useEmployeesQuery({});
+  const { data: managerData, error: managerError, isLoading: managerIsLoading } = useManagerQuery({});
   const { data: departmentData, error: departmentError, isLoading: departmentIsLoading } = useCategoriesQuery({});
   const { mutateAsync: createMutation } = useCreateEmployee();
 
-  let managers = [
-    {
+  if (employeeIsLoading || departmentIsLoading || managerIsLoading) return <div>Loading...</div>;
+  if (employeeError || departmentError || managerError) return null;
 
-      label: "Select Manager",
-      value: 0,
-    },
-    {
-      label: "Manager 1",
-      value: 1,
-    },
-    {
-      label: "Manager 2",
-      value: 2,
-    },
-    {
-      label: "Manager 3",
-      value: 3,
-    },
-  ]
 
-  const departments = useMemo(() => departmentData?.categories?.data?.results || [], [departmentData]);
+  const departments:CategoryUpdateInput[] = departmentData?.categories?.data?.results || [];
+  let employees: Employee[] = employeeData?.employees?.data?.results || [];
+  let managers: Manager[] = managerData?.managers?.data?.results || [];
+
+  let managerOptions = managers.map((manager) => {
+    return {
+      label: manager?.employee?.user?.first_name + " " + manager?.employee?.user?.last_name,
+      value: manager.id,
+    };
+  }
+  );
+  managerOptions.push({
+    label: "Select Manager",
+    value: 0,
+  });
+
+  let departmentOptions = departments.map((department) => {
+    return {
+      label: department.name,
+      value: department.id,
+    };
+  }
+  );
+  departmentOptions.push({
+    label: "Select Department",
+    value: 0,
+  });
+
+
+  // let managers = [
+  //   {
+
+  //     label: "Select Manager",
+  //     value: 0,
+  //   },
+  //   {
+  //     label: "Manager 1",
+  //     value: 1,
+  //   },
+  //   {
+  //     label: "Manager 2",
+  //     value: 2,
+  //   },
+  //   {
+  //     label: "Manager 3",
+  //     value: 3,
+  //   },
+  // ]
+
 
   const handleModelData = (key: string, value: any) => {
     setState({
@@ -66,8 +98,7 @@ const Employees: React.FC<Props> = () => {
   };
 
 
-  if (employeeIsLoading || departmentIsLoading) return <div>Loading...</div>;
-  if (employeeError || departmentError) return null;
+
 
 
   const closeModal = (reload: boolean = false) => {
@@ -82,7 +113,7 @@ const Employees: React.FC<Props> = () => {
   };
 
   const handleCreateEmployee = async () => {
-     try {
+    try {
       let createInput = employeeInput(modelData);
       await createMutation(createInput);
 
@@ -154,14 +185,15 @@ const Employees: React.FC<Props> = () => {
         }}
       />
       <div className="row g-3 row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-2 row-cols-xxl-2 row-deck py-1 pb-4">
-        {MembersData.map((data: any, i: number) => {
+        {employees.map((employee, i: number) => {
           return (
             <div key={"skhd" + i} className="col">
               <OurClients
-                avatar={data.avatar}
-                post={data.post}
-                name={data.name}
-                department={data.Companyname}
+                id={employee?.id}
+                avatar={employee?.user?.avatar}
+                post={employee?.description}
+                name={employee?.user?.first_name + " " + employee?.user?.last_name}
+                department={getCategory(departments, employee?.department)}
                 isMember={true}
               />
             </div>
@@ -173,8 +205,8 @@ const Employees: React.FC<Props> = () => {
         onClose={closeModal}
         handleModelData={handleModelData}
         modelData={modelData}
-        departments={departments}
-        managers={managers}
+        departments={departmentOptions.reverse()}
+        managers={managerOptions.reverse()}
         onCreate={handleCreateEmployee}
         header="Add Employee"
 

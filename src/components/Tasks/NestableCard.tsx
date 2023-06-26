@@ -1,6 +1,7 @@
 import useApp from "hooks/useApp";
 import { ProgressBar } from "react-bootstrap";
 import { sumDateRange, sumDaysLeftFromToDay } from "utils/convert";
+import { getShortString } from "utils/helper";
 
 interface Props {
   data: any;
@@ -10,13 +11,7 @@ const NestableCard: React.FC<Props> = ({ data }) => {
 
 
   const { push } = useApp();
-  const getShortDescription = (description: string) => {
-    if (description.length > 200) {
-      return description.substring(0, 200) + "...";
-    } else {
-      return description;
-    }
-  };
+
   return (
     <div className="dd-handle mt-2 pointer"
       onClick={() => push(`/dashboard/tasks/${data.id}`)}
@@ -25,7 +20,7 @@ const NestableCard: React.FC<Props> = ({ data }) => {
         <h6
           className={`light-success-bg py-1 px-2 rounded-1 d-inline-block fw-bold small-14 mb-0`}
         >
-          {data.name}
+          {getShortString(data?.name!, 30)}
         </h6>
         <div className="task-priority d-flex flex-column align-items-center justify-content-center">
           <div className="avatar-list avatar-list-stacked m-0">
@@ -59,7 +54,7 @@ const NestableCard: React.FC<Props> = ({ data }) => {
           <div className="d-flex align-items-center">
             {/* description here */}
             <i className="icofont-info-circle" style={{ marginRight: 5 }}></i>
-            <p className="small-14 mb-0">{getShortDescription(data.description)}</p>
+            <p className="small-14 mb-1">{getShortString(data.description, 100)}</p>
           </div>
         </div>
         <div className="col">

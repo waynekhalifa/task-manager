@@ -216,7 +216,7 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
   let members = project?.members || [
     {
 
-      label: "Select User",
+      label: "Select Member",
       value: 0,
     },
     {

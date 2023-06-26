@@ -8,7 +8,7 @@ export const getAllEmployees = async ({ queryKey }: any) => {
   return { employees: { data: data as any } };
 };
 
-export const useEmployeesQuery = (options: QueryOptionsType) => {
+export const  useEmployeesQuery = (options: QueryOptionsType) => {
   return useQuery<{ employees: { data: any } }, Error>(
     [Endpoints.EMPLOYEE, options],
     getAllEmployees

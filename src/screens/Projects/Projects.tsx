@@ -22,6 +22,7 @@ import DeleteModal from "components/common/DeleteModal";
 import { Task } from "types/task";
 import { taskInput, useCreateTask } from "framework/task/create-task";
 import ProjectCard from "components/Projects/ProjectCard";
+import { getCategory } from "utils/helper";
 
 interface Props { }
 
@@ -101,6 +102,10 @@ const Projects: React.FC<Props> = () => {
 
   const admins = [
     {
+      label: "Select Admin",
+      value: 0,
+    },
+    {
       label: "Badr",
       value: 1,
     },
@@ -114,6 +119,11 @@ const Projects: React.FC<Props> = () => {
     },
   ]
   const groups = [
+    {
+
+      label: "Select Group",
+      value: 0,
+    },
     {
       label: "Group1",
       value: 1,
@@ -131,7 +141,7 @@ const Projects: React.FC<Props> = () => {
   let members = projectData?.projects.data.results[0]?.members || [
     {
 
-      label: "Select User",
+      label: "Select Member",
       value: 0,
     },
     {
@@ -298,10 +308,6 @@ const Projects: React.FC<Props> = () => {
     }));
   };
 
-  const getCategory = (id: number) => {
-    let category = categories.find((category) => category.id === id);
-    return category?.name;
-  };
 
 
   const createTask = async () => {
@@ -447,7 +453,7 @@ const Projects: React.FC<Props> = () => {
                       >
                         <ProjectCard
                           project={d}
-                          category={getCategory(d.category)}
+                          category={getCategory(categories, d.category)}
                           onClickEdit={() => handleOpenEditModal(d)}
                           onClickDelete={() => handleOpenDeleteModal(d)}
                           onClickAddMember={handleOpenAddUserModal}

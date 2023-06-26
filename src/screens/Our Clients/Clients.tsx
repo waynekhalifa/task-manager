@@ -1,10 +1,9 @@
 import React from "react";
 import { Dropdown, Modal } from "react-bootstrap";
-import OurClients from "../../components/Clients/OurClients";
 import PageHeader from "../../components/common/PageHeader";
 import { OurClientsData } from "../../components/Data/AppData";
 
-interface Props {}
+interface Props { }
 
 interface State {
   isModal: boolean;
@@ -94,7 +93,7 @@ const Clients: React.FC<Props> = () => {
         {OurClientsData.map((data: any, i: number) => {
           return (
             <div key={"skhd" + i} className="col">
-              <OurClients
+              {/* <OurClients
                 avatar={data.avatar}
                 post={data.post}
                 name={data.name}
@@ -110,7 +109,7 @@ const Clients: React.FC<Props> = () => {
                 onClickDelete={() => {
                   setState({ ...state, isModalDelete: true });
                 }}
-              />
+              /> */}
             </div>
           );
         })}
@@ -271,7 +270,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault1"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -281,7 +280,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault2"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -291,7 +290,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault3"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -301,7 +300,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault4"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -311,7 +310,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault5"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -321,7 +320,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault6"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                   </tr>
@@ -334,7 +333,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault7"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -344,7 +343,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault8"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -354,7 +353,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault9"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -364,7 +363,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault10"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -374,7 +373,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault11"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -384,7 +383,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault12"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                   </tr>
@@ -397,7 +396,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault13"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -407,7 +406,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault14"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -417,7 +416,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault15"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -427,7 +426,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault16"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -437,7 +436,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault17"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -447,7 +446,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault18"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                   </tr>
@@ -460,7 +459,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault19"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -470,7 +469,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault20"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -480,7 +479,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault21"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -490,7 +489,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault22"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -500,7 +499,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault23"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -510,7 +509,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault24"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                   </tr>
@@ -523,7 +522,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault25"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -541,7 +540,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault27"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -559,7 +558,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault29"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -569,7 +568,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault30"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                   </tr>
@@ -582,7 +581,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault31"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -592,7 +591,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault32"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -602,7 +601,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault33"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -612,7 +611,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault34"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -622,7 +621,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault35"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                     <td className="text-center">
@@ -632,7 +631,7 @@ const Clients: React.FC<Props> = () => {
                         value=""
                         id="flexCheckDefault36"
                         checked={true}
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                     </td>
                   </tr>

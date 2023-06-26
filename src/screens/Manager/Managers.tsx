@@ -1,13 +1,14 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import OurClients from "components/Clients/OurClients";
 import PageHeader from "components/common/PageHeader";
-import { MembersData } from "components/Data/AppData";
 import { useEmployeesQuery } from "framework/employee/getAllEmployees";
 
-import { EmployeeCreateInput } from "types/employee";
+import { EmployeeCreateInput, Manager } from "types/employee";
 import { useCategoriesQuery } from "framework/category/getAllCategories";
 import EmployeeModal from "components/common/EmployeeModal";
 import { managerInput, useCreateManager } from "framework/Manager/createManager";
+import { useManagerQuery } from "framework/Manager/getAllManagers";
+import { getCategory } from "utils/helper";
 
 interface Props { }
 
@@ -27,31 +28,32 @@ const INITIAlIZE_DATA: State = {
 const Managers: React.FC<Props> = () => {
   const [state, setState] = useState<State>(INITIAlIZE_DATA);
   const { isModal, modelData } = state;
-  const { data: employeeData, error: employeeError, isLoading: employeeIsLoading } = useEmployeesQuery({});
-  const { data: departmentData, error: departmentError, isLoading: departmentIsLoading } = useCategoriesQuery({});
   const { mutateAsync: createMutation } = useCreateManager();
 
-  let managers = [
-    {
+  const { data: employeeData, error: employeeError, isLoading: employeeIsLoading } = useEmployeesQuery({});
+  const { data: managerData, error: managerError, isLoading: managerIsLoading } = useManagerQuery({});
 
-      label: "Select Manager",
-      value: 0,
-    },
-    {
-      label: "Manager 1",
-      value: 1,
-    },
-    {
-      label: "Manager 2",
-      value: 2,
-    },
-    {
-      label: "Manager 3",
-      value: 3,
-    },
-  ]
+  const { data: departmentData, error: departmentError, isLoading: departmentIsLoading } = useCategoriesQuery({});
 
-  const departments = useMemo(() => departmentData?.categories?.data?.results || [], [departmentData]);
+  if (employeeIsLoading || departmentIsLoading || managerIsLoading) return <div>Loading...</div>;
+  if (employeeError || departmentError || managerError) return null;
+
+  let managers: Manager[] = managerData?.managers?.data?.results || [];
+
+  let managerOptions = managers.map((manager) => {
+    return {
+      label: manager?.employee?.user?.first_name + " " + manager?.employee?.user?.last_name,
+      value: manager.id,
+    };
+  }
+  );
+  managerOptions.push({
+    label: "Select Manager",
+    value: 0,
+  });
+
+
+  const departments = departmentData?.categories?.data?.results || [];
 
   const handleModelData = (key: string, value: any) => {
     setState({
@@ -64,9 +66,6 @@ const Managers: React.FC<Props> = () => {
   };
 
 
-
-  if (employeeIsLoading || departmentIsLoading) return <div>Loading...</div>;
-  if (employeeError || departmentError) return null;
 
 
   const closeModal = (reload: boolean = false) => {
@@ -153,14 +152,15 @@ const Managers: React.FC<Props> = () => {
         }}
       />
       <div className="row g-3 row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-2 row-cols-xxl-2 row-deck py-1 pb-4">
-        {MembersData.map((data: any, i: number) => {
+        {managers.map((manager, i: number) => {
           return (
             <div key={"skhd" + i} className="col">
               <OurClients
-                avatar={data.avatar}
-                post={data.post}
-                name={data.name}
-                department={data.Companyname}
+                id={manager?.id}
+                avatar={manager?.employee?.user?.avatar}
+                post={manager?.description}
+                name={manager?.employee?.user?.first_name + " " + manager?.employee?.user?.last_name}
+                department={getCategory(departments, manager?.department)}
                 isMember={true}
               />
             </div>
@@ -173,7 +173,7 @@ const Managers: React.FC<Props> = () => {
         handleModelData={handleModelData}
         modelData={modelData}
         departments={departments}
-        managers={managers}
+        managers={managerOptions.reverse()}
         onCreate={handleCreateEmployee}
         header="Add Manager"
         isManager={true}

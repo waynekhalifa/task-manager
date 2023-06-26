@@ -15,11 +15,6 @@ import { useTaskQuery } from "framework/task/get-all-tasks";
 interface State {
   isAddModal: boolean;
   isEditModal: boolean;
-  isDeleteModal: boolean;
-  isAddUserModal: boolean;
-  isAddAttachmentModal: boolean;
-  isViewDescriptionModal: boolean;
-  isAddCommentModal: Boolean;
   modalHeader: any;
   selectedTask: SelectedTask;
   modelData: any;
@@ -28,11 +23,6 @@ interface State {
 const INITIAlIZE_DATA: State = {
   isAddModal: false,
   isEditModal: false,
-  isDeleteModal: false,
-  isAddUserModal: false,
-  isAddAttachmentModal: false,
-  isViewDescriptionModal: false,
-  isAddCommentModal: false,
   modalHeader: "",
   selectedTask: {} as SelectedTask,
   modelData: {},
@@ -41,7 +31,7 @@ const INITIAlIZE_DATA: State = {
 
 const Tasks: React.FC = () => {
   const [state, setState] = useState<State>(INITIAlIZE_DATA);
-  const { modelData, isAddModal, isEditModal, isDeleteModal, isAddUserModal, isAddAttachmentModal, isViewDescriptionModal, isAddCommentModal, modalHeader } = state;
+  const { modelData, isAddModal, isEditModal, modalHeader } = state;
   const { mutateAsync: createTaskMutation } = useCreateTask();
 
   let { data: projectData, error: errorProjects, isLoading: loadingProjects } = useProjectsQuery({});
@@ -70,6 +60,10 @@ const Tasks: React.FC = () => {
     },
   ];
   const groups = [
+    {
+      label: "Select Group",
+      value: 0,
+    },
     {
       label: "Group1",
       value: 1,
@@ -116,11 +110,6 @@ const Tasks: React.FC = () => {
       ...state,
       isAddModal: false,
       isEditModal: false,
-      isDeleteModal: false,
-      isAddUserModal: false,
-      isAddAttachmentModal: false,
-      isViewDescriptionModal: false,
-      isAddCommentModal: false,
       modelData: {},
     });
   };

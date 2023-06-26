@@ -70,7 +70,6 @@ const TaskModal: React.FC<Props> = ({ onClose, modalHeader, isAddModal,
       onChange: (e: any) => handleModelData(ModelKeys.PROJECT, e.target.value),
       placeholder: "Select Project",
       disabled: selectedProject ? true : false,
-      hide: !selectedProject ? true : false,
     },
     {
       label: "Task Name",

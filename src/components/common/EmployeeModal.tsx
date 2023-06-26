@@ -2,8 +2,8 @@ import FormInputs from 'components/FormInputs';
 import { usePermissionsQuery } from 'framework/permissions/getAllPermissions';
 import React from 'react';
 import { Modal } from 'react-bootstrap';
-import { Category } from 'types/category';
 import { IField } from 'types/formFields';
+import { IOption } from 'types/option';
 import { CustomPermission, Permission } from 'types/permission';
 
 interface Props {
@@ -11,8 +11,8 @@ interface Props {
   onClose: () => void;
   modelData: any;
   show: boolean;
-  departments: Category[];
-  managers: any[];
+  departments: IOption[];
+  managers: IOption[];
   onCreate: () => void;
   header: string;
   isManager?: boolean;
@@ -134,10 +134,7 @@ const EmployeeModal: React.FC<Props> = ({
       key: ModelKeys.DEPARTMENT,
       value: modelData?.department?.value,
       onChange: (e: any) => handleModelData(ModelKeys.DEPARTMENT, e.target.value),
-      options: departments.map((department: Category) => ({
-        label: department.name,
-        value: department.id,
-      })).concat({ label: "Select Department", value: 0 }).reverse(),
+      options: departments,
       placeholder: "Select Department",
     },
     {
@@ -145,10 +142,7 @@ const EmployeeModal: React.FC<Props> = ({
       type: "select",
       key: ModelKeys.MANAGER,
       value: modelData?.manager,
-      options: managers.map((manager) => ({
-        label: manager.label,
-        value: manager.value,
-      })),
+      options: managers,
       onChange: (e: any) => handleModelData(ModelKeys.MANAGER, e.target.value),
       placeholder: "Select Manager",
       hide: isManager
