@@ -46,7 +46,7 @@ const Managers: React.FC<Props> = () => {
     };
   }
   );
-  managerOptions.push({
+  managerOptions.unshift({
     label: "Select Manager",
     value: 0,
   });
@@ -60,7 +60,7 @@ const Managers: React.FC<Props> = () => {
     };
   }
   );
-  departmentOptions.push({
+  departmentOptions.unshift({
     label: "Select Department",
     value: 0,
   });
@@ -187,8 +187,8 @@ const Managers: React.FC<Props> = () => {
         onClose={closeModal}
         handleModelData={handleModelData}
         modelData={modelData}
-        departments={departmentOptions.reverse()}
-        managers={managerOptions.reverse()}
+        departments={departmentOptions}
+        managers={managerOptions}
         onCreate={handleCreateEmployee}
         header="Add Manager"
         isManager={true}

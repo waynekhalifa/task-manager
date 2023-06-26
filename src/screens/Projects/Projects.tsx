@@ -262,15 +262,7 @@ const Projects: React.FC<Props> = () => {
     });
   }
 
-  const handleOpenEditTaskModal = (project: SelectedProject) => {
-    setState({
-      ...state,
-      isEditTaskModal: true,
-      selectedProject: project,
-      modalHeader: "Edit Task",
-    });
-  };
-
+  
 
   const handleOpenViewTaskModal = (project: SelectedProject) => {
     setState({
@@ -347,12 +339,6 @@ const Projects: React.FC<Props> = () => {
     }
   };
 
-  const editTask = async () => {
-    try {
-    } catch (error) {
-      alert(error);
-    }
-  };
 
 
 
@@ -377,7 +363,6 @@ const Projects: React.FC<Props> = () => {
   };
 
   const editProject = async () => {
-    // Object.assign(selectedProject, { admin: 1 });
     try {
       let createInput = projectUpdateInput(selectedProject);
       let res = await updateProjectMutation({
@@ -551,7 +536,6 @@ const Projects: React.FC<Props> = () => {
         selectedProject={selectedProject}
         modelData={modelTaskData}
         onCreate={createTask}
-        onUpdate={editTask}
         members={members}
         groups={groups}
       />

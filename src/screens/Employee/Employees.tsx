@@ -37,7 +37,7 @@ const Employees: React.FC<Props> = () => {
   if (employeeError || departmentError || managerError) return null;
 
 
-  const departments:CategoryUpdateInput[] = departmentData?.categories?.data?.results || [];
+  const departments: CategoryUpdateInput[] = departmentData?.categories?.data?.results || [];
   let employees: Employee[] = employeeData?.employees?.data?.results || [];
   let managers: Manager[] = managerData?.managers?.data?.results || [];
 
@@ -48,7 +48,7 @@ const Employees: React.FC<Props> = () => {
     };
   }
   );
-  managerOptions.push({
+  managerOptions.unshift({
     label: "Select Manager",
     value: 0,
   });
@@ -60,7 +60,7 @@ const Employees: React.FC<Props> = () => {
     };
   }
   );
-  departmentOptions.push({
+  departmentOptions.unshift({
     label: "Select Department",
     value: 0,
   });
@@ -213,8 +213,8 @@ const Employees: React.FC<Props> = () => {
         onClose={closeModal}
         handleModelData={handleModelData}
         modelData={modelData}
-        departments={departmentOptions.reverse()}
-        managers={managerOptions.reverse()}
+        departments={departmentOptions}
+        managers={managerOptions}
         onCreate={handleCreateEmployee}
         header="Add Employee"
 
