@@ -13,7 +13,10 @@ import { useProjectsQuery } from "framework/project/getAllProjects";
 import { useDeleteProject } from "framework/project/deleteProject";
 import AddNewAttachmentModal from "components/common/AddNewAttachmentModal";
 import DescriptionViewModal from "components/common/DescriptionViewModal";
-import { projectUpdateInput, useUpdateProject } from "framework/project/updateProject";
+import {
+  projectUpdateInput,
+  useUpdateProject,
+} from "framework/project/updateProject";
 import AddCommentModal from "components/common/AddCommentModal";
 import ViewTasksModal from "components/common/ViewTasksModal";
 import ProjectModal from "components/common/ProjectModal";
@@ -22,14 +25,18 @@ import DeleteModal from "components/common/DeleteModal";
 import { Task } from "types/task";
 import { taskInput, useCreateTask } from "framework/task/create-task";
 import ProjectCard from "components/Projects/ProjectCard";
-import { getCategory } from "utils/helper";
+import { checkPermission, getCategory } from "utils/helper";
 import { useEmployeesQuery } from "framework/employee/getAllEmployees";
 import { Employee } from "types/employee";
 import { useGroupQuery } from "framework/Group/getAllGroups";
 import { Group } from "types/group";
-import { createAssignInput, useAssignMemberToProject } from "framework/project/assignMember";
+import {
+  createAssignInput,
+  useAssignMemberToProject,
+} from "framework/project/assignMember";
+import { Permission } from "enums/permission";
 
-interface Props { }
+interface Props {}
 
 enum ModelKeys {
   NAME = "name",
@@ -78,26 +85,59 @@ const INITIAlIZE_DATA: State = {
 };
 
 const Projects: React.FC<Props> = () => {
-
-
   const [state, setState] = React.useState<State>(INITIAlIZE_DATA);
-  const { isAddModal, isEditModal, isDeleteModal, modalHeader, modelProjectData, modelTaskData, selectedProject, isAddUserModal, isAddAttachmentModal, isViewDescriptionModal, isAddCommentModal, isAddTaskModal, isEditTaskModal, isViewTaskModal } =
-    state;
+  const {
+    isAddModal,
+    isEditModal,
+    isDeleteModal,
+    modalHeader,
+    modelProjectData,
+    modelTaskData,
+    selectedProject,
+    isAddUserModal,
+    isAddAttachmentModal,
+    isViewDescriptionModal,
+    isAddCommentModal,
+    isAddTaskModal,
+    isEditTaskModal,
+    isViewTaskModal,
+  } = state;
   const { mutateAsync: createProjectMutation } = useCreateProject();
   const { mutateAsync: updateProjectMutation } = useUpdateProject();
   const { mutateAsync: deleteProjectMutation } = useDeleteProject();
   const { mutateAsync: createTaskMutation } = useCreateTask();
   const { mutateAsync: AssignMemberMutation } = useAssignMemberToProject();
 
+  let {
+    data: projectData,
+    error: errorProjects,
+    isLoading: loadingProjects,
+  } = useProjectsQuery({});
+  const {
+    data: employeeData,
+    error: employeeError,
+    isLoading: employeeIsLoading,
+  } = useEmployeesQuery({});
+  let {
+    data: categoriesData,
+    error: errorCategories,
+    isLoading: isLoadingCategories,
+  } = useCategoriesQuery({});
+  const {
+    data: groupData,
+    error: groupError,
+    isLoading: groupIsLoading,
+  } = useGroupQuery({});
 
-  let { data: projectData, error: errorProjects, isLoading: loadingProjects } = useProjectsQuery({});
-  const { data: employeeData, error: employeeError, isLoading: employeeIsLoading } = useEmployeesQuery({});
-  let { data: categoriesData, error: errorCategories, isLoading: isLoadingCategories } = useCategoriesQuery({});
-  const { data: groupData, error: groupError, isLoading: groupIsLoading } = useGroupQuery({});
-
-  if (isLoadingCategories || loadingProjects || employeeIsLoading || groupIsLoading) return <div>Loading...</div>;
-  if (errorCategories || errorProjects || employeeError || groupError) return null;
-
+  if (
+    isLoadingCategories ||
+    loadingProjects ||
+    employeeIsLoading ||
+    groupIsLoading
+  )
+    return <div>Loading...</div>;
+  if (errorCategories || errorProjects || employeeError || groupError)
+    return null;
 
   let projects: SelectedProject[] = projectData?.projects.data.results || [];
   let categories: CategoryUpdateInput[] =
@@ -108,8 +148,7 @@ const Projects: React.FC<Props> = () => {
       label: category.name,
       value: category.id,
     };
-  }
-  );
+  });
   categoryOptions.unshift({
     label: "Select Department",
     value: 0,
@@ -121,8 +160,7 @@ const Projects: React.FC<Props> = () => {
       label: employee?.user?.first_name + " " + employee?.user?.last_name,
       value: employee.id,
     };
-  }
-  );
+  });
 
   let groups: Group[] = groupData?.groups?.data?.results || [];
   let groupOptions = groups.map((group) => {
@@ -130,13 +168,11 @@ const Projects: React.FC<Props> = () => {
       label: group.name,
       value: group.id,
     };
-  }
-  );
+  });
   groupOptions.unshift({
     label: "Select Group",
     value: 0,
   });
-
 
   const handleModalClose = (reload: boolean = false) => {
     if (reload === true) window.location.reload();
@@ -189,7 +225,7 @@ const Projects: React.FC<Props> = () => {
       ...state,
       isAddUserModal: true,
       modalHeader: "Assign Member",
-      selectedProject: project
+      selectedProject: project,
     });
   };
   const handleOpenAddAttachmentModal = (project: Project) => {
@@ -217,7 +253,7 @@ const Projects: React.FC<Props> = () => {
       selectedProject: project,
       modalHeader: "Add Comment",
     });
-  }
+  };
 
   const handleOpenAddTaskModal = (project: SelectedProject) => {
     setState({
@@ -226,9 +262,7 @@ const Projects: React.FC<Props> = () => {
       selectedProject: project,
       modalHeader: "Add Task",
     });
-  }
-
-
+  };
 
   const handleOpenViewTaskModal = (project: SelectedProject) => {
     setState({
@@ -237,7 +271,7 @@ const Projects: React.FC<Props> = () => {
       selectedProject: project,
       modalHeader: "View Tasks",
     });
-  }
+  };
 
   const handleProjectModelData = (key: string, value: any) => {
     if (isEditModal) {
@@ -285,7 +319,7 @@ const Projects: React.FC<Props> = () => {
         user: employee.id,
         project: selectedProject?.id!,
       });
-      await AssignMemberMutation(createInput)
+      await AssignMemberMutation(createInput);
       handleModalClose(true);
     } catch (err) {
       alert(err);
@@ -315,9 +349,6 @@ const Projects: React.FC<Props> = () => {
       alert(error);
     }
   };
-
-
-
 
   const createProject = async () => {
     if (!modelProjectData.name) {
@@ -358,8 +389,7 @@ const Projects: React.FC<Props> = () => {
             admin: updatedProject.admin,
             ...project,
           };
-        }
-        else return project;
+        } else return project;
       });
       handleModalClose(true);
     } catch (err) {
@@ -370,16 +400,15 @@ const Projects: React.FC<Props> = () => {
   const deleteProject = async () => {
     try {
       await deleteProjectMutation(selectedProject);
-      let currenProject = projects.find(project => project.id === selectedProject.id);
+      let currenProject = projects.find(
+        (project) => project.id === selectedProject.id
+      );
       currenProject && projects.splice(projects.indexOf(currenProject), 1);
       handleModalClose();
     } catch (err) {
       alert(err);
     }
   };
-
-
-
 
   return (
     <div className="container-xxl">
@@ -389,14 +418,16 @@ const Projects: React.FC<Props> = () => {
           renderRight={() => {
             return (
               <div className="d-flex py-2 project-tab flex-wrap w-sm-100">
-                <button
-                  type="button"
-                  className="btn btn-dark w-sm-100"
-                  onClick={handleOpenAddModal}
-                >
-                  <i className="icofont-plus-circle me-2 fs-6" />
-                  Create Project
-                </button>
+                {checkPermission(Permission.ADD_PROJECT) && (
+                  <button
+                    type="button"
+                    className="btn btn-dark w-sm-100"
+                    onClick={handleOpenAddModal}
+                  >
+                    <i className="icofont-plus-circle me-2 fs-6" />
+                    Create Project
+                  </button>
+                )}
                 {/* <Nav
                   variant="pills"
                   className="nav nav-tabs tab-body-header rounded ms-3 prtab-set w-sm-100"
@@ -423,28 +454,35 @@ const Projects: React.FC<Props> = () => {
             <Tab.Content>
               <Tab.Pane eventKey="All">
                 <div className="row g-3 gy-5 py-3 row-deck">
-                  {projects && projects.length > 0 && projects.map((d: any, i: number) => {
-
-                    return (
-                      <div
-                        key={"key" + i}
-                        className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6"
-                      >
-                        <ProjectCard
-                          project={d}
-                          category={getCategory(categories, d.category)}
-                          onClickEdit={() => handleOpenEditModal(d)}
-                          onClickDelete={() => handleOpenDeleteModal(d)}
-                          onClickAddMember={() => handleOpenAddUserModal(d)}
-                          onClickAddAttachment={() => handleOpenAddAttachmentModal(d)}
-                          onClickViewDescription={() => handleOpenViewDescriptionModal(d)}
-                          onClickAddComment={() => handleOpenAddCommentModal(d)}
-                          onClickAddTask={() => handleOpenAddTaskModal(d)}
-                          onClickViewTasks={() => handleOpenViewTaskModal(d)}
-                        />
-                      </div>
-                    );
-                  })}
+                  {projects &&
+                    projects.length > 0 &&
+                    projects.map((d: any, i: number) => {
+                      return (
+                        <div
+                          key={"key" + i}
+                          className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6"
+                        >
+                          <ProjectCard
+                            project={d}
+                            category={getCategory(categories, d.category)}
+                            onClickEdit={() => handleOpenEditModal(d)}
+                            onClickDelete={() => handleOpenDeleteModal(d)}
+                            onClickAddMember={() => handleOpenAddUserModal(d)}
+                            onClickAddAttachment={() =>
+                              handleOpenAddAttachmentModal(d)
+                            }
+                            onClickViewDescription={() =>
+                              handleOpenViewDescriptionModal(d)
+                            }
+                            onClickAddComment={() =>
+                              handleOpenAddCommentModal(d)
+                            }
+                            onClickAddTask={() => handleOpenAddTaskModal(d)}
+                            onClickViewTasks={() => handleOpenViewTaskModal(d)}
+                          />
+                        </div>
+                      );
+                    })}
                 </div>
               </Tab.Pane>
             </Tab.Content>

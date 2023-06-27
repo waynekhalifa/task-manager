@@ -1,10 +1,10 @@
-import FormInputs from 'components/FormInputs';
-import { usePermissionsQuery } from 'framework/permissions/getAllPermissions';
-import React from 'react';
-import { Modal } from 'react-bootstrap';
-import { IField } from 'types/formFields';
-import { IOption } from 'types/option';
-import { CustomPermission, Permission } from 'types/permission';
+import FormInputs from "components/FormInputs";
+import { usePermissionsQuery } from "framework/permissions/getAllPermissions";
+import React from "react";
+import { Modal } from "react-bootstrap";
+import { IField } from "types/formFields";
+import { IOption } from "types/option";
+import { CustomPermission, Permission } from "types/permission";
 
 interface Props {
   handleModelData: (key: string, value: any) => void;
@@ -34,7 +34,6 @@ enum ModelKeys {
   USER_PERMISSIONS = "user_permissions",
 }
 
-
 const EmployeeModal: React.FC<Props> = ({
   handleModelData,
   onClose,
@@ -44,14 +43,14 @@ const EmployeeModal: React.FC<Props> = ({
   departments,
   managers,
   header,
-  isManager
+  isManager,
 }) => {
   const { data, error, isLoading } = usePermissionsQuery({});
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Something went wrong</div>;
   const permissions: Permission[] = data?.permissions?.data?.results || [];
 
-
+  console.log("permissions", permissions);
 
   const formFields: IField[] = [
     {
@@ -60,7 +59,8 @@ const EmployeeModal: React.FC<Props> = ({
       width: "col-md-6",
       key: ModelKeys.FIRST_NAME,
       value: modelData?.first_name,
-      onChange: (e: any) => handleModelData(ModelKeys.FIRST_NAME, e.target.value),
+      onChange: (e: any) =>
+        handleModelData(ModelKeys.FIRST_NAME, e.target.value),
       placeholder: "Enter First Name",
     },
     {
@@ -69,7 +69,8 @@ const EmployeeModal: React.FC<Props> = ({
       width: "col-md-6",
       key: ModelKeys.FIRST_NAME,
       value: modelData?.last_name,
-      onChange: (e: any) => handleModelData(ModelKeys.LAST_NAME, e.target.value),
+      onChange: (e: any) =>
+        handleModelData(ModelKeys.LAST_NAME, e.target.value),
       placeholder: "Enter Last Name",
     },
     {
@@ -78,7 +79,8 @@ const EmployeeModal: React.FC<Props> = ({
       width: "col-md-6",
       key: ModelKeys.EMPLOYEE_ID,
       value: modelData?.employee_id,
-      onChange: (e: any) => handleModelData(ModelKeys.EMPLOYEE_ID, e.target.value),
+      onChange: (e: any) =>
+        handleModelData(ModelKeys.EMPLOYEE_ID, e.target.value),
       placeholder: "Employee ID",
     },
     {
@@ -106,7 +108,8 @@ const EmployeeModal: React.FC<Props> = ({
       width: "col-md-6",
       key: ModelKeys.PASSWORD1,
       value: modelData?.password1,
-      onChange: (e: any) => handleModelData(ModelKeys.PASSWORD1, e.target.value),
+      onChange: (e: any) =>
+        handleModelData(ModelKeys.PASSWORD1, e.target.value),
       placeholder: "Password",
     },
     {
@@ -133,7 +136,8 @@ const EmployeeModal: React.FC<Props> = ({
       width: "col-md-12",
       key: ModelKeys.DEPARTMENT,
       value: modelData?.department?.value,
-      onChange: (e: any) => handleModelData(ModelKeys.DEPARTMENT, e.target.value),
+      onChange: (e: any) =>
+        handleModelData(ModelKeys.DEPARTMENT, e.target.value),
       options: departments,
       placeholder: "Select Department",
     },
@@ -145,7 +149,7 @@ const EmployeeModal: React.FC<Props> = ({
       options: managers,
       onChange: (e: any) => handleModelData(ModelKeys.MANAGER, e.target.value),
       placeholder: "Select Manager",
-      hide: isManager
+      hide: isManager,
     },
     {
       label: "Description",
@@ -157,9 +161,7 @@ const EmployeeModal: React.FC<Props> = ({
         handleModelData(ModelKeys.DESCRIPTION, e.target.value),
       placeholder: "Enter Description",
     },
-  ]
-
-
+  ];
 
   const checkReadPermission = (permission: Permission): Permission | null => {
     switch (permission.codename) {
@@ -174,7 +176,9 @@ const EmployeeModal: React.FC<Props> = ({
     }
   };
   const getReadPermission = (permissions: Permission[]): Permission | null => {
-    return permissions.find((permission) => checkReadPermission(permission)) || null;
+    return (
+      permissions.find((permission) => checkReadPermission(permission)) || null
+    );
   };
   const handleTable = (): JSX.Element => {
     let CustomizedPermissions: CustomPermission[] = [];
@@ -213,12 +217,17 @@ const EmployeeModal: React.FC<Props> = ({
                   <input
                     type="checkbox"
                     className="form-check-input"
-                    checked={modelData?.user_permissions?.includes(permission.id)}
+                    checked={modelData?.user_permissions?.includes(
+                      permission.id
+                    )}
                     onChange={(e: any) => {
-                      let userPermissions: number[] = modelData?.user_permissions || [];
+                      let userPermissions: number[] =
+                        modelData?.user_permissions || [];
                       if (e.target.checked) {
                         if (!checkReadPermission(permission)) {
-                          const readPermission = getReadPermission(customizedPermission.children);
+                          const readPermission = getReadPermission(
+                            customizedPermission.children
+                          );
                           userPermissions?.push(readPermission?.id!);
                         }
                         userPermissions?.push(permission?.id!);
@@ -227,7 +236,10 @@ const EmployeeModal: React.FC<Props> = ({
                           (permissionId) => permissionId !== permission.id
                         );
                       }
-                      handleModelData(ModelKeys.USER_PERMISSIONS, userPermissions)
+                      handleModelData(
+                        ModelKeys.USER_PERMISSIONS,
+                        userPermissions
+                      );
                     }}
                   />
                 </td>
@@ -237,44 +249,29 @@ const EmployeeModal: React.FC<Props> = ({
         </tbody>
       </table>
     );
-  }
-
+  };
 
   return (
-    <Modal
-      centered
-      show={show}
-      size="lg"
-      onHide={onClose}
-    >
+    <Modal centered show={show} size="lg" onHide={onClose}>
       <Modal.Header closeButton>
         <Modal.Title className="fw-bold">{header}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div className="modal-body">
           <FormInputs formFields={formFields} grid={true} />
-          <div className="table-responsive">
-            {handleTable()}
-          </div>
+          <div className="table-responsive">{handleTable()}</div>
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <button
-          type="button"
-          className="btn btn-secondary"
-          onClick={onClose}
-        >
+        <button type="button" className="btn btn-secondary" onClick={onClose}>
           Cancel
         </button>
-        <button type="button" className="btn btn-primary"
-          onClick={onCreate}
-        >
+        <button type="button" className="btn btn-primary" onClick={onCreate}>
           Create
         </button>
       </Modal.Footer>
     </Modal>
-  )
-}
-
+  );
+};
 
 export default EmployeeModal;

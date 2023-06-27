@@ -15,7 +15,7 @@ export const getBadge = (status: string) => {
     default:
       return "badge rounded-pill bg-info text-white";
   }
-}
+};
 export const getBtn = (status: string) => {
   switch (status) {
     case TaskStatusBadge.TODO:
@@ -29,7 +29,7 @@ export const getBtn = (status: string) => {
     default:
       return "btn  btn-info text-white";
   }
-}
+};
 
 export const getShortString = (str: string, length: number) => {
   if (!str) return "";
@@ -45,34 +45,33 @@ export const getCategory = (categories: CategoryUpdateInput[], id: number) => {
   return category?.name;
 };
 
-
 export const checkImage = (url: string) => {
   if (!url) return false;
-  return (url.match(/\.(jpeg|jpg|gif|png)$/) != null);
-}
+  return url.match(/\.(jpeg|jpg|gif|png)$/) != null;
+};
 
 export const checkIfExist = (array: any[], item: any) => {
   return array.some((element: any) => element === item);
 };
 
 export const checkRole = (roles: string[]) => {
-  let session = JSON.parse(localStorage.getItem('session') || "")
+  let session = JSON.parse(localStorage.getItem("session") || "");
   if (!session || !roles || roles.length === 0) return false;
   let hasRole: boolean = false;
-  roles.forEach(role => {
+  roles.forEach((role) => {
     if (session.user.role === role) hasRole = true;
-  })
+  });
   return hasRole;
-}
-
+};
 
 export const checkPermission = (selectPermission: string) => {
-  let session = JSON.parse(localStorage.getItem('session') || "")
+  let session = JSON.parse(localStorage.getItem("session") || "");
   if (!session) return false;
+  if (session.user.role === "superuser") return true;
   let hasPermission: boolean = false;
   session.user.user_permissions.forEach((permission: Permission) => {
     if (permission.codename === selectPermission) hasPermission = true;
-  })
+  });
 
   return hasPermission;
-}
+};
