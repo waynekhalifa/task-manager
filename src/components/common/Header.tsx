@@ -14,10 +14,9 @@ import { profileEmail } from "utils/profileEmail";
 
 const Header: React.FC = () => {
   const { push } = useApp();
-  const { session, setSession } = useAuth();
+  const { session } = useAuth();
 
   const handleLogout = () => {
-    setSession(null);
     localStorage.removeItem("session");
     localStorage.removeItem("access_token");
 
