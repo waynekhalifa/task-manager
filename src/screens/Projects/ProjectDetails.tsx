@@ -67,7 +67,7 @@ const INITIAlIZE_DATA: State = {
 const ProjectDetails: React.FC<Props> = ({ id }) => {
   const { push } = useApp();
   const [state, setState] = React.useState<State>(INITIAlIZE_DATA);
-  const { isEditModal, isDeleteModal, modalHeader, modelProjectData, modelTaskData, selectedProject, isAddUserModal, isAddTaskModal, isEditTaskModal, isViewTaskModal } =
+  const { isEditModal, isDeleteModal, modalHeader, modelProjectData, modelTaskData, selectedProject, isAddTaskModal, isEditTaskModal } =
     state;
   let { data, error, isLoading } = useSingleProject({ id });
 
@@ -346,7 +346,7 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
               <Member
                 employees={employees}
                 departments={categories}
-
+                project={project}
               />
             </div>
           </div>

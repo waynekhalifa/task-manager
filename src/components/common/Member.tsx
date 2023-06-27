@@ -1,16 +1,21 @@
 import { Dropdown } from "react-bootstrap";
 import { CategoryUpdateInput } from "types/category";
-import { Employee } from "types/employee";
+import { AssignedEmployee, Employee } from "types/employee";
 import { Group } from "types/group";
-import { checkImage, getCategory, getShortString } from "utils/helper";
+import { checkImage, getShortString } from "utils/helper";
 import Avatar1 from "assets/images/sm/avatar4.jpg";
 import AddNewUserModal from "./AddNewUserModal";
 import React from "react";
+import { createAssignInput, useAssignMemberToProject } from "framework/project/assignMember";
+import { SelectedProject } from "types/project";
+import { useAssignedMembersQuery } from "framework/project/getAssignedMembers";
+import { useDeleteAssignedEmployee } from "framework/project/removeAssignMember";
 
 interface Props {
   employees: Employee[];
   groups?: Group[];
   departments: CategoryUpdateInput[];
+  project: SelectedProject;
 }
 enum ModelKeys {
   NAME = "name",
@@ -34,10 +39,20 @@ const INITIAlIZE_DATA: State = {
   modalHeader: "",
 };
 
-const Member: React.FC<Props> = ({ groups, employees, departments }) => {
+const Member: React.FC<Props> = ({ groups, employees, departments, project }) => {
   const [state, setState] = React.useState<State>(INITIAlIZE_DATA);
   const { modalHeader, isAddUserModal } =
     state;
+  const { mutateAsync: AssignMemberMutation } = useAssignMemberToProject();
+  const { mutateAsync: deleteMutation } = useDeleteAssignedEmployee();
+
+  let { data, error, isLoading } = useAssignedMembersQuery({ id: project.id });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return null;
+
+  const assignedEmployees: AssignedEmployee[] = data?.assignedEmployees?.data?.results || [];
+
   const handleModalClose = (reload: boolean = false) => {
     if (reload === true) window.location.reload();
     setState({
@@ -55,18 +70,22 @@ const Member: React.FC<Props> = ({ groups, employees, departments }) => {
     });
   };
 
-  const assignMember = (employee: Employee) => {
+  const assignMember = async (employee: Employee) => {
     try {
-
+      const createInput = createAssignInput({
+        user: employee.id,
+        project: project?.id!,
+      });
+      await AssignMemberMutation(createInput)
       handleModalClose(true);
     } catch (err) {
       alert(err);
     }
   };
 
-  const removeAssignedMember = (employee: Employee) => {
+  const removeAssignedMember = async (employee: AssignedEmployee) => {
     try {
-
+      await deleteMutation(employee);
       window.location.reload();
     } catch (err) {
       alert(err);
@@ -85,13 +104,12 @@ const Member: React.FC<Props> = ({ groups, employees, departments }) => {
           <i className="fa fa-plus"></i> Add Member
         </button>
       </div>
-      {employees && employees.length > 0 && <div className="members_list mb-3">
+      {assignedEmployees && assignedEmployees.length > 0 && <div className="members_list mb-3">
         <ul className="list-unstyled list-group list-group-custom list-group-flush mb-0" style={{
-          marginTop: "20px",
-          maxHeight: "300px",
+          maxHeight: "400px",
           overflowY: "scroll"
         }}>
-          {employees.map((employee) => (
+          {assignedEmployees.map((employee) => (
             <li className="list-group-item py-3 text-center text-md-start" key={employee.id} >
               <div className="d-flex align-items-center flex-column flex-sm-column flex-md-row">
                 <div className="no-thumbnail mb-2 mb-md-0">
@@ -104,7 +122,7 @@ const Member: React.FC<Props> = ({ groups, employees, departments }) => {
                 <div className="flex-fill ms-3 text-truncate">
                   <h6 className="mb-0  fw-bold">{employee?.user?.first_name + " " + employee?.user?.last_name}</h6>
                   <span className="text-muted">{employee?.user?.email}</span>
-                  <span className="text-muted">{getShortString(getCategory(departments, employee?.department!)!, 20)}</span>
+                  {/* <span className="text-muted">{getShortString(getCategory(departments, employee?.department!)!, 20)}</span> */}
                 </div>
                 <div className="members-action">
                   <Dropdown className="btn-group">

@@ -27,6 +27,7 @@ import { useEmployeesQuery } from "framework/employee/getAllEmployees";
 import { Employee } from "types/employee";
 import { useGroupQuery } from "framework/Group/getAllGroups";
 import { Group } from "types/group";
+import { createAssignInput, useAssignMemberToProject } from "framework/project/assignMember";
 
 interface Props { }
 
@@ -86,6 +87,7 @@ const Projects: React.FC<Props> = () => {
   const { mutateAsync: updateProjectMutation } = useUpdateProject();
   const { mutateAsync: deleteProjectMutation } = useDeleteProject();
   const { mutateAsync: createTaskMutation } = useCreateTask();
+  const { mutateAsync: AssignMemberMutation } = useAssignMemberToProject();
 
 
   let { data: projectData, error: errorProjects, isLoading: loadingProjects } = useProjectsQuery({});
@@ -182,11 +184,12 @@ const Projects: React.FC<Props> = () => {
     });
   };
 
-  const handleOpenAddUserModal = () => {
+  const handleOpenAddUserModal = (project: SelectedProject) => {
     setState({
       ...state,
       isAddUserModal: true,
       modalHeader: "Assign Member",
+      selectedProject: project
     });
   };
   const handleOpenAddAttachmentModal = (project: Project) => {
@@ -276,9 +279,13 @@ const Projects: React.FC<Props> = () => {
     }));
   };
 
-  const assignMember = (employee: Employee) => {
+  const assignMember = async (employee: Employee) => {
     try {
-
+      const createInput = createAssignInput({
+        user: employee.id,
+        project: selectedProject?.id!,
+      });
+      await AssignMemberMutation(createInput)
       handleModalClose(true);
     } catch (err) {
       alert(err);
@@ -428,7 +435,7 @@ const Projects: React.FC<Props> = () => {
                           category={getCategory(categories, d.category)}
                           onClickEdit={() => handleOpenEditModal(d)}
                           onClickDelete={() => handleOpenDeleteModal(d)}
-                          onClickAddMember={handleOpenAddUserModal}
+                          onClickAddMember={() => handleOpenAddUserModal(d)}
                           onClickAddAttachment={() => handleOpenAddAttachmentModal(d)}
                           onClickViewDescription={() => handleOpenViewDescriptionModal(d)}
                           onClickAddComment={() => handleOpenAddCommentModal(d)}

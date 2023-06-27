@@ -50,3 +50,10 @@ export interface User {
   last_name: string;
   avatar: string;
 }
+
+export interface AssignedEmployee {
+  id: number;
+  createdAt: string;
+  project: number;
+  user: User;
+}
