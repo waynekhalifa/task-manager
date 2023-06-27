@@ -36,12 +36,17 @@ const DashboardIndex: React.FC = () => {
   };
 
   const renderContent = () => {
-    if (id && typeof parseFloat(id) === "number" && !isNaN(parseFloat(id)) ) {
+    if (id && typeof parseFloat(id) === "number" && !isNaN(parseFloat(id))) {
       switch (slug) {
         case Pages.PROJECTS:
           return <ProjectDetails id={parseFloat(id)} />;
         case Pages.TASKS:
-          return <TaskDetails id={parseFloat(id)} projectId={parseFloat(projectId!)} />;
+          return (
+            <TaskDetails
+              id={parseFloat(id)}
+              projectId={parseFloat(projectId!)}
+            />
+          );
         case Pages.PROFILE:
           return <EmployeeProfile id={parseFloat(id)} />;
       }

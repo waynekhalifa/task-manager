@@ -1,25 +1,20 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Dropdown } from "react-bootstrap";
 import Avatar1 from "assets/images/xs/avatar1.jpg";
-import Avatar2 from "assets/images/xs/avatar2.jpg";
 import Avatar3 from "assets/images/xs/avatar3.jpg";
-import Avatar4 from "assets/images/xs/avatar4.jpg";
 import Avatar5 from "assets/images/xs/avatar5.jpg";
 import Avatar6 from "assets/images/xs/avatar6.jpg";
 import Avatar7 from "assets/images/xs/avatar7.jpg";
-import Avatar8 from "assets/images/xs/avatar8.jpg";
 import ProfileImg from "assets/images/profile_av.png";
 import { useAuth } from "contexts/AuthContext";
 import useApp from "hooks/useApp";
-
-type IState = { isAddUserModal: boolean };
-const INITIAL_STATE: IState = { isAddUserModal: false };
+import { profileName } from "utils/profileName";
+import { profileUserName } from "utils/profileUserName";
+import { profileEmail } from "utils/profileEmail";
 
 const Header: React.FC = () => {
-  const [state, setState] = useState<IState>(INITIAL_STATE);
   const { push } = useApp();
-  const { setSession } = useAuth();
+  const { session, setSession } = useAuth();
 
   const handleLogout = () => {
     setSession(null);
@@ -34,29 +29,6 @@ const Header: React.FC = () => {
       <nav className="navbar py-4">
         <div className="container-xxl">
           <div className="h-right d-flex align-items-center mr-5 mr-lg-0 order-1">
-            <div className="d-flex">
-              <Link
-                to="help"
-                className="nav-link text-primary collapsed"
-                title="Get Help"
-              >
-                <i className="icofont-info-square fs-5"></i>
-              </Link>
-              <div className="avatar-list avatar-list-stacked px-3 pointer">
-                <img className="avatar rounded-circle" src={Avatar2} alt="" />
-                <img className="avatar rounded-circle" src={Avatar1} alt="" />
-                <img className="avatar rounded-circle" src={Avatar3} alt="" />
-                <img className="avatar rounded-circle" src={Avatar4} alt="" />
-                <img className="avatar rounded-circle" src={Avatar7} alt="" />
-                <img className="avatar rounded-circle" src={Avatar8} alt="" />
-                <span
-                  className="avatar rounded-circle text-center pointer"
-                  onClick={() => setState({ isAddUserModal: true })}
-                >
-                  <i className="icofont-ui-add"></i>
-                </span>
-              </div>
-            </div>
             <Dropdown className="notifications">
               <Dropdown.Toggle
                 as="a"
@@ -197,7 +169,6 @@ const Header: React.FC = () => {
                     </div>
                   </div>
                   <a className="card-footer text-center border-top-0" href="#!">
-                    {" "}
                     View all notifications
                   </a>
                 </div>
@@ -205,10 +176,12 @@ const Header: React.FC = () => {
             </Dropdown>
             <Dropdown className="dropdown user-profile ml-2 ml-sm-3 d-flex align-items-center">
               <div className="u-info me-2">
-                <p className="mb-0 text-end line-height-sm ">
-                  <span className="font-weight-bold">Dylan Hunter</span>
+                <p className="mb-0 text-end line-height-sm">
+                  <span className="font-weight-bold">
+                    {profileName(session)}
+                  </span>
                 </p>
-                <small>Admin Profile</small>
+                <small>{profileUserName(session) + "profile"}</small>
               </div>
               <Dropdown.Toggle
                 as="a"
@@ -231,9 +204,11 @@ const Header: React.FC = () => {
                       />
                       <div className="flex-fill ms-3">
                         <p className="mb-0">
-                          <span className="font-weight-bold">Dylan Hunter</span>
+                          <span className="font-weight-bold">
+                            {profileName(session)}
+                          </span>
                         </p>
-                        <small className="">Dylan.hunter@gmail.com</small>
+                        <small className="">{profileEmail(session)}</small>
                       </div>
                     </div>
 
@@ -308,22 +283,10 @@ const Header: React.FC = () => {
                 aria-label="search"
                 aria-describedby="addon-wrapping"
               />
-              <button
-                type="button"
-                className="input-group-text add-member-top"
-                onClick={() => setState({ isAddUserModal: true })}
-              >
-                <i className="fa fa-plus"></i>
-              </button>
             </div>
           </div>
         </div>
       </nav>
-      {/* <AddNewUserModal
-        show={state.isAddUserModal}
-        onClose={() => setState({ isAddUserModal: false })}
-        modalHeader="Add New User"
-      /> */}
     </div>
   );
 };

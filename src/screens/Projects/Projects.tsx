@@ -38,18 +38,6 @@ import { Permission } from "enums/permission";
 
 interface Props {}
 
-enum ModelKeys {
-  NAME = "name",
-  CATEGORY = "category",
-  DESCRIPTION = "description",
-  START_DATE = "start_at",
-  END_DATE = "end_at",
-  ADMIN = "admin",
-  GROUP = "group",
-  FILE = "file",
-  FILES = "files",
-}
-
 interface State {
   isAddModal: boolean;
   isEditModal: boolean;
