@@ -45,7 +45,7 @@ const ViewTasksModal: React.FC<Props> = ({ onClose, show, modalHeader, project }
           <div className="d-flex justify-content-between" key={index}>
             <p className=" ms-2 text-dark"
               style={{ cursor: 'pointer' }}
-              onClick={() => push(`/dashboard/tasks/${task.id}`)}
+              onClick={() => push(`/dashboard/tasks/${task.id}/${task?.project!}`)}
             ><strong>{task.name}</strong></p>
             <p className={getBadge(task?.task_progress!) + " ms-2"}>{task.task_progress}</p>
 
@@ -57,7 +57,7 @@ const ViewTasksModal: React.FC<Props> = ({ onClose, show, modalHeader, project }
               <button
                 type="button"
                 className="btn btn-outline-secondary"
-                onClick={() => push(`/dashboard/tasks/${task.id}`)}
+                onClick={() => push(`/dashboard/tasks/${task.id}/${task?.project!}`)}
               >
                 <i className="icofont-edit text-success"></i>
               </button>

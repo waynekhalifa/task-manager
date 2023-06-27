@@ -10,20 +10,22 @@ export const useCreateEmployee = () => {
   });
 };
 
-export const employeeInput = (data: EmployeeCreateInput): EmployeeCreateInput => {
+export const employeeInput = (data: EmployeeCreateInput): any => {
   return {
+    useremployee: {
+      onboard_at: data.onboard_at!,
+      employee_id: data.employee_id!,
+      phone: data.phone!,
+      department: data.department!,
+      description: data.description!,
+      manager: data.manager!,
+    },
     first_name: data.first_name!,
     last_name: data.last_name!,
     username: data.username!,
     email: data.email!,
     password1: data.password1!,
     password2: data.password1!,
-    onboard_at: data.onboard_at!,
-    employee_id: data.employee_id!,
-    phone: data.phone!,
-    department: data.department!,
-    description: data.description!,
-    manager: data.manager!,
     user_permissions: data.user_permissions!
 
   }

@@ -5,6 +5,9 @@ import Comment from "components/common/Comment";
 import DeleteModal from "components/common/DeleteModal";
 import TaskModal from "components/common/TaskModal";
 import { TaskStatusBadge } from "enums/global";
+import { useGroupQuery } from "framework/Group/getAllGroups";
+import { useCategoriesQuery } from "framework/category/getAllCategories";
+import { useAssignedMembersQuery } from "framework/project/getAssignedMembers";
 import { useDeleteTask } from "framework/task/deleteTask";
 import { useSingleTask } from "framework/task/get-single-task";
 import { taskInput, useUpdateTask } from "framework/task/update-task";
@@ -12,11 +15,15 @@ import useApp from "hooks/useApp";
 import { useState } from "react";
 import { Dropdown } from "react-bootstrap";
 import EnquiresView from "screens/Tickets/TicketsView";
+import { CategoryUpdateInput } from "types/category";
+import { AssignedEmployee } from "types/employee";
+import { Group } from "types/group";
 import { SelectedTask } from "types/task";
-import { getBtn } from "utils/helper";
+import { getBtn, getCategory } from "utils/helper";
 
 interface Props {
   id: number;
+  projectId: number;
 }
 
 interface State {
@@ -38,6 +45,7 @@ const INITIAlIZE_DATA: State = {
 };
 
 const TaskDetails: React.FC<Props> = ({ id,
+  projectId
 }) => {
   const { push } = useApp();
   const [state, setState] = useState<State>(INITIAlIZE_DATA);
@@ -45,19 +53,39 @@ const TaskDetails: React.FC<Props> = ({ id,
   let { data, error, isLoading } = useSingleTask({ id });
   const { mutateAsync: updateTaskMutation } = useUpdateTask();
   const { mutateAsync: deleteTaskMutation } = useDeleteTask();
-  let user = {
-    id:1,
-    avatar: "https://via.placeholder.com/150",
-    post: "Teacher",
-    name: "John Doe",
-    department: "Academic Department",
 
-  };
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return null;
+  const { data: employeeData, error: employeeError, isLoading: employeeIsLoading } = useAssignedMembersQuery({ id: projectId });
+  const { data: groupData, error: groupError, isLoading: groupIsLoading } = useGroupQuery({});
+  let { data: categoriesData, error: errorCategories, isLoading: isLoadingCategories } = useCategoriesQuery({});
+
+  if (isLoading || employeeIsLoading || groupIsLoading || isLoadingCategories) return <div>Loading...</div>;
+  if (error || employeeError || groupError || errorCategories) return null;
 
   let task: any = data || {} as SelectedTask;
+  const assignedEmployees: AssignedEmployee[] = employeeData?.assignedEmployees?.data?.results || [];
+  let categories: CategoryUpdateInput[] =
+    categoriesData?.categories.data.results || [];
 
+  const assignedEmployeesOptions = assignedEmployees.map((employee: AssignedEmployee) => {
+    return {
+      label: employee.user.first_name + " " + employee.user.last_name,
+      value: employee.user.id,
+    };
+  }
+  );
+  assignedEmployeesOptions.unshift({ label: "Select Member", value: 0 });
+  let groups: Group[] = groupData?.groups?.data?.results || [];
+  let groupOptions = groups.map((group) => {
+    return {
+      label: group.name,
+      value: group.id,
+    };
+  }
+  );
+  groupOptions.unshift({
+    label: "Select Group",
+    value: 0,
+  });
   let comments = [
     {
       id: 1,
@@ -95,40 +123,8 @@ const TaskDetails: React.FC<Props> = ({ id,
       time: "2 hours ago"
     },
   ];
-  let members = [
-    {
 
-      label: "Select User",
-      value: 0,
-    },
-    {
-      label: "User 1",
-      value: 1,
-    },
-    {
-      label: "User 2",
-      value: 2,
-    },
-    {
-      label: "User 3",
-      value: 3,
-    },
-  ];
 
-  const groups = [
-    {
-      label: "Group1",
-      value: 1,
-    },
-    {
-      label: "Group2",
-      value: 1,
-    },
-    {
-      label: "Group2",
-      value: 1,
-    },
-  ]
   const handleModelData = (key: string, value: any) => {
     if (isEditModal) {
       setState({
@@ -266,11 +262,11 @@ const TaskDetails: React.FC<Props> = ({ id,
           </div>
           <div className="col-lg-8 col-md-12">
             <OurClients
-              id={user.id}
-              avatar={user.avatar}
-              post={user.post}
-              name={user.name}
-              department={user.department}
+              id={task.user.id}
+              avatar={task.user.avatar || "https://via.placeholder.com/150"}
+              post={task?.user?.email}
+              name={task?.user?.first_name + " " + task?.user?.last_name}
+              department={getCategory(categories, task.category)}
               onClickEdit={() => { }}
               onClickDelete={() => { }}
               details="lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -335,8 +331,8 @@ const TaskDetails: React.FC<Props> = ({ id,
         modelData={modelData}
         SelectedTask={task}
         onUpdate={editTask}
-        members={members}
-        groups={groups}
+        members={assignedEmployeesOptions}
+        groups={groupOptions}
       />
       <DeleteModal
         show={isDeleteModal}

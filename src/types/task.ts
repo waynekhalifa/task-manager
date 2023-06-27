@@ -1,3 +1,5 @@
+import { User } from "./employee";
+
 export interface Task {
   files: File[];
   name: string;
@@ -17,7 +19,7 @@ export interface SelectedTask {
   task_progress?: string;
   task_priority: string;
   created_at?: string;
-  user?: number;
+  user?: number | User;
   group?: any;
   project?: number;
   start_at?: string;

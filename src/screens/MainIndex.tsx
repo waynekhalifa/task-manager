@@ -70,6 +70,7 @@ const MainIndex: React.FC = () => {
             <Routes>
               <Route path="/" element={<Navigate to="summary" />} />
               <Route path=":slug/*" element={<DashboardIndex />} />
+              <Route path=":slug/:id/:projectId/*" element={<DashboardIndex />} />
               <Route path=":slug/:id/*" element={<DashboardIndex />} />
             </Routes>
           </Suspense>

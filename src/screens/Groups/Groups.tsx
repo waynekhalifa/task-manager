@@ -113,7 +113,7 @@ const Groups: React.FC<Props> = () => {
 
   const assignMember = async (employee: Employee) => {
     try {
-      Object.assign(modelData, { users: [...modelData.users, employee.id] });
+      Object.assign(modelData, { users: [...modelData.users, employee.user.id] });
       let createInput = groupInputUpdate(modelData);
       await updateMutation(createInput);
       closeModal(true);

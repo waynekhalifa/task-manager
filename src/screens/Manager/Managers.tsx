@@ -173,9 +173,9 @@ const Managers: React.FC<Props> = () => {
               <OurClients
                 id={manager?.id}
                 avatar={manager?.employee?.user?.avatar}
-                post={manager?.description}
+                post={manager?.employee?.description}
                 name={manager?.employee?.user?.first_name + " " + manager?.employee?.user?.last_name}
-                department={getCategory(departments, manager?.department)}
+                department={getCategory(departments, manager?.employee?.department)}
                 isMember={true}
               />
             </div>

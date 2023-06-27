@@ -10,6 +10,10 @@ import { SelectedProject } from "types/project";
 import { taskInput, useCreateTask } from "framework/task/create-task";
 import { useTaskQuery } from "framework/task/get-all-tasks";
 import { IOption } from "types/option";
+import { useGroupQuery } from "framework/Group/getAllGroups";
+import { Group } from "types/group";
+import { useEmployeesQuery } from "framework/employee/getAllEmployees";
+import { Employee } from "types/employee";
 
 
 
@@ -37,47 +41,40 @@ const Tasks: React.FC = () => {
 
   let { data: projectData, error: errorProjects, isLoading: loadingProjects } = useProjectsQuery({});
   let { data: taskData, error: errorTask, isLoading: loadingTasks } = useTaskQuery({});
-  let tasks: SelectedTask[] = taskData?.tasks.data.results || [];
-  if (loadingProjects || errorTask) return <div>Loading...</div>;
-  if (errorProjects || loadingTasks) return null;
-  let projects: SelectedProject[] = projectData?.projects.data.results || [];
-  let members = projectData?.projects.data.results[0].members || [
-    {
+  const { data: employeeData, error: employeeError, isLoading: employeeIsLoading } = useEmployeesQuery({});
 
-      label: "Select User",
-      value: 0,
-    },
-    {
-      label: "User 1",
-      value: 2,
-    },
-    {
-      label: "User 2",
-      value: 3,
-    },
-    {
-      label: "User 3",
-      value: 4,
-    },
-  ];
-  const groups = [
-    {
-      label: "Select Group",
-      value: 0,
-    },
-    {
-      label: "Group1",
-      value: 1,
-    },
-    {
-      label: "Group2",
-      value: 2,
-    },
-    {
-      label: "Group2",
-      value: 3,
-    },
-  ]
+  const { data: groupData, error: groupError, isLoading: groupIsLoading } = useGroupQuery({});
+  let tasks: SelectedTask[] = taskData?.tasks.data.results || [];
+  if (loadingProjects || errorTask || groupError || employeeError) return <div>Loading...</div>;
+  if (errorProjects || loadingTasks || groupIsLoading || employeeIsLoading) return null;
+  let projects: SelectedProject[] = projectData?.projects.data.results || [];
+
+  const assignedEmployees: Employee[] = employeeData?.employees?.data?.results || [];
+
+
+  const assignedEmployeesOptions = assignedEmployees.map((employee: Employee) => {
+    return {
+      label: employee.user.first_name + " " + employee.user.last_name,
+      value: employee.user.id,
+    };
+  }
+  );
+  assignedEmployeesOptions.unshift({ label: "Select Member", value: 0 });
+  let groups: Group[] = groupData?.groups?.data?.results || [];
+  let groupOptions = groups.map((group) => {
+    return {
+      label: group.name,
+      value: group.id,
+    };
+  }
+  );
+  groupOptions.unshift({
+    label: "Select Group",
+    value: 0,
+  });
+
+
+
   let projectsOptions: IOption[] = projects.map((project) => {
     return {
       label: project.name!,
@@ -128,27 +125,6 @@ const Tasks: React.FC = () => {
   };
 
 
-  // const handleAddUserModal = (task: SelectedTask) => {
-  //   setState({
-  //     ...state,
-  //     isAddUserModal: !isAddUserModal,
-  //     modalHeader: "Add User",
-  //     selectedTask: task
-  //   });
-  // };
-
-
-
-  // const handleAddCommentModal = (task: SelectedTask) => {
-  //   setState({
-  //     ...state,
-  //     isAddCommentModal: !isAddCommentModal,
-  //     modalHeader: "Add Comment",
-  //     selectedTask: task
-  //   });
-  // };
-
-
   const createTask = async () => {
     if (!modelData.name) {
       alert("Please enter name");
@@ -158,14 +134,7 @@ const Tasks: React.FC = () => {
       alert("Please select project");
       return;
     }
-    if (!modelData.group) {
-      alert("Please select group");
-      return;
-    }
-    if (!modelData.user) {
-      alert("Please select member");
-      return;
-    }
+    
 
     try {
       let createInput = taskInput(modelData);
@@ -225,8 +194,8 @@ const Tasks: React.FC = () => {
         projects={projectsOptions}
         modelData={modelData}
         onCreate={createTask}
-        members={members}
-        groups={groups}
+        members={assignedEmployeesOptions}
+        groups={groupOptions}
       />
     </div>
   );

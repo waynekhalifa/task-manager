@@ -14,7 +14,7 @@ const NestableCard: React.FC<Props> = ({ data }) => {
 
   return (
     <div className="dd-handle mt-2 pointer"
-      onClick={() => push(`/dashboard/tasks/${data.id}`)}
+      onClick={() => push(`/dashboard/tasks/${data.id}/${data?.project!}`)}
     >
       <div className="task-info d-flex align-items-center justify-content-between">
         <h6

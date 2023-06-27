@@ -73,7 +73,7 @@ const Member: React.FC<Props> = ({ groups, employees, departments, project }) =>
   const assignMember = async (employee: Employee) => {
     try {
       const createInput = createAssignInput({
-        user: employee.id,
+        user: employee?.user?.id,
         project: project?.id!,
       });
       await AssignMemberMutation(createInput)
