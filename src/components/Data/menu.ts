@@ -8,6 +8,7 @@ export const menu: any[] = [
     isCategory: false,
     isApp: false,
     children: [],
+    roles: ["manager", "superuser"]
   },
   {
     name: "Project Management",
@@ -18,6 +19,7 @@ export const menu: any[] = [
     isCategory: false,
     isApp: false,
     children: [],
+    roles: ["manager", "superuser"]
   },
   {
     name: "Task Management",
@@ -28,6 +30,7 @@ export const menu: any[] = [
     isCategory: false,
     isApp: false,
     children: [],
+    roles: ["manager", "superuser", "employee"]
   },
   // {
   //   name: "Enquires",
@@ -48,6 +51,7 @@ export const menu: any[] = [
     isCategory: false,
     isApp: true,
     children: [],
+    roles: ["superuser"]
   },
   {
     name: "Managers",
@@ -58,6 +62,7 @@ export const menu: any[] = [
     isCategory: false,
     isApp: true,
     children: [],
+    roles: ["superuser"]
   },
   {
     name: "Groups",
@@ -68,6 +73,7 @@ export const menu: any[] = [
     isCategory: false,
     isApp: true,
     children: [],
+    roles: ["manager", "superuser"]
   },
   {
     name: "Chat",
@@ -78,6 +84,7 @@ export const menu: any[] = [
     isCategory: false,
     isApp: true,
     children: [],
+    roles: ["manager", "superuser", 'employee']
   },
   {
     name: "Attendance",
@@ -88,6 +95,7 @@ export const menu: any[] = [
     isCategory: false,
     isApp: true,
     children: [],
+    roles: ["manager", "superuser", 'employee']
   },
   {
     name: "Calendar",
@@ -98,6 +106,7 @@ export const menu: any[] = [
     isCategory: false,
     isApp: true,
     children: [],
+    roles: ["manager", "superuser", 'employee']
   },
   {
     name: "Departments",
@@ -108,5 +117,6 @@ export const menu: any[] = [
     isCategory: false,
     isApp: true,
     children: [],
+    roles: ["superuser"]
   },
 ];

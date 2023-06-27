@@ -5,6 +5,7 @@ import Logo from "../../assets/images/logo.png";
 import useApp from "hooks/useApp";
 import { menu } from "components/Data/menu";
 import { menu2 } from "components/Data/menu2";
+import { checkRole } from "utils/helper";
 
 type IState = {
   isSidebarMini: boolean;
@@ -128,9 +129,8 @@ const Sidebar: React.FC = () => {
   return (
     <div
       id="mainSideMenu"
-      className={`sidebar px-4 py-4 py-md-5 me-0 ${
-        isSidebarMini ? "sidebar-mini" : ""
-      }`}
+      className={`sidebar px-4 py-4 py-md-5 me-0 ${isSidebarMini ? "sidebar-mini" : ""
+        }`}
     >
       <div className="d-flex flex-column h-100">
         <a href="hr-dashboard" className="mb-0 brand-icon">
@@ -141,6 +141,7 @@ const Sidebar: React.FC = () => {
         </a>
         <ul className="menu-list flex-grow-1 mt-3">
           {menuData.map((d: any, i: any) => {
+            if (!checkRole(d.roles)) return null;
             if (d.isToggled) {
               return (
                 <li key={"shsdg" + i}>
@@ -163,9 +164,8 @@ const Sidebar: React.FC = () => {
                 <li key={"dsfshsdg" + i} className=" collapsed">
                   <Link
                     to={d.routerLink[0]}
-                    className={`m-link ${
-                      d.routerLink[0] === activekey ? "active" : ""
-                    }`}
+                    className={`m-link ${d.routerLink[0] === activekey ? "active" : ""
+                      }`}
                   >
                     <i className={d.iconClass}></i>
                     <span>{d.name}</span>
@@ -177,13 +177,12 @@ const Sidebar: React.FC = () => {
             return (
               <li key={"shsdg" + i} className=" collapsed">
                 <a
-                  className={`m-link ${
-                    d.children.filter(
-                      (d: any) => "/" + d.routerLink[0] === activekey
-                    ).length > 0
+                  className={`m-link ${d.children.filter(
+                    (d: any) => "/" + d.routerLink[0] === activekey
+                  ).length > 0
                       ? "active"
                       : ""
-                  }`}
+                    }`}
                   href="#!"
                   onClick={(e) => {
                     e.preventDefault();
