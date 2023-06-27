@@ -50,8 +50,6 @@ const EmployeeModal: React.FC<Props> = ({
   if (error) return <div>Something went wrong</div>;
   const permissions: Permission[] = data?.permissions?.data?.results || [];
 
-  console.log("permissions", permissions);
-
   const formFields: IField[] = [
     {
       label: "First Name",
@@ -175,11 +173,13 @@ const EmployeeModal: React.FC<Props> = ({
         return null;
     }
   };
+
   const getReadPermission = (permissions: Permission[]): Permission | null => {
     return (
       permissions.find((permission) => checkReadPermission(permission)) || null
     );
   };
+
   const handleTable = (): JSX.Element => {
     let CustomizedPermissions: CustomPermission[] = [];
     permissions.forEach((permission) => {
