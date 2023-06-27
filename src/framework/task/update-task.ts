@@ -14,16 +14,17 @@ export const useUpdateTask = () => {
 };
 
 export const taskInput = (data: SelectedTask): SelectedTask => {
-  return {
+  let result = {
     id: data.id,
     project: data.project,
     name: data.name,
     description: data.description,
     task_priority: data.task_priority,
     task_progress: data.task_progress,
-    user: data.user,
     group: data?.group?.id,
     start_at: data.start_at,
     end_at: data.end_at,
   } as SelectedTask;
+  if (data.user) Object.assign(result, { user: data.user })
+  return result;
 };

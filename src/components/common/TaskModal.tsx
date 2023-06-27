@@ -62,7 +62,7 @@ const TaskModal: React.FC<Props> = ({ onClose, modalHeader, isAddModal,
       onChange: (e: any) => handleModelData(ModelKeys.PROJECT, e.target.value),
       placeholder: "Select Project",
       disabled: selectedProject ? true : false,
-      hide: selectedProject ? true : false,
+      hide: isEditModal ? true : false,
     },
     {
       label: "Task Name",
@@ -138,6 +138,7 @@ const TaskModal: React.FC<Props> = ({ onClose, modalHeader, isAddModal,
       onChange: (e: any) => handleModelData(ModelKeys.GROUP, e.target.value),
       options: groups,
       placeholder: "Select Group",
+      hide: isEditModal ? true : false,
     },
     {
       label: "Assign To",
@@ -147,6 +148,7 @@ const TaskModal: React.FC<Props> = ({ onClose, modalHeader, isAddModal,
       options: members,
       onChange: (e: any) => handleModelData(ModelKeys.USER, e.target.value),
       placeholder: "Select User",
+      hide: isEditModal ? true : false,
     }
 
 

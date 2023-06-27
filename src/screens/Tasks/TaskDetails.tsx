@@ -1,5 +1,6 @@
 import OurClients from "components/Clients/OurClients";
 import NestableCard from "components/Tasks/NestableCard";
+import AddNewUserModal from "components/common/AddNewUserModal";
 import Attachment from "components/common/Attachment";
 import Comment from "components/common/Comment";
 import DeleteModal from "components/common/DeleteModal";
@@ -7,7 +8,7 @@ import TaskModal from "components/common/TaskModal";
 import { TaskStatusBadge } from "enums/global";
 import { useGroupQuery } from "framework/Group/getAllGroups";
 import { useCategoriesQuery } from "framework/category/getAllCategories";
-import { useAssignedMembersQuery } from "framework/project/getAssignedMembers";
+import { useEmployeesQuery } from "framework/employee/getAllEmployees";
 import { useDeleteTask } from "framework/task/deleteTask";
 import { useSingleTask } from "framework/task/get-single-task";
 import { taskInput, useUpdateTask } from "framework/task/update-task";
@@ -16,7 +17,7 @@ import { useState } from "react";
 import { Dropdown } from "react-bootstrap";
 import EnquiresView from "screens/Tickets/TicketsView";
 import { CategoryUpdateInput } from "types/category";
-import { AssignedEmployee } from "types/employee";
+import { Employee } from "types/employee";
 import { Group } from "types/group";
 import { SelectedTask } from "types/task";
 import { getBtn, getCategory } from "utils/helper";
@@ -54,7 +55,8 @@ const TaskDetails: React.FC<Props> = ({ id,
   const { mutateAsync: updateTaskMutation } = useUpdateTask();
   const { mutateAsync: deleteTaskMutation } = useDeleteTask();
 
-  const { data: employeeData, error: employeeError, isLoading: employeeIsLoading } = useAssignedMembersQuery({ id: projectId });
+  // const { data: employeeData, error: employeeError, isLoading: employeeIsLoading } = useAssignedMembersQuery({ id: projectId });
+  const { data: employeeData, error: employeeError, isLoading: employeeIsLoading } = useEmployeesQuery({});
   const { data: groupData, error: groupError, isLoading: groupIsLoading } = useGroupQuery({});
   let { data: categoriesData, error: errorCategories, isLoading: isLoadingCategories } = useCategoriesQuery({});
 
@@ -62,11 +64,11 @@ const TaskDetails: React.FC<Props> = ({ id,
   if (error || employeeError || groupError || errorCategories) return null;
 
   let task: any = data || {} as SelectedTask;
-  const assignedEmployees: AssignedEmployee[] = employeeData?.assignedEmployees?.data?.results || [];
+  const assignedEmployees: Employee[] = employeeData?.employees?.data?.results || [];
   let categories: CategoryUpdateInput[] =
     categoriesData?.categories.data.results || [];
 
-  const assignedEmployeesOptions = assignedEmployees.map((employee: AssignedEmployee) => {
+  const assignedEmployeesOptions = assignedEmployees.map((employee: Employee) => {
     return {
       label: employee.user.first_name + " " + employee.user.last_name,
       value: employee.user.id,
@@ -145,6 +147,15 @@ const TaskDetails: React.FC<Props> = ({ id,
     }));
   };
 
+  const handleAddUserModal = () => {
+    setState({
+      ...state,
+      isAddUserModal: !isAddUserModal,
+      modalHeader: "Add User",
+    });
+
+  };
+
 
 
   const handleModalClose = (reload: boolean = false) => {
@@ -182,20 +193,21 @@ const TaskDetails: React.FC<Props> = ({ id,
   };
 
   const editTask = async () => {
-    let createInput = taskInput(modelData);
-    await updateTaskMutation(createInput);
-    handleModalClose(true);
     try {
+      let createInput = taskInput(modelData);
+      await updateTaskMutation(createInput);
+      handleModalClose(true);
     } catch (error) {
       alert(error);
     }
   };
 
   const updateTaskProgress = async (progress: string) => {
-    let createInput = taskInput({ ...task, task_progress: progress });
-    await updateTaskMutation(createInput);
-    handleModalClose(true);
+
     try {
+      let createInput = taskInput({ ...task, task_progress: progress });
+      await updateTaskMutation(createInput);
+      handleModalClose(true);
     } catch (error) {
       alert(error);
     }
@@ -205,6 +217,16 @@ const TaskDetails: React.FC<Props> = ({ id,
     try {
       await deleteTaskMutation(task);
       push("/dashboard/tasks");
+    } catch (err) {
+      alert(err);
+    }
+  };
+
+  const assignMember = async (employee: Employee) => {
+    try {
+      let createInput = taskInput({ ...task, user: employee?.user?.id });
+      await updateTaskMutation(createInput);
+      handleModalClose(true);
     } catch (err) {
       alert(err);
     }
@@ -267,12 +289,12 @@ const TaskDetails: React.FC<Props> = ({ id,
               post={task?.user?.email}
               name={task?.user?.first_name + " " + task?.user?.last_name}
               department={getCategory(categories, task.category)}
-              onClickEdit={() => { }}
-              onClickDelete={() => { }}
+              onAssign={handleAddUserModal}
               details="lorem ipsum dolor sit amet, consectetur adipiscing elit.
               Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.              
               "
             />
+           
           </div>
           <div className="col-12">
             <div className="card">
@@ -340,6 +362,15 @@ const TaskDetails: React.FC<Props> = ({ id,
         onDelete={deleteTask}
         message="Are you sure you want to delete this Task?"
         modalHeader={modalHeader}
+      />
+      <AddNewUserModal
+        show={isAddUserModal}
+        onClose={handleModalClose}
+        modalHeader={modalHeader}
+        employees={assignedEmployees}
+        // groups={groups}
+        departments={categories}
+        onSelect={assignMember}
       />
     </div>
   );

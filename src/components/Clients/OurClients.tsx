@@ -8,6 +8,7 @@ interface Props {
   isMember?: any;
   onClickEdit?: any;
   onClickDelete?: any;
+  onAssign?: () => void;
   details?: any;
   id: number;
 }
@@ -21,6 +22,7 @@ const OurClients: React.FC<Props> = ({
   onClickEdit,
   onClickDelete,
   details,
+  onAssign,
   id
 }) => {
   return (
@@ -36,6 +38,9 @@ const OurClients: React.FC<Props> = ({
             <h6 className="mb-0 fw-bold d-block fs-6 mt-2">
               {getShortString(name, 50)}
             </h6>
+            <button className="btn btn-primary mt-3"
+              onClick={onAssign}
+            >Assign Member</button>
             {/* <div className="d-flex flex-wrap align-items-center justify-content-center mt-3">
               <button
                 type="button"
