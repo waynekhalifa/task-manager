@@ -194,6 +194,7 @@ const TaskDetails: React.FC<Props> = ({ id,
 
   const editTask = async () => {
     try {
+      delete modelData?.user;
       let createInput = taskInput(modelData);
       await updateTaskMutation(createInput);
       handleModalClose(true);
@@ -294,7 +295,7 @@ const TaskDetails: React.FC<Props> = ({ id,
               Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.              
               "
             />
-           
+
           </div>
           <div className="col-12">
             <div className="card">
