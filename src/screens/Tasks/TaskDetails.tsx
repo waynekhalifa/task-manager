@@ -45,35 +45,49 @@ const INITIAlIZE_DATA: State = {
   modelData: {},
 };
 
-const TaskDetails: React.FC<Props> = ({ id,
-  projectId
-}) => {
+const TaskDetails: React.FC<Props> = ({ id, projectId }) => {
   const { push } = useApp();
   const [state, setState] = useState<State>(INITIAlIZE_DATA);
-  const { modelData, isEditModal, isDeleteModal, isAddUserModal, modalHeader } = state;
+  const { modelData, isEditModal, isDeleteModal, isAddUserModal, modalHeader } =
+    state;
   let { data, error, isLoading } = useSingleTask({ id });
   const { mutateAsync: updateTaskMutation } = useUpdateTask();
   const { mutateAsync: deleteTaskMutation } = useDeleteTask();
 
   // const { data: employeeData, error: employeeError, isLoading: employeeIsLoading } = useAssignedMembersQuery({ id: projectId });
-  const { data: employeeData, error: employeeError, isLoading: employeeIsLoading } = useEmployeesQuery({});
-  const { data: groupData, error: groupError, isLoading: groupIsLoading } = useGroupQuery({});
-  let { data: categoriesData, error: errorCategories, isLoading: isLoadingCategories } = useCategoriesQuery({});
+  const {
+    data: employeeData,
+    error: employeeError,
+    isLoading: employeeIsLoading,
+  } = useEmployeesQuery({});
+  const {
+    data: groupData,
+    error: groupError,
+    isLoading: groupIsLoading,
+  } = useGroupQuery({});
+  let {
+    data: categoriesData,
+    error: errorCategories,
+    isLoading: isLoadingCategories,
+  } = useCategoriesQuery({});
 
-  if (isLoading || employeeIsLoading || groupIsLoading || isLoadingCategories) return <div>Loading...</div>;
+  if (isLoading || employeeIsLoading || groupIsLoading || isLoadingCategories)
+    return <div>Loading...</div>;
   if (error || employeeError || groupError || errorCategories) return null;
 
-  let task: any = data || {} as SelectedTask;
-  const assignedEmployees: Employee[] = employeeData?.employees?.data?.results || [];
+  let task: any = data || ({} as SelectedTask);
+  const assignedEmployees: Employee[] =
+    employeeData?.employees?.data?.results || [];
   let categories: CategoryUpdateInput[] =
     categoriesData?.categories.data.results || [];
 
-  const assignedEmployeesOptions = assignedEmployees.map((employee: Employee) => {
-    return {
-      label: employee.user.first_name + " " + employee.user.last_name,
-      value: employee.user.id,
-    };
-  }
+  const assignedEmployeesOptions = assignedEmployees.map(
+    (employee: Employee) => {
+      return {
+        label: employee.user.first_name + " " + employee.user.last_name,
+        value: employee.user.id,
+      };
+    }
   );
   assignedEmployeesOptions.unshift({ label: "Select Member", value: 0 });
   let groups: Group[] = groupData?.groups?.data?.results || [];
@@ -82,8 +96,7 @@ const TaskDetails: React.FC<Props> = ({ id,
       label: group.name,
       value: group.id,
     };
-  }
-  );
+  });
   groupOptions.unshift({
     label: "Select Group",
     value: 0,
@@ -93,39 +106,43 @@ const TaskDetails: React.FC<Props> = ({ id,
       id: 1,
       name: "John Doe",
       avatar: "https://via.placeholder.com/150",
-      comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.",
-      time: "2 hours ago"
+      comment:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.",
+      time: "2 hours ago",
     },
     {
       id: 2,
       name: "John Doe",
       avatar: "https://via.placeholder.com/150",
-      comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.",
-      time: "2 hours ago"
+      comment:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.",
+      time: "2 hours ago",
     },
     {
       id: 3,
       name: "John Doe",
       avatar: "https://via.placeholder.com/150",
-      comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.",
-      time: "2 hours ago"
+      comment:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.",
+      time: "2 hours ago",
     },
     {
       id: 4,
       name: "John Doe",
       avatar: "https://via.placeholder.com/150",
-      comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.",
-      time: "2 hours ago"
+      comment:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.",
+      time: "2 hours ago",
     },
     {
       id: 5,
       name: "John Doe",
       avatar: "https://via.placeholder.com/150",
-      comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.",
-      time: "2 hours ago"
+      comment:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.",
+      time: "2 hours ago",
     },
   ];
-
 
   const handleModelData = (key: string, value: any) => {
     if (isEditModal) {
@@ -153,10 +170,7 @@ const TaskDetails: React.FC<Props> = ({ id,
       isAddUserModal: !isAddUserModal,
       modalHeader: "Add User",
     });
-
   };
-
-
 
   const handleModalClose = (reload: boolean = false) => {
     if (reload) {
@@ -171,16 +185,14 @@ const TaskDetails: React.FC<Props> = ({ id,
     });
   };
 
-
   const handleEditModal = () => {
     setState({
       ...state,
       isEditModal: !isEditModal,
       modalHeader: "Edit Task",
       selectedTask: task,
-      modelData: task
+      modelData: task,
     });
-
   };
 
   const handleDeleteModal = () => {
@@ -188,7 +200,7 @@ const TaskDetails: React.FC<Props> = ({ id,
       ...state,
       isDeleteModal: !isDeleteModal,
       modalHeader: "Delete Task",
-      selectedTask: task
+      selectedTask: task,
     });
   };
 
@@ -204,7 +216,6 @@ const TaskDetails: React.FC<Props> = ({ id,
   };
 
   const updateTaskProgress = async (progress: string) => {
-
     try {
       let createInput = taskInput({ ...task, task_progress: progress });
       await updateTaskMutation(createInput);
@@ -233,51 +244,96 @@ const TaskDetails: React.FC<Props> = ({ id,
     }
   };
 
-
   return (
-    <div style={{
-      backgroundColor: "#F5F6FA",
-      minHeight: "100vh",
-      padding: 20,
-    }}>
-
+    <div
+      style={{
+        backgroundColor: "#F5F6FA",
+        minHeight: "100vh",
+        padding: 20,
+      }}
+    >
       <div className="container-xxl">
         <div className="d-flex justify-content-between mb-3">
           <h2>Task Details</h2>
           <div className="d-flex justify-content-between mb-3">
-            <Dropdown className="d-inline-flex m-1" >
-              <Dropdown.Toggle as="a" variant="" id="dropdown-basic" className={getBtn(task.task_progress)}>
+            <Dropdown className="d-inline-flex m-1">
+              <Dropdown.Toggle
+                as="a"
+                variant=""
+                id="dropdown-basic"
+                className={getBtn(task.task_progress)}
+              >
                 {task.task_progress}
               </Dropdown.Toggle>
-
               <Dropdown.Menu as="ul" className="border-0 shadow bg-primary">
-                {task.task_progress !== TaskStatusBadge.TODO && <li><a className="dropdown-item py-2 rounded text-light" href="#!" onClick={(e) => {
-                  e.preventDefault();
-                  updateTaskProgress(TaskStatusBadge.TODO);
-                }}>
-                  {TaskStatusBadge.TODO}</a></li>}
-                {task.task_progress !== TaskStatusBadge.ON_PROGRESS && <li><a className="dropdown-item py-2 rounded text-light" href="#!" onClick={(e) => {
-                  e.preventDefault();
-                  updateTaskProgress(TaskStatusBadge.ON_PROGRESS);
-                }}>{TaskStatusBadge.ON_PROGRESS}</a></li>}
-                {task.task_progress !== TaskStatusBadge.ON_REVIEW && <li><a className="dropdown-item py-2 rounded text-light" href="#!" onClick={(e) => {
-                  e.preventDefault();
-                  updateTaskProgress(TaskStatusBadge.ON_REVIEW);
-                }}>{TaskStatusBadge.ON_REVIEW}</a></li>}
-                {task.task_progress !== TaskStatusBadge.COMPLETED && <li><a className="dropdown-item py-2 rounded text-light" href="#!" onClick={(e) => {
-                  e.preventDefault();
-                  updateTaskProgress(TaskStatusBadge.COMPLETED);
-                }}>{TaskStatusBadge.COMPLETED}</a></li>}
+                {task.task_progress !== TaskStatusBadge.TODO && (
+                  <li>
+                    <a
+                      className="dropdown-item py-2 rounded text-light"
+                      href="#!"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        updateTaskProgress(TaskStatusBadge.TODO);
+                      }}
+                    >
+                      {TaskStatusBadge.TODO}
+                    </a>
+                  </li>
+                )}
+                {task.task_progress !== TaskStatusBadge.ON_PROGRESS && (
+                  <li>
+                    <a
+                      className="dropdown-item py-2 rounded text-light"
+                      href="#!"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        updateTaskProgress(TaskStatusBadge.ON_PROGRESS);
+                      }}
+                    >
+                      {TaskStatusBadge.ON_PROGRESS}
+                    </a>
+                  </li>
+                )}
+                {task.task_progress !== TaskStatusBadge.ON_REVIEW && (
+                  <li>
+                    <a
+                      className="dropdown-item py-2 rounded text-light"
+                      href="#!"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        updateTaskProgress(TaskStatusBadge.ON_REVIEW);
+                      }}
+                    >
+                      {TaskStatusBadge.ON_REVIEW}
+                    </a>
+                  </li>
+                )}
+                {task.task_progress !== TaskStatusBadge.COMPLETED && (
+                  <li>
+                    <a
+                      className="dropdown-item py-2 rounded text-light"
+                      href="#!"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        updateTaskProgress(TaskStatusBadge.COMPLETED);
+                      }}
+                    >
+                      {TaskStatusBadge.COMPLETED}
+                    </a>
+                  </li>
+                )}
               </Dropdown.Menu>
             </Dropdown>
-            <button className="btn btn-primary  m-1"
-              onClick={handleEditModal}
-            >Edit</button>
-            <button className="btn btn-danger text-white m-1"
+            <button className="btn btn-primary  m-1" onClick={handleEditModal}>
+              Edit
+            </button>
+            <button
+              className="btn btn-danger text-white m-1"
               onClick={handleDeleteModal}
-            >Delete</button>
+            >
+              Delete
+            </button>
           </div>
-
         </div>
         <div className="row g-3 mb-3 mt-3">
           <div className="col-lg-4 col-md-12">
@@ -295,7 +351,6 @@ const TaskDetails: React.FC<Props> = ({ id,
               Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.              
               "
             />
-
           </div>
           <div className="col-12">
             <div className="card">
@@ -309,17 +364,19 @@ const TaskDetails: React.FC<Props> = ({ id,
           <div className="col-12">
             <div className="card">
               <div className="card-body">
-                <h5 className="card-title text-primary"><strong>Attachments</strong></h5>
-                <Attachment
-                  task={task}
-                />
+                <h5 className="card-title text-primary">
+                  <strong>Attachments</strong>
+                </h5>
+                <Attachment task={task} />
               </div>
             </div>
           </div>
           <div className="col-12">
             <div className="card">
               <div className="card-body">
-                <h5 className="card-title text-primary"><strong>Tickets</strong></h5>
+                <h5 className="card-title text-primary">
+                  <strong>Tickets</strong>
+                </h5>
                 <EnquiresView />
               </div>
             </div>
@@ -336,8 +393,20 @@ const TaskDetails: React.FC<Props> = ({ id,
                   ))}
                   <div className="col-md-12">
                     <div className="input-group mb-3">
-                      <input type="text" className="form-control" placeholder="Comment" aria-label="Comment" aria-describedby="button-addon2" />
-                      <button className="btn btn-outline-secondary" type="button" id="button-addon2">Send</button>
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Comment"
+                        aria-label="Comment"
+                        aria-describedby="button-addon2"
+                      />
+                      <button
+                        className="btn btn-outline-secondary"
+                        type="button"
+                        id="button-addon2"
+                      >
+                        Send
+                      </button>
                     </div>
                   </div>
                 </div>

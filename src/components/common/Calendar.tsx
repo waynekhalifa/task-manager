@@ -16,8 +16,6 @@ const Calendar: React.FC<Props> = ({ tasks }) => {
   const { showDetails, selectedEvent } = state;
   const calendarData: any[] = [];
 
-  console.log({ tasks });
-
   for (let i = 0; i < tasks.length; i++) {
     calendarData.push({
       type: "task",
