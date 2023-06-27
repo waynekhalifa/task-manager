@@ -1,5 +1,5 @@
 export interface CreateGroup {
-   name: string;
+  name: string;
   permissions: number[];
   description: string;
   users: number[];

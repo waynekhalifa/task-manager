@@ -12,6 +12,8 @@ import DeleteModal from "components/common/DeleteModal";
 import AddNewUserModal from "components/common/AddNewUserModal";
 import { useCategoriesQuery } from "framework/category/getAllCategories";
 import { CategoryUpdateInput } from "types/category";
+import { useDeleteGroup } from "framework/Group/deleteGroup";
+import { groupInputUpdate, useUpdateGroup } from "framework/Group/updateGroup";
 
 interface Props { }
 
@@ -23,7 +25,6 @@ interface State {
   isAssignModal: boolean;
   modelData: Group;
   modalHeader: string;
-
 }
 
 const INITIAlIZE_DATA: State = {
@@ -40,6 +41,8 @@ const Groups: React.FC<Props> = () => {
   const [state, setState] = useState<State>(INITIAlIZE_DATA);
   const { isAddModal, isEditModal, isDeleteModal, isAssignModal, modelData, modalHeader } = state;
   const { mutateAsync: createMutation } = useCreateGroup();
+  const { mutateAsync: deleteMutation } = useDeleteGroup();
+  const { mutateAsync: updateMutation } = useUpdateGroup();
 
   const { data: groupData, error: groupError, isLoading: groupIsLoading } = useGroupQuery({});
   const { data: employeeData, error: employeeError, isLoading: employeeIsLoading } = useEmployeesQuery({});
@@ -108,9 +111,12 @@ const Groups: React.FC<Props> = () => {
   };
 
 
-  const assignMember = async () => {
+  const assignMember = async (employee: Employee) => {
     try {
-
+      Object.assign(modelData, { users: [...modelData.users, employee.id] });
+      let createInput = groupInputUpdate(modelData);
+      await updateMutation(createInput);
+      closeModal(true);
     } catch (err) {
       alert(err);
     }
@@ -131,7 +137,8 @@ const Groups: React.FC<Props> = () => {
 
   const updateGroup = async () => {
     try {
-      // await updateMutation(modelData.id, modelData);
+      let createInput = groupInputUpdate(modelData);
+      await updateMutation(createInput);
       closeModal(true);
     } catch (err) {
       alert(err);
@@ -140,8 +147,9 @@ const Groups: React.FC<Props> = () => {
 
   const deleteGroup = async () => {
     try {
-      // await deleteMutation(modelData.id);
-      closeModal(true);
+      await deleteMutation({ id: modelData.id });
+      groups = groups.filter((item) => item.id !== modelData.id);
+      closeModal();
     } catch (err) {
       alert(err);
     }

@@ -73,6 +73,7 @@ const GroupModal: React.FC<Props> = ({
         }
       },
       placeholder: "Select Member",
+      disabled: isEdit,
     },
     {
       label: "Description",
@@ -194,7 +195,7 @@ const GroupModal: React.FC<Props> = ({
           Cancel
         </button>
         <button type="button" className="btn btn-primary"
-          onClick={isEdit? onUpdate : onCreate}
+          onClick={isEdit ? onUpdate : onCreate}
         >
           {isEdit ? "Update" : "Create"}
         </button>

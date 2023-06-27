@@ -1,20 +1,26 @@
 import { useMutation } from "@tanstack/react-query";
 import { Endpoints } from "enums/endpoints";
-import { EmployeeUpdateInput } from "types/employee";
+import { Group } from "types/group";
 import http from "utils/http";
 
-export const useUpdateEmployee = () => {
-  return useMutation<any, Error, EmployeeUpdateInput>(async updateInput => {
-    const { data } = await http.post(
-      Endpoints.EMPLOYEE + updateInput.id + "/",
+export const useUpdateGroup = () => {
+  return useMutation<any, Error, Group>(async updateInput => {
+    const { data } = await http.patch(
+      Endpoints.GROUP + updateInput.id + "/",
       updateInput
     );
     return { session: { data: data as any } };
   });
 };
 
-export const employeeInput = (
-  data: EmployeeUpdateInput
-): EmployeeUpdateInput => {
-  return { project: data.project, user: data.user };
+export const groupInputUpdate = (
+  data: Group
+): Group => {
+  return {
+    id: data.id,
+    name: data.name,
+    permissions: data.permissions,
+    description: data.description,
+    users: data.users
+  };
 };

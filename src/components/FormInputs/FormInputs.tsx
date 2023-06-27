@@ -33,7 +33,9 @@ const FormInputs: React.FC<Props> = ({ formFields, grid }) => {
                 <Form.Group as={Col} controlId="my_multiselect_field" hidden={formInfo.hide}
                   disabled={formInfo.disabled}
                 >
-                  <Form.Control as="select" multiple value={formInfo.value} onChange={formInfo.onChange}>
+                  <Form.Control as="select" multiple value={formInfo.value} onChange={formInfo.onChange}
+                    disabled={formInfo.disabled}
+                  >
                     {formInfo.options?.map((option: any, i: number) => {
                       return <option key={"key" + i} value={option.value} >
                         {option.label}
