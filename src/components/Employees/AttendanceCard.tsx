@@ -76,6 +76,17 @@ const AttendanceCard: React.FC<Props> = ({ data }) => {
                             getHoursDiff(
                               new Date(login_time),
                               new Date(logout_time)
+                            ) >= 8
+                          )
+                            return (
+                              <th key={day} className="text-center">
+                                <i className="icofont-check-circled text-success"></i>
+                              </th>
+                            );
+                          else if (
+                            getHoursDiff(
+                              new Date(login_time),
+                              new Date(logout_time)
                             ) <= 8
                           )
                             return (
@@ -86,7 +97,7 @@ const AttendanceCard: React.FC<Props> = ({ data }) => {
 
                           return (
                             <th key={day} className="text-center">
-                              <i className="icofont-check-circled text-success"></i>
+                              <i className="icofont-check-circled text-warning"></i>
                             </th>
                           );
                         }
