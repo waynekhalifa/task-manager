@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Dropdown } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import PageHeader from "components/common/PageHeader";
 import AttendanceCard from "components/Employees/AttendanceCard";
 import { useAttendanceQuery } from "framework/attendance/getAllAttendance";
@@ -28,39 +28,40 @@ const Attendance: React.FC<Props> = () => {
             headerTitle="Attendance (Admin)"
             renderRight={() => {
               return (
-                <div className="col-auto d-flex w-sm-100">
-                  <button
-                    type="button"
-                    className="btn btn-dark  w-sm-100 me-2"
-                    onClick={() => {
-                      setState({ ...state, isModal: true });
-                    }}
-                  >
-                    <i className="icofont-edit me-2 fs-6"></i>Edit Attendance
-                  </button>
-                  <Dropdown>
-                    <Dropdown.Toggle as="button" className="btn btn-primary ">
-                      Filter
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu as="ul" className="dropdown-menu-end">
-                      <li>
-                        <a className="dropdown-item" href="#!">
-                          All
-                        </a>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="#!">
-                          Today Absent
-                        </a>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="#!">
-                          Week Absent
-                        </a>
-                      </li>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div>
+                // <div className="col-auto d-flex w-sm-100">
+                //   <button
+                //     type="button"
+                //     className="btn btn-dark  w-sm-100 me-2"
+                //     onClick={() => {
+                //       setState({ ...state, isModal: true });
+                //     }}
+                //   >
+                //     <i className="icofont-edit me-2 fs-6"></i>Edit Attendance
+                //   </button>
+                //   <Dropdown>
+                //     <Dropdown.Toggle as="button" className="btn btn-primary ">
+                //       Filter
+                //     </Dropdown.Toggle>
+                //     <Dropdown.Menu as="ul" className="dropdown-menu-end">
+                //       <li>
+                //         <a className="dropdown-item" href="#!">
+                //           All
+                //         </a>
+                //       </li>
+                //       <li>
+                //         <a className="dropdown-item" href="#!">
+                //           Today Absent
+                //         </a>
+                //       </li>
+                //       <li>
+                //         <a className="dropdown-item" href="#!">
+                //           Week Absent
+                //         </a>
+                //       </li>
+                //     </Dropdown.Menu>
+                //   </Dropdown>
+                // </div>
+                null
               );
             }}
           />
