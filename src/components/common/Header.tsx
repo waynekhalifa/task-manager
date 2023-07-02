@@ -177,7 +177,7 @@ const Header: React.FC = () => {
               <div className="u-info me-2">
                 <p className="mb-0 text-end line-height-sm">
                   <span className="font-weight-bold">
-                    {profileName(session)}
+                    {profileName(session.user)}
                   </span>
                 </p>
                 <small>{profileUserName(session) + "profile"}</small>
@@ -204,7 +204,7 @@ const Header: React.FC = () => {
                       <div className="flex-fill ms-3">
                         <p className="mb-0">
                           <span className="font-weight-bold">
-                            {profileName(session)}
+                            {profileName(session.user)}
                           </span>
                         </p>
                         <small className="">{profileEmail(session)}</small>

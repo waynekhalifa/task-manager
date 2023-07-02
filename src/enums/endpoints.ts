@@ -35,4 +35,7 @@ export enum Endpoints {
 
   /**  Admin Dashboard */
   ADMIN_DASHBOARD = "attendance/dashboard", // GET
+
+  /**  Attendance */
+  ATTENDANCE = "attendance/daily", // GET
 }

@@ -1,4 +1,13 @@
-const AttendanceCard: React.FC = () => {
+import { getCurrentDate } from "utils/getCurrentDate";
+import { getCurrentMonthDays } from "utils/getCurrentMonthDays";
+import { getHoursDiff } from "utils/getHoursDiff";
+import { profileName } from "utils/profileName";
+
+interface Props {
+  data: any;
+}
+
+const AttendanceCard: React.FC<Props> = ({ data }) => {
   return (
     <div className="card mb-3">
       <div className="card-body">
@@ -24,704 +33,74 @@ const AttendanceCard: React.FC = () => {
             <thead>
               <tr>
                 <th>Employee</th>
-                <th>1</th>
-                <th>2</th>
-                <th>3</th>
-                <th>4</th>
-                <th>5</th>
-                <th>6</th>
-                <th>7</th>
-                <th>8</th>
-                <th>9</th>
-                <th>10</th>
-                <th>11</th>
-                <th>12</th>
-                <th>13</th>
-                <th>14</th>
-                <th>15</th>
-                <th>16</th>
-                <th>17</th>
-                <th>18</th>
-                <th>19</th>
-                <th>20</th>
-                <th>21</th>
-                <th>22</th>
-                <th>23</th>
-                <th>24</th>
-                <th>25</th>
-                <th>27</th>
-                <th>28</th>
-                <th>29</th>
-                <th>30</th>
-                <th>31</th>
+                {getCurrentMonthDays().map((day) => (
+                  <th key={day} className="text-center">
+                    {day}
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>
-                  <span className="fw-bold small">Joan Dyer</span>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-wall-clock text-warning"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-wall-clock text-warning"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-wall-clock text-warning"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <span className="fw-bold small">Ryan Randall</span>
-                </td>
-                <td>
-                  <i className="icofont-close-circled text-danger"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-close-circled text-danger"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-wall-clock text-warning"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-close-circled text-danger"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-wall-clock text-warning"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <span className="fw-bold small">Phil Glover</span>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-wall-clock text-warning"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-wall-clock text-warning"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <span className="fw-bold small">Victor Rampling</span>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-wall-clock text-warning"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-wall-clock text-warning"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-wall-clock text-warning"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <span className="fw-bold small">Sally Graham</span>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-wall-clock text-warning"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-wall-clock text-warning"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-wall-clock text-warning"></i>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <span className="fw-bold small">Robert Anderson</span>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <span className="fw-bold small">Ryan Stewart</span>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-check-circled text-success"></i>
-                </td>
-                <td>
-                  <i className="icofont-wall-clock text-warning"></i>
-                </td>
-                <td>
-                  <i className="icofont-wall-clock text-warning"></i>
-                </td>
-              </tr>
+              {data.results.map((item: any) => (
+                <tr key={item.id}>
+                  <td>
+                    <span className="fw-bold small">{profileName(item)}</span>
+                  </td>
+                  {getCurrentMonthDays().map((day) => {
+                    const today: number = new Date().getDate();
+
+                    if (day > today) {
+                      return (
+                        <th key={day} className="text-center">
+                          -
+                        </th>
+                      );
+                    } else {
+                      for (let i = 0; i < item?.attendance_set.length; i++) {
+                        let login_time: string = "";
+                        let logout_time: string = "";
+
+                        /** Get user login time */
+                        if (item?.attendance_set[i]?.login_time)
+                          login_time = item?.attendance_set[i]?.login_time;
+                        /** Get user logout time */
+                        if (item?.attendance_set[i]?.logout_time)
+                          logout_time = item?.attendance_set[i]?.logout_time;
+
+                        if (
+                          login_time !== "" &&
+                          getCurrentDate(login_time) === day &&
+                          getCurrentDate(logout_time) === day
+                        ) {
+                          if (
+                            getHoursDiff(
+                              new Date(login_time),
+                              new Date(logout_time)
+                            ) <= 8
+                          )
+                            return (
+                              <th key={day} className="text-center">
+                                <i className="icofont-check-circled text-warning"></i>
+                              </th>
+                            );
+
+                          return (
+                            <th key={day} className="text-center">
+                              <i className="icofont-check-circled text-success"></i>
+                            </th>
+                          );
+                        }
+                      }
+
+                      return (
+                        <th key={day} className="text-center">
+                          <i className="icofont-wall-clock text-danger"></i>
+                        </th>
+                      );
+                    }
+                  })}
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
