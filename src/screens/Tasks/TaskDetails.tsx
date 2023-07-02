@@ -11,7 +11,7 @@ import { useCategoriesQuery } from "framework/category/getAllCategories";
 import { useEmployeesQuery } from "framework/employee/getAllEmployees";
 import { useDeleteTask } from "framework/task/deleteTask";
 import { useSingleTask } from "framework/task/get-single-task";
-import { taskInput, useUpdateTask } from "framework/task/update-task";
+import { useUpdateTask } from "framework/task/updateTask";
 import useApp from "hooks/useApp";
 import { useState } from "react";
 import { Dropdown } from "react-bootstrap";
@@ -207,8 +207,18 @@ const TaskDetails: React.FC<Props> = ({ id, projectId }) => {
   const editTask = async () => {
     try {
       delete modelData?.user;
-      let createInput = taskInput(modelData);
-      await updateTaskMutation(createInput);
+      // let createInput = taskInput(modelData);
+      const updateInput: any = {
+        id: task.id,
+        task_priority: task.task_priority,
+        task_progress: task.task_progress,
+        name: task.name,
+        description: task.description,
+      };
+      if (task.group) updateInput.group = task.group.id;
+      if (task.user) updateInput.user = task.user.id;
+
+      await updateTaskMutation(updateInput);
       handleModalClose(true);
     } catch (error) {
       alert(error);
@@ -217,8 +227,18 @@ const TaskDetails: React.FC<Props> = ({ id, projectId }) => {
 
   const updateTaskProgress = async (progress: string) => {
     try {
-      let createInput = taskInput({ ...task, task_progress: progress });
-      await updateTaskMutation(createInput);
+      // let createInput = taskInput({ ...task, task_progress: progress });
+      const updateInput: any = {
+        id: task.id,
+        task_priority: task.task_priority,
+        task_progress: progress,
+        name: task.name,
+        description: task.description,
+      };
+      if (task.group) updateInput.group = task.group.id;
+      if (task.user) updateInput.user = task.user.id;
+
+      await updateTaskMutation(updateInput);
       handleModalClose(true);
     } catch (error) {
       alert(error);
@@ -236,8 +256,17 @@ const TaskDetails: React.FC<Props> = ({ id, projectId }) => {
 
   const assignMember = async (employee: Employee) => {
     try {
-      let createInput = taskInput({ ...task, user: employee?.user?.id });
-      await updateTaskMutation(createInput);
+      // let createInput = taskInput({ ...task, user: employee?.user?.id });
+      const updateInput: any = {
+        id: task.id,
+        task_priority: task.task_priority,
+        task_progress: task.task_progress,
+        name: task.name,
+        description: task.description,
+      };
+      if (task.group) updateInput.group = task.group.id;
+      if (employee?.user) updateInput.user = employee?.user.id;
+      await updateTaskMutation(updateInput);
       handleModalClose(true);
     } catch (err) {
       alert(err);
