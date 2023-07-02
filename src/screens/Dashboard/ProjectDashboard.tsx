@@ -1,15 +1,7 @@
 import React from "react";
 import BrandInfoSmallcard from "components/Dashboard/BrandInfoSmallcard";
-import DylanHunter from "components/Dashboard/DylanHunter";
-import GeneralChartCard from "components/Dashboard/GeneralChartCard";
-import GeneralChartCardDropDown from "components/Dashboard/GeneralChartCardDropDown";
-import ProjectCredentials from "components/Dashboard/ProjectCredentials";
 import ProjectInformationTable from "components/Dashboard/ProjectInformationTable";
 import TaskCard from "components/Dashboard/TaskCard";
-import {
-  IncomeAnalyticsChartData,
-  ProjectTimelineChartData,
-} from "components/Data/DashboardData";
 
 interface Props {}
 
@@ -39,15 +31,15 @@ const ProjectDashboard: React.FC<Props> = () => {
           />
         </div>
       </div>
-      <div className="row g-3 mb-3 row-deck">
+      {/* <div className="row g-3 mb-3 row-deck">
         <div className="col-md-12 col-lg-8 col-xl-7 col-xxl-7">
           <DylanHunter />
         </div>
         <div className="col-md-12 col-lg-4 col-xl-5 col-xxl-5">
           <ProjectCredentials />
         </div>
-      </div>
-      <div className="row g-3 mb-3 row-deck">
+      </div> */}
+      {/* <div className="row g-3 mb-3 row-deck">
         <div className="col-md-12 col-lg-4">
           <GeneralChartCard
             Title="Income Analytics"
@@ -79,7 +71,7 @@ const ProjectDashboard: React.FC<Props> = () => {
             extraDivBody={undefined}
           />
         </div>
-      </div>
+      </div> */}
       <div className="row g-3 mb-3 row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-2 row-cols-xl-4 row-cols-xxl-4">
         <div className="col">
           <BrandInfoSmallcard
