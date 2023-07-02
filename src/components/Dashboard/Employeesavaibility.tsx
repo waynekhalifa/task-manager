@@ -22,9 +22,9 @@ const Employeesavaibility: React.FC<Props> = ({ data }) => {
           <div className="col-md-6 col-sm-6">
             <div className="card">
               <div className="card-body ">
-                <i className="icofont-stopwatch fs-3"></i>
-                <h6 className="mt-3 mb-0 fw-bold small-14">Late Coming</h6>
-                <span className="text-muted">0</span>
+                <i className="icofont-users-alt-1 fs-3"></i>
+                <h6 className="mt-3 mb-0 fw-bold small-14">Total Employees</h6>
+                <span className="text-muted">{data.total_employee}</span>
               </div>
             </div>
           </div>

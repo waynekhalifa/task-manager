@@ -1,10 +1,6 @@
 import React from "react";
 import GeneralChartCard from "components/Dashboard/GeneralChartCard";
-import {
-  EmployeeInfoChartData,
-  TopHiringSourcesChartData,
-  TotalEmployeesChartData,
-} from "components/Data/DashboardData";
+import { TopHiringSourcesChartData } from "components/Data/DashboardData";
 import BigCalendar from "components/Pages/BigCalendar";
 import Employeesavaibility from "components/Dashboard/Employeesavaibility";
 import { useAdminDashboardQuery } from "framework/dashboard/adminDashboard";
@@ -18,8 +14,6 @@ const HrDashboard: React.FC<Props> = () => {
 
   if (isLoading) return null;
 
-  console.log({ data });
-
   return (
     <>
       {data && (
@@ -28,7 +22,7 @@ const HrDashboard: React.FC<Props> = () => {
           <div className="row clearfix g-3">
             <div className="col-xl-8 col-lg-12 col-md-12 flex-column">
               <div className="row g-3">
-                <div className="col-md-12">
+                {/* <div className="col-md-12">
                   <GeneralChartCard
                     Title="Employees Info"
                     data={EmployeeInfoChartData}
@@ -36,7 +30,7 @@ const HrDashboard: React.FC<Props> = () => {
                     TitleRight={undefined}
                     extraDivBody={undefined}
                   />
-                </div>
+                </div> */}
                 {/* <div className="col-md-6">
               <Employeesavaibility />
             </div>
@@ -65,7 +59,7 @@ const HrDashboard: React.FC<Props> = () => {
                 <div className="col-md-6 col-lg-6 col-xl-12">
                   <Employeesavaibility data={data} />
                 </div>
-                <div className="col-md-6 col-lg-6 col-xl-12">
+                {/* <div className="col-md-6 col-lg-6 col-xl-12">
                   <GeneralChartCard
                     Title="Total Employees"
                     data={TotalEmployeesChartData}
@@ -73,7 +67,7 @@ const HrDashboard: React.FC<Props> = () => {
                     identity="totalemployee"
                     extraDivBody={undefined}
                   />
-                </div>
+                </div> */}
                 {/* <div className="col-md-6 col-lg-6 col-xl-12 flex-column">
               <InterviewCard
                 value={246}
