@@ -1,4 +1,8 @@
-const Employeesavaibility: React.FC = () => {
+interface Props {
+  data: any;
+}
+
+const Employeesavaibility: React.FC<Props> = ({ data }) => {
   return (
     <div className="card">
       <div className="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
@@ -11,7 +15,7 @@ const Employeesavaibility: React.FC = () => {
               <div className="card-body ">
                 <i className="icofont-checked fs-3"></i>
                 <h6 className="mt-3 mb-0 fw-bold small-14">Attendance</h6>
-                <span className="text-muted">400</span>
+                <span className="text-muted">{data.attendance}</span>
               </div>
             </div>
           </div>
@@ -20,7 +24,7 @@ const Employeesavaibility: React.FC = () => {
               <div className="card-body ">
                 <i className="icofont-stopwatch fs-3"></i>
                 <h6 className="mt-3 mb-0 fw-bold small-14">Late Coming</h6>
-                <span className="text-muted">17</span>
+                <span className="text-muted">0</span>
               </div>
             </div>
           </div>
@@ -29,7 +33,7 @@ const Employeesavaibility: React.FC = () => {
               <div className="card-body ">
                 <i className="icofont-ban fs-3"></i>
                 <h6 className="mt-3 mb-0 fw-bold small-14">Absent</h6>
-                <span className="text-muted">06</span>
+                <span className="text-muted">{data.absent}</span>
               </div>
             </div>
           </div>
@@ -38,7 +42,7 @@ const Employeesavaibility: React.FC = () => {
               <div className="card-body ">
                 <i className="icofont-beach-bed fs-3"></i>
                 <h6 className="mt-3 mb-0 fw-bold small-14">Leave Apply</h6>
-                <span className="text-muted">14</span>
+                <span className="text-muted">{data.left}</span>
               </div>
             </div>
           </div>

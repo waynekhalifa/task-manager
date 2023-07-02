@@ -13,12 +13,12 @@ export enum Endpoints {
   /** Management Endpoints */
   /** Task Endpoints */
   TASK = "management/task/", // GET - POST - PUT - PATCH - DELETE
-  TASK_ATTACHMENT = '/management/files/task/', // POST 
-  TASK_ATTACHMENT_DELETE = '/management/files/task/', // /{id} DELETE
+  TASK_ATTACHMENT = "/management/files/task/", // POST
+  TASK_ATTACHMENT_DELETE = "/management/files/task/", // /{id} DELETE
   /** Project Endpoints */
   PROJECT = "management/project/", // /{id} GET - POST - PUT - PATCH - DELETE
-  PROJECT_ATTACHMENT = '/management/files/project/', // POST 
-  PROJECT_ATTACHMENT_DELETE = '/management/files/project/', // /{id} DELETE
+  PROJECT_ATTACHMENT = "/management/files/project/", // POST
+  PROJECT_ATTACHMENT_DELETE = "/management/files/project/", // /{id} DELETE
   /** Category Endpoints */
   CATEGORY = "category/", // /{id} GET - POST - PUT - PATCH - DELETE
   PERMISSION = "user/utils/permissions/",
@@ -32,4 +32,7 @@ export enum Endpoints {
 
   /**  Group */
   GROUP = "user/utils/groups/",
- }
+
+  /**  Admin Dashboard */
+  ADMIN_DASHBOARD = "attendance/dashboard", // GET
+}
