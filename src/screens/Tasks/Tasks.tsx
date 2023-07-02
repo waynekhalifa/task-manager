@@ -15,8 +15,6 @@ import { Group } from "types/group";
 import { useEmployeesQuery } from "framework/employee/getAllEmployees";
 import { Employee } from "types/employee";
 
-
-
 interface State {
   isAddModal: boolean;
   isEditModal: boolean;
@@ -33,31 +31,49 @@ const INITIAlIZE_DATA: State = {
   modelData: {},
 };
 
-
 const Tasks: React.FC = () => {
   const [state, setState] = useState<State>(INITIAlIZE_DATA);
   const { modelData, isAddModal, isEditModal, modalHeader } = state;
   const { mutateAsync: createTaskMutation } = useCreateTask();
 
-  let { data: projectData, error: errorProjects, isLoading: loadingProjects } = useProjectsQuery({});
-  let { data: taskData, error: errorTask, isLoading: loadingTasks } = useTaskQuery({});
-  const { data: employeeData, error: employeeError, isLoading: employeeIsLoading } = useEmployeesQuery({});
+  let {
+    data: projectData,
+    error: errorProjects,
+    isLoading: loadingProjects,
+  } = useProjectsQuery({});
+  let {
+    data: taskData,
+    error: errorTask,
+    isLoading: loadingTasks,
+  } = useTaskQuery({});
+  const {
+    data: employeeData,
+    error: employeeError,
+    isLoading: employeeIsLoading,
+  } = useEmployeesQuery({});
 
-  const { data: groupData, error: groupError, isLoading: groupIsLoading } = useGroupQuery({});
+  const {
+    data: groupData,
+    error: groupError,
+    isLoading: groupIsLoading,
+  } = useGroupQuery({});
   let tasks: SelectedTask[] = taskData?.tasks.data.results || [];
-  if (loadingProjects || errorTask || groupError || employeeError) return <div>Loading...</div>;
-  if (errorProjects || loadingTasks || groupIsLoading || employeeIsLoading) return null;
+  if (loadingProjects || errorTask || groupError || employeeError)
+    return <div>Loading...</div>;
+  if (errorProjects || loadingTasks || groupIsLoading || employeeIsLoading)
+    return null;
   let projects: SelectedProject[] = projectData?.projects.data.results || [];
 
-  const assignedEmployees: Employee[] = employeeData?.employees?.data?.results || [];
+  const assignedEmployees: Employee[] =
+    employeeData?.employees?.data?.results || [];
 
-
-  const assignedEmployeesOptions = assignedEmployees.map((employee: Employee) => {
-    return {
-      label: employee.user.first_name + " " + employee.user.last_name,
-      value: employee.user.id,
-    };
-  }
+  const assignedEmployeesOptions = assignedEmployees.map(
+    (employee: Employee) => {
+      return {
+        label: employee.user.first_name + " " + employee.user.last_name,
+        value: employee.user.id,
+      };
+    }
   );
   assignedEmployeesOptions.unshift({ label: "Select Member", value: 0 });
   let groups: Group[] = groupData?.groups?.data?.results || [];
@@ -66,22 +82,18 @@ const Tasks: React.FC = () => {
       label: group.name,
       value: group.id,
     };
-  }
-  );
+  });
   groupOptions.unshift({
     label: "Select Group",
     value: 0,
   });
-
-
 
   let projectsOptions: IOption[] = projects.map((project) => {
     return {
       label: project.name!,
       value: project.id,
     };
-  }
-  );
+  });
   projectsOptions.unshift({
     label: "Select Project",
     value: 0,
@@ -124,7 +136,6 @@ const Tasks: React.FC = () => {
     });
   };
 
-
   const createTask = async () => {
     if (!modelData.name) {
       alert("Please enter name");
@@ -134,7 +145,6 @@ const Tasks: React.FC = () => {
       alert("Please select project");
       return;
     }
-    
 
     try {
       let createInput = taskInput(modelData);
@@ -146,7 +156,6 @@ const Tasks: React.FC = () => {
       alert(error);
     }
   };
-
 
   return (
     <div className="container-xxl">
@@ -179,12 +188,10 @@ const Tasks: React.FC = () => {
               <AllocatedTask />
             </div>
           </div> */}
-          <TaskNestable1
-            tasks={tasks}
-          />
+          <TaskNestable1 tasks={tasks} />
         </div>
       </div>
-
+      {/* <DragDrop /> */}
       <TaskModal
         onClose={handleModalClose}
         modalHeader={modalHeader}
@@ -199,7 +206,6 @@ const Tasks: React.FC = () => {
       />
     </div>
   );
-
-}
+};
 
 export default Tasks;
