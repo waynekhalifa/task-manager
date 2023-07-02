@@ -2,31 +2,33 @@ import React from "react";
 import BrandInfoSmallcard from "components/Dashboard/BrandInfoSmallcard";
 import ProjectInformationTable from "components/Dashboard/ProjectInformationTable";
 import TaskCard from "components/Dashboard/TaskCard";
+import { useAuth } from "contexts/AuthContext";
 
 interface Props {}
 
 const ProjectDashboard: React.FC<Props> = () => {
+  const { session } = useAuth();
   return (
     <div className="container-xxl">
       <div className="row g-3 mb-3 row-deck">
         <div className="col-md-12 col-lg-4 col-xl-4 col-xxl-4">
           <TaskCard
             label="Total Task"
-            value="122"
+            value={session?.user?.total_tasks_count}
             iconClass="bi bi-journal-check fs-4"
           />
         </div>
         <div className="col-md-12 col-lg-4 col-xl-4 col-xxl-4">
           <TaskCard
             label="Completed Task"
-            value="376"
+            value={session?.user?.completed_tasks_count}
             iconClass="bi bi-list-check fs-4"
           />
         </div>
         <div className="col-md-12 col-lg-4 col-xl-4 col-xxl-4">
           <TaskCard
             label="Progress Task"
-            value="74"
+            value={session?.user?.on_progress_tasks_count}
             iconClass="bi bi-clipboard-data fs-4"
           />
         </div>
