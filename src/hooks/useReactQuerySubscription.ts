@@ -15,8 +15,9 @@ export const useReactQuerySubscription = () => {
 
     websocket.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      const queryKey = [...data.entity, data.id].filter(Boolean);
-      queryClient.invalidateQueries({ queryKey });
+      // const queryKey = [...data.entity, data.id].filter(Boolean);
+      // queryClient.invalidateQueries({ queryKey });
+      console.log("data", data);
     };
 
     return () => {
