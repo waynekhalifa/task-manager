@@ -12,11 +12,13 @@ import { profileName } from "utils/profileName";
 import { profileUserName } from "utils/profileUserName";
 import { profileEmail } from "utils/profileEmail";
 import { useNotificationsQuery } from "framework/notifications/getAllNotifications";
+import { useReactQuerySubscription } from "hooks/useReactQuerySubscription";
 
 const Header: React.FC = () => {
   const { push } = useApp();
   const { session } = useAuth();
   const { isLoading, error, data } = useNotificationsQuery({});
+  useReactQuerySubscription();
 
   const handleLogout = () => {
     localStorage.removeItem("session");
