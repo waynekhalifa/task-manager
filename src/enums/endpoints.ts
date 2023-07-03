@@ -38,4 +38,7 @@ export enum Endpoints {
 
   /**  Attendance */
   ATTENDANCE = "attendance/daily", // GET
+
+  /** Notifications */
+  NOTIFICATIONS = "notifications/notifications/", // GET
 }

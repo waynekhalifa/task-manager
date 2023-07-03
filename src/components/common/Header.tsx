@@ -6,15 +6,17 @@ import Avatar5 from "assets/images/xs/avatar5.jpg";
 import Avatar6 from "assets/images/xs/avatar6.jpg";
 import Avatar7 from "assets/images/xs/avatar7.jpg";
 import ProfileImg from "assets/images/profile_av.png";
-import { useAuth } from "contexts/AuthContext";
 import useApp from "hooks/useApp";
+import { useAuth } from "contexts/AuthContext";
 import { profileName } from "utils/profileName";
 import { profileUserName } from "utils/profileUserName";
 import { profileEmail } from "utils/profileEmail";
+import { useNotificationsQuery } from "framework/notifications/getAllNotifications";
 
 const Header: React.FC = () => {
   const { push } = useApp();
   const { session } = useAuth();
+  const { isLoading, error, data } = useNotificationsQuery({});
 
   const handleLogout = () => {
     localStorage.removeItem("session");
@@ -22,6 +24,11 @@ const Header: React.FC = () => {
 
     push("/");
   };
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Something went wrong</div>;
+
+  const notifications: any = data;
 
   return (
     <div className="header">
@@ -37,140 +44,149 @@ const Header: React.FC = () => {
                 <span className="pulse-ring"></span>
               </Dropdown.Toggle>
               <Dropdown.Menu className=" rounded-lg shadow border-0 dropdown-animation dropdown-menu-sm-end p-0 m-0">
-                <div className="card border-0 w380">
-                  <div className="card-header border-0 p-3">
-                    <h5 className="mb-0 font-weight-light d-flex justify-content-between">
-                      <span>Notifications</span>
-                      <span className="badge text-white">11</span>
-                    </h5>
-                  </div>
-                  <div className="tab-content card-body">
-                    <div className="tab-pane fade show active">
-                      <ul className="list-unstyled list mb-0">
-                        <li className="py-2 mb-1 border-bottom">
-                          <a href="#!" className="d-flex">
-                            <img
-                              className="avatar rounded-circle"
-                              src={Avatar1}
-                              alt=""
-                            />
-                            <div className="flex-fill ms-2">
-                              <p className="d-flex justify-content-between mb-0 ">
-                                <span className="font-weight-bold">
-                                  Dylan Hunter
-                                </span>{" "}
-                                <small>2MIN</small>
-                              </p>
-                              <span className="">
-                                Added 2021-02-19 my-Task ui/ux Design{" "}
-                                <span className="badge bg-success">Review</span>
-                              </span>
-                            </div>
-                          </a>
-                        </li>
-                        <li className="py-2 mb-1 border-bottom">
-                          <a href="#!" className="d-flex">
-                            <div className="avatar rounded-circle no-thumbnail">
-                              DF
-                            </div>
-                            <div className="flex-fill ms-2">
-                              <p className="d-flex justify-content-between mb-0 ">
-                                <span className="font-weight-bold">
-                                  Diane Fisher
-                                </span>{" "}
-                                <small>13MIN</small>
-                              </p>
-                              <span className="">
-                                Task added Get Started with Fast Cad project
-                              </span>
-                            </div>
-                          </a>
-                        </li>
-                        <li className="py-2 mb-1 border-bottom">
-                          <a href="#!" className="d-flex">
-                            <img
-                              className="avatar rounded-circle"
-                              src={Avatar3}
-                              alt=""
-                            />
-                            <div className="flex-fill ms-2">
-                              <p className="d-flex justify-content-between mb-0 ">
-                                <span className="font-weight-bold">
-                                  Andrea Gill
-                                </span>{" "}
-                                <small>1HR</small>
-                              </p>
-                              <span className="">
-                                Curriculum Development Task Completed
-                              </span>
-                            </div>
-                          </a>
-                        </li>
-                        <li className="py-2 mb-1 border-bottom">
-                          <a href="#!" className="d-flex">
-                            <img
-                              className="avatar rounded-circle"
-                              src={Avatar5}
-                              alt=""
-                            />
-                            <div className="flex-fill ms-2">
-                              <p className="d-flex justify-content-between mb-0 ">
-                                <span className="font-weight-bold">
-                                  Diane Fisher
-                                </span>{" "}
-                                <small>13MIN</small>
-                              </p>
-                              <span className="">
-                                Add New Project for App Developemnt
-                              </span>
-                            </div>
-                          </a>
-                        </li>
-                        <li className="py-2 mb-1 border-bottom">
-                          <a href="#!" className="d-flex">
-                            <img
-                              className="avatar rounded-circle"
-                              src={Avatar6}
-                              alt=""
-                            />
-                            <div className="flex-fill ms-2">
-                              <p className="d-flex justify-content-between mb-0 ">
-                                <span className="font-weight-bold">
-                                  Andrea Gill
-                                </span>{" "}
-                                <small>1HR</small>
-                              </p>
-                              <span className="">
-                                Add Timesheet For Rhinestone project
-                              </span>
-                            </div>
-                          </a>
-                        </li>
-                        <li className="py-2">
-                          <a href="#!" className="d-flex">
-                            <img
-                              className="avatar rounded-circle"
-                              src={Avatar7}
-                              alt=""
-                            />
-                            <div className="flex-fill ms-2">
-                              <p className="d-flex justify-content-between mb-0 ">
-                                <span className="font-weight-bold">
-                                  Zoe Wright
-                                </span>{" "}
-                                <small className="">1DAY</small>
-                              </p>
-                              <span className="">Add Calander Event</span>
-                            </div>
-                          </a>
-                        </li>
-                      </ul>
+                {data && (
+                  <div className="card border-0 w380">
+                    <div className="card-header border-0 p-3">
+                      <h5 className="mb-0 font-weight-light d-flex justify-content-between">
+                        <span>Notifications</span>
+                        <span className="badge text-white">
+                          {notifications.results.length}
+                        </span>
+                      </h5>
                     </div>
+                    <div className="tab-content card-body">
+                      <div className="tab-pane fade show active">
+                        <ul className="list-unstyled list mb-0">
+                          <li className="py-2 mb-1 border-bottom">
+                            <a href="#!" className="d-flex">
+                              <img
+                                className="avatar rounded-circle"
+                                src={Avatar1}
+                                alt=""
+                              />
+                              <div className="flex-fill ms-2">
+                                <p className="d-flex justify-content-between mb-0 ">
+                                  <span className="font-weight-bold">
+                                    Dylan Hunter
+                                  </span>{" "}
+                                  <small>2MIN</small>
+                                </p>
+                                <span className="">
+                                  Added 2021-02-19 my-Task ui/ux Design{" "}
+                                  <span className="badge bg-success">
+                                    Review
+                                  </span>
+                                </span>
+                              </div>
+                            </a>
+                          </li>
+                          <li className="py-2 mb-1 border-bottom">
+                            <a href="#!" className="d-flex">
+                              <div className="avatar rounded-circle no-thumbnail">
+                                DF
+                              </div>
+                              <div className="flex-fill ms-2">
+                                <p className="d-flex justify-content-between mb-0 ">
+                                  <span className="font-weight-bold">
+                                    Diane Fisher
+                                  </span>{" "}
+                                  <small>13MIN</small>
+                                </p>
+                                <span className="">
+                                  Task added Get Started with Fast Cad project
+                                </span>
+                              </div>
+                            </a>
+                          </li>
+                          <li className="py-2 mb-1 border-bottom">
+                            <a href="#!" className="d-flex">
+                              <img
+                                className="avatar rounded-circle"
+                                src={Avatar3}
+                                alt=""
+                              />
+                              <div className="flex-fill ms-2">
+                                <p className="d-flex justify-content-between mb-0 ">
+                                  <span className="font-weight-bold">
+                                    Andrea Gill
+                                  </span>{" "}
+                                  <small>1HR</small>
+                                </p>
+                                <span className="">
+                                  Curriculum Development Task Completed
+                                </span>
+                              </div>
+                            </a>
+                          </li>
+                          <li className="py-2 mb-1 border-bottom">
+                            <a href="#!" className="d-flex">
+                              <img
+                                className="avatar rounded-circle"
+                                src={Avatar5}
+                                alt=""
+                              />
+                              <div className="flex-fill ms-2">
+                                <p className="d-flex justify-content-between mb-0 ">
+                                  <span className="font-weight-bold">
+                                    Diane Fisher
+                                  </span>{" "}
+                                  <small>13MIN</small>
+                                </p>
+                                <span className="">
+                                  Add New Project for App Developemnt
+                                </span>
+                              </div>
+                            </a>
+                          </li>
+                          <li className="py-2 mb-1 border-bottom">
+                            <a href="#!" className="d-flex">
+                              <img
+                                className="avatar rounded-circle"
+                                src={Avatar6}
+                                alt=""
+                              />
+                              <div className="flex-fill ms-2">
+                                <p className="d-flex justify-content-between mb-0 ">
+                                  <span className="font-weight-bold">
+                                    Andrea Gill
+                                  </span>{" "}
+                                  <small>1HR</small>
+                                </p>
+                                <span className="">
+                                  Add Timesheet For Rhinestone project
+                                </span>
+                              </div>
+                            </a>
+                          </li>
+                          <li className="py-2">
+                            <a href="#!" className="d-flex">
+                              <img
+                                className="avatar rounded-circle"
+                                src={Avatar7}
+                                alt=""
+                              />
+                              <div className="flex-fill ms-2">
+                                <p className="d-flex justify-content-between mb-0 ">
+                                  <span className="font-weight-bold">
+                                    Zoe Wright
+                                  </span>{" "}
+                                  <small className="">1DAY</small>
+                                </p>
+                                <span className="">Add Calander Event</span>
+                              </div>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <a
+                      className="card-footer text-center border-top-0"
+                      href="#!"
+                    >
+                      View all notifications
+                    </a>
                   </div>
-                  <a className="card-footer text-center border-top-0" href="#!">
-                    View all notifications
-                  </a>
-                </div>
+                )}
               </Dropdown.Menu>
             </Dropdown>
             <Dropdown className="dropdown user-profile ml-2 ml-sm-3 d-flex align-items-center">
