@@ -163,7 +163,7 @@ const Projects: React.FC<Props> = () => {
   });
 
   const handleModalClose = (reload: boolean = false) => {
-    // if (reload === true) window.location.reload();
+    if (reload === true) window.location.reload();
     setState({
       ...state,
       isAddModal: false,
